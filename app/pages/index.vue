@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="bg-primary-50 dark:bg-primary-900">
+  <NuxtLayout>
     <UButton color="primary">Button</UButton>
-  </div>
+  </NuxtLayout>
 </template>
