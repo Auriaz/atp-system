@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "vue.vscode-typescript-vue-plugin",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "antfu.iconify",
+    "mikestead.dotenv",
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker"
+  ],
+}
