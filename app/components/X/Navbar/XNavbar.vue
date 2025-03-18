@@ -41,7 +41,7 @@ import type { MenuItem } from '@@/types/navbar'
         <slot name="left" />
       </div>
 
-      <div class="lg:hidden absolute z-60 top-6 left-0 px-3">
+      <div class="lg:hidden absolute z-60 top-6 left-3 px-3">
         <UTooltip text="Open menu">
           <XBtnCloseToOpen variant="outline" :switcher="navbar.isMobile" @click="toggleMobile()" />
         </UTooltip>
@@ -75,11 +75,9 @@ import type { MenuItem } from '@@/types/navbar'
         <slot name="logo" />
       </div>
 
-      <!-- Mobile left -->
-      <div class="w-auto absolute top-0 right-0 lg:hidden flex justify-center items-center 
-                bg-secondary/20 dark:bg-secondary-dark/20 backdrop-blur-lg rounded-bl-lg 
-                transition-all duration-300">
-        <div class="flex justify-center items-center">
+      <!-- Mobile right -->
+      <div class="w-auto h-full absolute top-0 right-0 lg:hidden flex justify-center items-center transition-all duration-300">
+        <div class="h-full w-full mr-4 flex justify-center items-center">
           <XBtnColorMode />
         </div>
 
