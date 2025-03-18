@@ -1,11 +1,5 @@
 <script setup lang="ts">
-interface MenuItem {
-  label?: string
-  name: string
-  icon?: string
-  to: string
-  items?: MenuItem[]
-}
+import type { MenuItem } from '@@/types/navbar'
 
 defineProps<{
   links: MenuItem[]

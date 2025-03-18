@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { MenuItem } from '@@/types/navbar'
   defineProps({
     isShowMenu: {
       type: Boolean,
@@ -11,7 +12,7 @@
     },
 
     links: {
-      type: Array,
+      type: Array as PropType<MenuItem[]>,
       default: () => [],
     },
   })
@@ -40,10 +41,10 @@
         <slot name="left" />
       </div>
 
-      <div class="lg:hidden absolute z-10 top-6 left-0 px-3">
-        <XTooltip text="Otwórz menu" :popper="{ placement: 'right' }">
-          <XBtnCloseToOpen variant="outline" :switcher="navbar.isMobile" @click=" toggleMobile()" />
-        </XTooltip>
+      <div class="lg:hidden absolute z-60 top-6 left-0 px-3">
+        <UTooltip text="Open menu">
+          <XBtnCloseToOpen variant="outline" :switcher="navbar.isMobile" @click="toggleMobile()" />
+        </UTooltip>
       </div>
 
       <div class="w-full hidden lg:block">
@@ -97,8 +98,8 @@
     <transition enter-active-class="transition ease-out duration-500" enter-from-class="transform translate-x-[-100%]"
       enter-to-class="transform translate-x-0" leave-active-class="transition ease-in duration-500"
       leave-from-class="transform translate-x-0" leave-to-class="transform translate-x-[-100%]">
-      <div v-if="navbar.isMobile" class="h-screen w-full fixed top-0 left-0 lg:hidden z-60 
-                bg-secondary dark:bg-secondary-dark backdrop-blur-lg 
+      <div v-if="navbar.isMobile" class="h-screen w-full fixed top-0 left-0 lg:hidden z-50 
+                bg-secondary-100 dark:bg-secondary-900 backdrop-blur-lg 
                 transition-all duration-300">
         <div class="w-full h-full relative flex flex-col justify-center items-center">
 
