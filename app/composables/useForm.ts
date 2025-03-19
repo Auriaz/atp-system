@@ -1,13 +1,11 @@
 // @ts-nocheck
 import cloneDeep from 'lodash.clonedeep'
 import isEqual from 'lodash.isequal'
-import type { IForm, IFormResponse } from '~~/types/form'
 
 export default function useForm(body) {
   let defaults = body
   let recentlySuccessfulTimeoutId
-  const { flash, flashSymfonyError } = useToast()
-  const { handleError } = useErrorHandler()
+  const toast = useToast()
 
   const form: IForm = reactive({
     body: cloneDeep(body),
@@ -19,7 +17,7 @@ export default function useForm(body) {
     wasSuccessful: false as boolean,
     recentlySuccessful: false as boolean,
 
-    async submit(path, method = 'POST', hooks = {}, options = {}) {
+    async submit(path, hooks = {}, options = {}) {
       if (this.loading) return
 
       const _hooks = {
@@ -45,16 +43,15 @@ export default function useForm(body) {
           if (hooks.success) await hooks.success(res)
 
           defaults = cloneDeep(this.body)
-          if (res.flash) flash(res.flash.message, res.flash.style)
+          if (res.toast) toast.add({ title: res.toast.title, description: res.toast.description, color: res.toast.color })
           if (res.refresh) location.reload()
-          if (res.redirect) location.href = res.redirect
 
           return res.data
         },
 
         onError: async (error) => {
           this.hasErrors = true
-          const err = await handleError(error.data)
+          // const err = await handleError(error.data)
 
           this.clearErrors()
           this.setErrors(err)
@@ -71,15 +68,14 @@ export default function useForm(body) {
 
       await _hooks.onBefore()
 
-      return await useFetchApi(path, {
-        method,
+      return await $fetch(path, {
+        method: 'POST',
         body: this.body,
         ...hooks.options,
       }).then(async (res: IFormResponse) => {
-        if (res.status.value === 'success') return await _hooks.onSuccess(res.data.value)
-        if (res.status.value === 'error') return await _hooks.onError(res.error.value)
+        return await _hooks.onSuccess(res)
       }).catch(async (error) => {
-        return await _hooks.onError(error.value)
+        return await _hooks.onError(error)
       }).finally(async () => {
         await _hooks.onFinish()
       })

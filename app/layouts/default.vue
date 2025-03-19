@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-
+  const { loggedIn, user } = useUserSession()
 </script>
 
 <template>
@@ -13,6 +13,14 @@
         ]">
           <template #logo>
             <XLogo />
+          </template>
+
+          <template #action>
+            <AuthState>
+              <XModalAuth v-if="!loggedIn" />
+
+              <XDropdownManageAccount v-else :user="user" />
+            </AuthState>
           </template>
 
         </x-navbar>

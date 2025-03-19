@@ -1,100 +1,76 @@
 <script setup lang="ts">
-const form = useForm({
-  email: "",
-  password: "",
-});
+import * as v from 'valibot'
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js' 
+const {fetch} = useUserSession() 
 
-const canSeeThePassword = ref(true);
+type loginSchema = v.InferOutput<typeof loginSchema>
 
-async function handlerSubmit() {
-  form.submit(
-    "/api/auth/login",
-    "POST",
-    {
-      success: async () => {
-        // Poczekaj na zaktualizowanie sesji
-        const { fetch } = useUserSession();
-        await fetch();
+const state = reactive({
+  email: '',
+  password: '',
+  rememberMe: false
+})
 
-        useModalHelper().toggleLoginModal();
-        form.reset();
-        navigateTo("/dashboard");
-      },
-    },
-    {}
-  );
+const previewPassword = ref(false)
+
+const toast = useToast()
+async function onSubmit(event: FormSubmitEvent<loginSchema>) {
+  const {data, error} = await useFetch('/api/auth/login', {
+    method: 'POST',
+    body: event.data
+  })
+
+  if(error.value) {
+    toast.add({
+      title: 'Error',
+      description: error.value.data.message,
+      color: 'error'
+    })
+    return
+  }
+
+  fetch()
+
+  toast.add(data.value?.message as Toast)
+  navigateTo('/dashboard')
 }
 </script>
 
 <template>
-  <form
-    class="relative w-full h-full flex flex-col"
-    @submit.prevent="handlerSubmit"
-  >
-    <span
-      v-if="form.errors && form.errors.error"
-      class="bg-error-200 text-error-600 flex justify-center items-center w-full h-10 rounded-lg"
-    >
-      {{ form.errors.error }}
-    </span>
+  <UForm :schema="v.safeParser(loginSchema)" :state="state" class="w-full space-y-6 px-6" @submit="onSubmit">
+    <UFormField required label="Email" name="email" class="w-full">
+      <UInput v-model="state.email" class="w-full"/>
+    </UFormField>
 
-    <div class="pt-5 space-y-8">
-      <x-input
-        v-model="form.body.email"
-        label="Email"
-        type="email"
-        icon="material-symbols:mark-email-unread-sharp"
-        name="email_login"
-        autofocus
-      />
+    <UFormField required class="w-full relative" label="Password" name="password">
+      <UInput v-model="state.password" :type="previewPassword ? 'text' : 'password'" class="w-full" >
+        <template #trailing>
+          <UButton
+            @click="previewPassword = !previewPassword"
+            color="secondary"
+            size="sm"
+            variant="link"
+            :icon="previewPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+            :aria-label="previewPassword ? 'Hide password' : 'Show password'"
+            :aria-pressed="previewPassword"
+            aria-controls="password"
+          />
+        </template>
+      </UInput>
+    </UFormField>
 
-      <div>
-        <x-input
-          v-model="form.body.password"
-          :type="canSeeThePassword ? 'text' : 'password'"
-          label="Hasło"
-          icon="teenyicons:password-solid"
-          right-icon
-          name="password_login"
-        >
-          <template #right-icon>
-            <Icon
-              v-if="canSeeThePassword"
-              name="mdi:eye-off-outline"
-              class="text-xl text-blue-600 hover:text-green-600 cursor-pointer"
-              @click="canSeeThePassword = !canSeeThePassword"
-            />
-
-            <Icon
-              v-if="!canSeeThePassword"
-              name="mdi:eye-outline"
-              class="text-xl hover:text-red-600 cursor-pointer"
-              @click="canSeeThePassword = !canSeeThePassword"
-            />
-          </template>
-        </x-input>
-
-        <XModalAuthForgotPassword />
-      </div>
-
-      <div class="w-full space-y-6">
-        <x-btn
-          :disabled="!form.body.email || !form.body.password"
-          type="submit"
-          color="success"
-          :loading="form.loading"
-          shadow
-          block
-        >
-          Sign in
-        </x-btn>
-      </div>
-
-      <XDivider label="OR" />
-
-      <div class="mb-6">
-        <XBtnOAuthLogin />
-      </div>
+    <div class="flex items-center space-x-2">
+      <UCheckbox v-model="state.rememberMe"  color="primary" />
+      <span class="text-sm">Remember me</span>
     </div>
-  </form>
+
+    <UButton type="submit" color="primary" variant="solid" block class="text-bold">
+      Submit
+    </UButton>
+
+    <USeparator />
+
+    <XBtnOAuthLogin />
+  </UForm>
 </template>

@@ -119,9 +119,18 @@ importers:
       crossws:
         specifier: ^0.3.4
         version: 0.3.4
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       drizzle-orm:
         specifier: ^0.40.1
         version: 0.40.1(@cloudflare/workers-types@4.20250313.0)(better-sqlite3@11.9.0)(gel@2.0.1)
+      drizzle-valibot:
+        specifier: ^0.4.0
+        version: 0.4.0(drizzle-orm@0.40.1(@cloudflare/workers-types@4.20250313.0)(better-sqlite3@11.9.0)(gel@2.0.1))(valibot@1.0.0-rc.4(typescript@5.8.2))
+      h3-valibot:
+        specifier: ^0.0.9
+        version: 0.0.9(@nuxt/kit@3.16.0(magicast@0.3.5))(@nuxt/schema@3.16.0)(valibot@1.0.0-rc.4(typescript@5.8.2))
       lodash.clonedeep:
         specifier: ^4.5.0
         version: 4.5.0
@@ -146,6 +155,9 @@ importers:
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
+      valibot:
+        specifier: 1.0.0-rc.4
+        version: 1.0.0-rc.4(typescript@5.8.2)
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
@@ -3108,6 +3120,9 @@ packages:
   data-uri-to-buffer@2.0.2:
     resolution: {integrity: sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==}
 
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
+
   db0@0.3.1:
     resolution: {integrity: sha512-3RogPLE2LLq6t4YiFCREyl572aBjkfMvfwPyN51df00TbPbryL3XqBYuJ/j6mgPssPK8AKfYdLxizaO5UG10sA==}
     peerDependencies:
@@ -3372,6 +3387,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-valibot@0.4.0:
+    resolution: {integrity: sha512-0K90Ko1l5uRFNMN/3RwVQy+6biEHiXA/thxq+ZsEDuHqevpiY1Yy8qQEzx9eshv3HEtFlaulAoV0POZJ0bcdJg==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      valibot: '>=1.0.0-beta.7'
 
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
@@ -3892,6 +3913,18 @@ packages:
   gzip-size@7.0.0:
     resolution: {integrity: sha512-O1Ld7Dr+nqPnmGpdhzLmMTQ4vAsD+rHwMm1NLUmoUFFymBOMKxCCrtDxqdBRYXdeEPEi3SyoR4TizJLQrnKBNA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  h3-valibot@0.0.9:
+    resolution: {integrity: sha512-JGueCa0s4EeOMrDjnJ/IoEKLXyYzXtv4+VH/V7xo6IkStOR9HrKTikGd/QvmOfy4azsOjahCrqwryDI9eC8CZg==}
+    peerDependencies:
+      '@nuxt/kit': '>=3'
+      '@nuxt/schema': '>=3'
+      valibot: '>=0.42.0 || >=1'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      '@nuxt/schema':
+        optional: true
 
   h3@1.15.1:
     resolution: {integrity: sha512-+ORaOBttdUm1E2Uu/obAyCguiI7MbBvsLTndc3gyK3zU+SYLoZXlyCP9Xgy0gikkGufFLTZXCXD6+4BsufnmHA==}
@@ -9734,6 +9767,8 @@ snapshots:
 
   data-uri-to-buffer@2.0.2: {}
 
+  date-fns@4.1.0: {}
+
   db0@0.3.1(better-sqlite3@11.9.0)(drizzle-orm@0.40.1(@cloudflare/workers-types@4.20250313.0)(better-sqlite3@11.9.0)(gel@2.0.1)):
     optionalDependencies:
       better-sqlite3: 11.9.0
@@ -9859,6 +9894,11 @@ snapshots:
       '@cloudflare/workers-types': 4.20250313.0
       better-sqlite3: 11.9.0
       gel: 2.0.1
+
+  drizzle-valibot@0.4.0(drizzle-orm@0.40.1(@cloudflare/workers-types@4.20250313.0)(better-sqlite3@11.9.0)(gel@2.0.1))(valibot@1.0.0-rc.4(typescript@5.8.2)):
+    dependencies:
+      drizzle-orm: 0.40.1(@cloudflare/workers-types@4.20250313.0)(better-sqlite3@11.9.0)(gel@2.0.1)
+      valibot: 1.0.0-rc.4(typescript@5.8.2)
 
   duplexer@0.1.2: {}
 
@@ -10543,6 +10583,14 @@ snapshots:
   gzip-size@7.0.0:
     dependencies:
       duplexer: 0.1.2
+
+  h3-valibot@0.0.9(@nuxt/kit@3.16.0(magicast@0.3.5))(@nuxt/schema@3.16.0)(valibot@1.0.0-rc.4(typescript@5.8.2)):
+    dependencies:
+      h3: 1.15.1
+      valibot: 1.0.0-rc.4(typescript@5.8.2)
+    optionalDependencies:
+      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/schema': 3.16.0
 
   h3@1.15.1:
     dependencies:

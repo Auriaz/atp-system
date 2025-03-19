@@ -14,7 +14,7 @@
 <template>
   <ClientOnly v-if="!colorMode?.forced">
     <UButton :icon="isDark ? 'i-line-md-moon-filled-loop' : 'i-line-md-moon-filled-to-sunny-filled-loop-transition'"
-      color="neutral" variant="ghost" @click="isDark = !isDark" />
+      color="primary" variant="ghost" @click="isDark = !isDark" />
 
     <template #fallback>
       <div class="size-8" />
