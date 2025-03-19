@@ -10,6 +10,7 @@ export const users = sqliteTable('users', {
     lastName: text('last_name'),
     bio: text('bio'),
     isAgreedToTerms: integer('is_agreed_to_terms').notNull().default(0),
+    isOAuthAccount: integer('is_oauth_account', { mode: 'boolean' }).default(false),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
     updatedAt: integer('updated_at', { mode: 'timestamp' }),
 })
@@ -22,6 +23,22 @@ export const userActivities = sqliteTable('user_activities', {
     userAgent: text('user_agent'),
     details: text('details'), // dodatkowe dane JSON
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+})
+
+export const oAuthAccounts = sqliteTable('oauth_accounts', {
+    id: integer('id').primaryKey({ autoIncrement: true }), // np. 'google', 'facebook'
+    userId: integer('user_id').notNull().references(() => users.id),
+    provider: text('provider').notNull(),
+    providerUserId: text('provider_user_id').notNull(),
+    accessToken: text('access_token').notNull(),
+    refreshToken: text('refresh_token'),
+    providerData: text('provider_data'),
+    email: text('email'),
+    username: text('username'),
+    avatarUrl: text('avatar_url'),
+    expiresAt: integer('expires_at').notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp' }),
 })
 
 // export const sessions = sqliteTable('sessions', {

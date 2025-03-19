@@ -24,9 +24,14 @@ export default defineNuxtConfig({
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
-    // session: {
-    //   maxAge: 60 * 60 * 24 * 7
-    // }
+    oauth: {
+      github: {
+        clientId: process.env.NUXT_OAUTH_GITHUB_CLIENT_ID,
+        clientSecret: process.env.NUXT_OAUTH_GITHUB_CLIENT_SECRET,
+        redirectUri: process.env.NUXT_OAUTH_GITHUB_REDIRECT_URI || 'http://localhost:3000/api/auth/github/callback',
+        scope: ['user:email']
+      },
+    },
   },
 
   auth: {
@@ -50,7 +55,8 @@ export default defineNuxtConfig({
 
   nitro: {
     experimental: {
-      tasks: true
+      tasks: true,
+      websocket: true,
     }
   },
 })

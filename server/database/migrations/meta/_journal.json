@@ -15,6 +15,13 @@
       "when": 1742413365080,
       "tag": "0001_far_lifeguard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1742424140600,
+      "tag": "0002_friendly_naoko",
+      "breakpoints": true
     }
   ]
 }
