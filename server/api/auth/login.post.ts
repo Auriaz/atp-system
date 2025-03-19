@@ -21,11 +21,18 @@ export default defineEventHandler(async (event) => {
       .where(eq(tables.users.email, body.email))
       .get()
 
-    // Unikaj ujawniania informacji o istnieniu użytkownika
-    if (!user || await verifyPassword(body.password, user.password)) {
+    if (!user) {
       throw createError({
         status: 401,
-        message: 'Invalid email or password'
+        message: 'Invalid email'
+      })
+    }
+
+    // Sprawdź czy hasło jest poprawne
+    if (!await verifyPassword(user.password, body.password)) {
+      throw createError({
+        status: 401,
+        message: 'Invalid password'
       })
     }
 
@@ -61,12 +68,7 @@ export default defineEventHandler(async (event) => {
       .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
-      {
-        user: userResource(user),
-        session: {
-          expiresAt: Date.now() + sessionDuration
-        }
-      },
+      null,
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
   } catch (error: unknown) {

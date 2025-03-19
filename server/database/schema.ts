@@ -8,7 +8,8 @@ export const users = sqliteTable('users', {
     avatarUrl: text('avatar_url'),
     firstName: text('first_name'),
     lastName: text('last_name'),
-
+    bio: text('bio'),
+    isAgreedToTerms: integer('is_agreed_to_terms').notNull().default(0),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
     updatedAt: integer('updated_at', { mode: 'timestamp' }),
 })

@@ -25,6 +25,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
         return currentPath.startsWith(link.to) || currentPath === link.to
     })
 
+    if (!loggedIn.value) {
+        console.log('Access denied, redirecting to login')
+        return navigateTo('/')
+    }
+
     // if (requiredLink?.requiredRoles && !hasRequiredRoles(requiredLink.requiredRoles)) {
     //     console.log('Access denied, redirecting to 403')
     //     return navigateTo('/403')

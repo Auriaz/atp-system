@@ -33,6 +33,6 @@ export const useGuard = () => {
     getUserRoles,
     hasRole,
     hasRequiredRoles,
-    filterLinksByRoles
+    filterLinksByRoles,
   }
 }

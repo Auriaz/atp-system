@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxthub/core',
     '@nuxt/eslint',
-    // '@nuxt/content',
+    '@nuxt/content',
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/image',
@@ -52,5 +52,5 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true
     }
-  }
+  },
 })

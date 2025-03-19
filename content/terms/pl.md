@@ -2,7 +2,9 @@
 
 ## Wprowadzenie
 
-Witamy w ATP (Advanced Training Platform) na stronie atp.nuxt.dev. Niniejsze Warunki korzystania regulują korzystanie z naszej platformy, która obecnie znajduje się w fazie przygotowań i testów. Uzyskując dostęp do ATP lub korzystając z niej, zgadzasz się przestrzegać tych Warunków korzystania. Jeśli nie zgadzasz się z jakąkolwiek częścią tych warunków, nie możesz korzystać z naszej platformy.
+Projekt jest w fazie Beta. Czyli jest to wersja testowa, która może zawierać błędy i nieprawidłowości. Wszelkie informacje zawarte w projekcie są fikcyjne i nie mają zastosowania w rzeczywistości. Projekt jest tworzony w celach edukacyjnych i nie jest przeznaczony do użytku komercyjnego.
+
+Witamy w ATP (Advanced Training Platform) na stronie atp-system.nuxt.dev. Niniejsze Warunki korzystania regulują korzystanie z naszej platformy, która obecnie znajduje się w fazie przygotowań i testów. Uzyskując dostęp do ATP lub korzystając z niej, zgadzasz się przestrzegać tych Warunków korzystania. Jeśli nie zgadzasz się z jakąkolwiek częścią tych warunków, nie możesz korzystać z naszej platformy.
 
 ## Opis projektu
 
@@ -71,4 +73,4 @@ Korzystając z ATP, potwierdzasz, że przeczytałeś, zrozumiałeś i zgadzasz s
 
 ---
 
-Proszę zastąpić "[adres e-mail]" rzeczywistym adresem e-mail dla Twojej platformy.
+<!-- Proszę zastąpić "[adres e-mail]" rzeczywistym adresem e-mail dla Twojej platformy. -->

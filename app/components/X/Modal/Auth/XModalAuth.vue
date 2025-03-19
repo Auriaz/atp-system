@@ -87,6 +87,10 @@
               class="text-7xl text-center text-primary"
             />
 
+            <h2 class="text-primary-900 dark:text-primary-100 text-center text-3xl font-semibold">
+              Create an account
+            </h2>
+
             <h2 class="text-basic-700 dark:text-basic-300 flex justify-center items-center">
               <p>You already have an account?</p>
 
@@ -97,9 +101,8 @@
               />
             </h2>
           </div>
-  <!-- 
-    <XFormAuthRegister />
-  -->
+
+          <XFormAuthRegister />
         </div>
       </template>
     </UModal>

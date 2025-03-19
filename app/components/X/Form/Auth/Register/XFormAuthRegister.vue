@@ -1,195 +1,157 @@
 <script setup lang="ts">
-const form = useForm({
+import * as v from 'valibot'
+import type { FormSubmitEvent } from '@nuxt/ui'
+import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js' 
+
+type registerSchema = v.InferOutput<typeof registerSchema>
+
+const state = reactive({
   username: '',
   email: '',
+  firstName: '',
+  lastName: '',
   password: '',
   password_confirmation: '',
-  isAgree: false,
+  isAgreedToTerms: false,
 })
 
 const canSeeThePassword = ref(false)
 const canSeeTheConfirmPassword = ref(false)
 
 const isOpenAgreementModel = ref<boolean>(false)
-const lang = ref(['en'])
+const lang = ref('en')
 
-const optionsSelected = ref([
-  { value: 'en', label: 'English', selected: false },
-  { value: 'pl', label: 'Polish', selected: true },
-])
+const itemsSelected = ref(['en', 'pl'])
 
 function agreement(value: boolean) {
-  form.body.isAgree = value
+  state.isAgreedToTerms = value
   isOpenAgreementModel.value = false
 }
 
-async function handleSubmit() {
-  form.submit('/api/auth/register', 'POST', {
-    success: () => {
-      useModalHelper().toggleRegisterModal()
-      form.reset()
-    },
-  }, {})
+const {data: terms} = await useAsyncData(() => queryCollection('content').path(`/terms/${lang.value}`).first())
+
+watch(() => lang.value, async () => {
+  terms.value = await queryCollection('content').path(`/terms/${lang.value}`).first()
+})
+
+const toast = useToast()
+
+async function onSubmit(event: FormSubmitEvent<registerSchema>)  {
+  const { data, error } = await useFetch('/api/auth/register', {
+    method: 'POST',
+    body: state,
+  })
+
+  if (error.value) {
+    toast.add({
+      title: 'Error',
+      description: error.value.data.message,
+      color: 'error',
+    })
+    return
+  }
+
+  toast.add(data.value?.message as Toast)
 }
 
 </script>
 
 <template>
-  <div>
-    <form
-      class="relative flex flex-col w-full h-full"
-      @submit.prevent="handleSubmit"
-    >
-      <div class="pt-5 space-y-8">
-        <x-input
-          v-model="form.body.username"
-          :color="form.errors && form.errors?.username ? 'error' : 'default'"
-          label="Name"
-          icon="material-symbols:person-3-rounded"
-          name="register_name"
-          :error="form.errors && form.errors?.username ? form.errors?.username : ''"
-          autofocus
-        />
+  <div class="w-full">
+    <UForm :schema="v.safeParser(registerSchema)" :state="state" class="w-full space-y-6 px-6 overflow-y-auto" @submit="onSubmit" >
+      <UFormField required label="Username" name="username" class="w-full">
+        <UInput v-model="state.username" class="w-full" />
+      </UFormField>
+      
+      <UFormField label="First Name" name="first_name" class="w-full">
+        <UInput v-model="state.firstName" class="w-full" />
+      </UFormField>
 
-        <x-input
-          v-model="form.body.email"
-          :color="form.errors && form.errors?.email ? 'error' : 'default'"
-          label="Email"
-          icon="material-symbols:mark-email-unread-sharp"
-          type="email"
-          name="register_email"
-          :error="form.errors && form.errors?.email ? form.errors?.email : ''"
-        />
+      <UFormField label="Last Name" name="last_name" class="w-full">
+        <UInput v-model="state.lastName" class="w-full" />
+      </UFormField>
 
-        <x-input
-          v-model="form.body.password"
-          :type="canSeeThePassword ? 'text' : 'password'"
-          :color="form.errors && form.errors?.password ? 'error' : 'default'"
-          label="Password"
-          icon="teenyicons:password-solid"
-          name="register_password"
-          right-icon
-          :error="form.errors && form.errors?.password ? form.errors?.password : ''"
-        >
-          <template #right-icon>
-            <div class="flex space-x-3">
-              <Icon
-                v-if="canSeeThePassword"
-                name="mdi:eye-off-outline"
-                class="text-xl text-blue-600 hover:text-green-600 cursor-pointer"
-                @click="canSeeThePassword = false"
-              />
-              <Icon
-                v-else
-                name="mdi:eye-outline"
-                class="text-xl hover:text-red-600 cursor-pointer"
-                @click="canSeeThePassword = true"
-              />
-            </div>
-          </template>
-        </x-input>
+      <UFormField required label="Email" name="email" class="w-full">
+        <UInput v-model="state.email" class="w-full" />
+      </UFormField>
 
-        <x-input
-          v-model="form.body.password_confirmation"
-          :type="canSeeTheConfirmPassword ? 'text' : 'password'"
-          :color="form.errors && form.errors?.password_confirmation ? 'error' : 'default'"
-          label="Password confirmation"
-          icon="teenyicons:password-solid"
-          name="register_password_confirm"
-          right-icon
-          :error="form.errors && form.errors?.password_confirmation ? form.errors?.password_confirmation : ''"
-        >
-          <template #right-icon>
-            <div class="flex space-x-3">
-              <Icon
-                v-if="canSeeTheConfirmPassword"
-                name="mdi:eye-off-outline"
-                class="text-xl text-blue-600 hover:text-green-600 cursor-pointer"
-                @click="canSeeTheConfirmPassword = false"
-              />
-              <Icon
-                v-else
-                name="mdi:eye-outline"
-                class="text-xl hover:text-red-600 cursor-pointer"
-                @click="canSeeTheConfirmPassword = true"
-              />
-            </div>
-          </template>
-        </x-input>
-
-        <div class="flex flex-col">
-          <div class="flex items-center">
-            <x-checkbox
-              v-model="form.body.isAgree"
-              label="I accept the"
-              color="primary"
-            />
-
-            <x-btn
-              variant="link"
-              color="primary"
-              label="Terms and Conditions"
+      <UFormField required class="w-full relative" label="Password" name="password">
+        <UInput v-model="state.password" :type="canSeeThePassword ? 'text' : 'password'" class="w-full">
+          <template #trailing>
+            <UButton
+              @click="canSeeThePassword = !canSeeThePassword"
+              color="secondary"
               size="sm"
-              @click="isOpenAgreementModel = true"
+              variant="link"
+              :icon="canSeeThePassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              :aria-label="canSeeThePassword ? 'Hide password' : 'Show password'"
+              :aria-pressed="canSeeThePassword"
+              aria-controls="password"
             />
-          </div>
+          </template>
+        </UInput>
+      </UFormField>
 
-          <div
-            v-if="form.errors && form.errors?.isAgree"
-            class="w-full text-center text-error-900 text-[14px] font-semibolds bg-error-300 p-2 box-border mt-1 rounded"
-          >
-            {{ form.errors?.isAgree }}
-          </div>
-        </div>
+      <UFormField required class="w-full relative" label="Confirm Password" name="password_confirmation">
+        <UInput v-model="state.password_confirmation" :type="canSeeTheConfirmPassword ? 'text' : 'password'" class="w-full">
+          <template #trailing>
+            <UButton
+              @click="canSeeTheConfirmPassword = !canSeeTheConfirmPassword"
+              color="secondary"
+              size="sm"
+              variant="link"
+              :icon="canSeeTheConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              :aria-label="canSeeTheConfirmPassword ? 'Hide password' : 'Show password'"
+              :aria-pressed="canSeeTheConfirmPassword"
+              aria-controls="password"
+            />
+          </template>
+        </UInput>
+      </UFormField>
 
-        <div class="w-full space-y-6">
-          <x-btn
-            :loading="form.loading"
-            type="submit"
-            label="Register"
-            class="w-full"
-            color="success"
-            shadow
-            block
-          />
-        </div>
+      <UCheckbox v-model="state.isAgreedToTerms" required color="primary">
+        <template #label>
+          <span class="italic">I accept the 
+            <UButton variant="link" label="Terms and Conditions" class="p-0" @click="isOpenAgreementModel = true" />
+          </span>
+        </template>
+      </UCheckbox>
+
+      <UButton type="submit" color="primary" variant="solid" block class="text-bold">
+        Submit
+      </UButton>
+    </UForm>
+
+    <UModal
+      v-model:open="isOpenAgreementModel" 
+      title="Terms and Conditions"        
+      :close="{
+        color: 'primary',
+        variant: 'outline',
+        class: 'rounded-full'
+      }"
+    >
+      <template #body>
+        <div class="w-full relative  p-4">
+      <div class="absolute top-2 right-4 flex items-center space-x-2">
+        <p class="text-sm text-bold">lang:</p>
+
+        <USelect v-model="lang" label="Language" :items="itemsSelected" />
       </div>
-    </form>
 
-    <XModal :show="isOpenAgreementModel">
-      <div class="w-full relative  p-4">
-        <div class="absolute top-2 right-4 flex items-center space-x-2">
-          <x-select
-            v-model="lang"
-            label="Language"
-            :options="optionsSelected"
-          />
-        </div>
+      <h2 class="text-xl font-semibold pb-4">Terms and Conditions</h2>
 
-        <h2 class="text-xl font-semibold pb-4 text-basic dark:text-basic-dark">
-          Terms and Conditions
-        </h2>
-
-        <div class="w-full overflow-y-auto h-80  p-4 bg-gray-300 text-justify rounded">
-          <ContentDoc :path="`/terms/${lang}`" />
-        </div>
-
-        <div class="w-full mt-4 flex justify-between">
-          <x-btn
-            variant="solid"
-            color="danger"
-            label="Reject"
-            @click="agreement(false)"
-          />
-
-          <x-btn
-            variant="solid"
-            color="primary"
-            label="Agree"
-            @click="agreement(true)"
-          />
-        </div>
+      <div v-if="terms" class="w-full overflow-y-auto h-80  p-4 bg-gray-100 dark:bg-gray-800 text-justify rounded">
+        <ContentRenderer :value="terms" />
       </div>
-    </XModal>
+
+      <div class="w-full mt-4 flex justify-between">
+        <UButton variant="solid" color="error" label="Decline" @click="agreement(false)" />
+
+        <UButton variant="solid" color="primary" label="Accept" @click="agreement(true)" />
+      </div>
+    </div>
+      </template>
+    </UModal>
   </div>
 </template>

@@ -2,6 +2,8 @@
 
 ## Introduction
 
+The project is in Beta phase. This means it's a test version that may contain errors and irregularities. All information contained in the project is fictional and has no real-world application. The project is created for educational purposes and is not intended for commercial use.
+
 Welcome to ATP (Advanced Training Platform) at atp.nuxt.dev. These Terms and Conditions govern your use of our platform, which is currently in the preparation and testing phase. By accessing or using ATP, you agree to comply with and be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our platform.
 
 ## Project Description
@@ -71,4 +73,4 @@ By using ATP, you acknowledge that you have read, understood, and agree to be bo
 
 ---
 
-Please replace "[email address]" with the actual contact email address for your platform.
+<!-- Please replace "[email address]" with the actual contact email address for your platform. -->
