@@ -53,10 +53,10 @@ export default defineNuxtConfig({
     // cache: true,
   },
 
-  nitro: {
-    experimental: {
-      tasks: true,
-      websocket: true,
-    }
-  },
+  // nitro: {
+  //   experimental: {
+  //     tasks: true,
+  //     // websocket: true,
+  //   }
+  // },
 })
