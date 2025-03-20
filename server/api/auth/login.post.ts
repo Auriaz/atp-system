@@ -40,39 +40,37 @@ export default defineEventHandler(async (event) => {
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
-    // const sessionDuration = body.rememberMe
-    //   ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
-    //   : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
+    const sessionDuration = body.rememberMe
+      ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
+      : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    const session = await setUserSession(event, {
-      user: {
-        // id: user.id,
-        email: user.email,
-        username: user.username,
-        avatarUrl: user.avatarUrl || '',
-      },
+    await setUserSession(event, {
+      user: userResource(user),
       loggedInAt: Date.now(),
+      expiresAt: Date.now() + sessionDuration,
+      rememberMe: body.rememberMe || false
     })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
-    // await useDatabase()
-    //   .insert(tables.userActivities)
-    //   .values({
-    //     userId: user.id,
-    //     action: 'login',
-    //     ip: getClientIp(event),
-    //     userAgent: event.node.req.headers['user-agent'] || 'unknown',
-    //     details: JSON.stringify({
-    //       rememberMe: body.rememberMe || false,
-    //       platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
-    //     }),
-    //     createdAt: new Date()
-    //   })
-    //   .execute()
+    await useDatabase()
+      .insert(tables.userActivities)
+      .values({
+        userId: user.id,
+        action: 'login',
+        ip: getClientIp(event),
+        userAgent: event.node.req.headers['user-agent'] || 'unknown',
+        details: JSON.stringify({
+          rememberMe: body.rememberMe || false,
+          platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
+        }),
+        createdAt: new Date()
+      })
+      .execute()
+      .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
-      { user: userResource(user) },
+      null,
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
     // kod logowania
