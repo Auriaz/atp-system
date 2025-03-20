@@ -45,17 +45,15 @@ export default defineEventHandler(async (event) => {
     //   : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    // await setUserSession(event, {
-    //   user: {
-    //     id: user.id,
-    //     email: user.email,
-    //     username: user.username,
-    //     avatarUrl: user.avatarUrl || '',
-    //   },
-    //   loggedInAt: Date.now(),
-    //   expiresAt: Date.now(),
-    //   rememberMe: body.rememberMe || false
-    // })
+    const session = await setUserSession(event, {
+      user: {
+        // id: user.id,
+        email: user.email,
+        username: user.username,
+        avatarUrl: user.avatarUrl || '',
+      },
+      loggedInAt: Date.now(),
+    })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
     // await useDatabase()
@@ -74,7 +72,7 @@ export default defineEventHandler(async (event) => {
     //   .execute()
 
     return createApiResponse(
-      user,
+      { user: userResource(user), session },
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
     // kod logowania
