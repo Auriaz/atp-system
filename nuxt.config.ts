@@ -35,7 +35,7 @@ export default defineNuxtConfig({
 
     session: {
       name: 'nuxt-session',
-      password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6',
+      password: process.env.NUXT_SESSION_PASSWORD || '',
       maxAge: 60 * 60 * 24 * 7, // 1 week
     }
   },
