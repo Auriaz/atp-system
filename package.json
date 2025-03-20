@@ -48,6 +48,7 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "^13.0.0",
+    "better-sqlite3": "^11.9.1",
     "chart.js": "^4.4.8",
     "crossws": "^0.3.4",
     "date-fns": "^4.1.0",
