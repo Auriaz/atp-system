@@ -11,13 +11,13 @@ export const userResource = (user: DatabaseUser): User => {
     const createdDate = new Date(user.createdAt);
 
     return {
-        id: user.id, // Konwersja na string
+        // id: user.id, // Konwersja na string
         avatarUrl: user.avatarUrl ? user.avatarUrl : '',
         email: user.email,
         username: user.username,
-        createdAtAgo: formatDistanceToNow(createdDate, {
-            addSuffix: true, // dodaje "temu" na końcu
-            locale: enGB // używa polskich formatów i nazw
-        }),
+        // createdAtAgo: formatDistanceToNow(createdDate, {
+        //     addSuffix: true, // dodaje "temu" na końcu
+        //     locale: enGB // używa polskich formatów i nazw
+        // }),
     }
 }
