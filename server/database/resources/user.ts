@@ -12,7 +12,7 @@ export const userResource = (user: DatabaseUser): User => {
 
     return {
         id: user.id, // Konwersja na string
-        avatarUrl: user.avatarUrl,
+        avatarUrl: user.avatarUrl ? user.avatarUrl : '',
         email: user.email,
         username: user.username,
         createdAtAgo: formatDistanceToNow(createdDate, {
