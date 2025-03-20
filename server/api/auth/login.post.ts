@@ -31,12 +31,12 @@ export default defineEventHandler(async (event) => {
     }
 
     // Sprawdź czy hasło jest poprawne
-    // if (!await verifyPassword(user.password, body.password)) {
-    //   throw createError({
-    //     status: 401,
-    //     message: 'Invalid password'
-    //   })
-    // }
+    if (!await verifyPassword(user.password, body.password)) {
+      throw createError({
+        status: 401,
+        message: 'Invalid password'
+      })
+    }
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
@@ -45,17 +45,17 @@ export default defineEventHandler(async (event) => {
     //   : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    await setUserSession(event, {
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        avatarUrl: user.avatarUrl || '',
-      },
-      loggedInAt: Date.now(),
-      expiresAt: Date.now(),
-      rememberMe: body.rememberMe || false
-    })
+    // await setUserSession(event, {
+    //   user: {
+    //     id: user.id,
+    //     email: user.email,
+    //     username: user.username,
+    //     avatarUrl: user.avatarUrl || '',
+    //   },
+    //   loggedInAt: Date.now(),
+    //   expiresAt: Date.now(),
+    //   rememberMe: body.rememberMe || false
+    // })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
     // await useDatabase()
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
     //   .execute()
 
     return createApiResponse(
-      null,
+      user,
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
     // kod logowania
