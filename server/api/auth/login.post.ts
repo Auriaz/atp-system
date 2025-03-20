@@ -31,12 +31,12 @@ export default defineEventHandler(async (event) => {
     }
 
     // Sprawdź czy hasło jest poprawne
-    // if (!await verifyPassword(user.password, body.password)) {
-    //   throw createError({
-    //     status: 401,
-    //     message: 'Invalid password'
-    //   })
-    // }
+    if (!await verifyPassword(user.password, body.password)) {
+      throw createError({
+        status: 401,
+        message: 'Invalid password'
+      })
+    }
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
@@ -73,24 +73,16 @@ export default defineEventHandler(async (event) => {
       null,
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
-    // kod logowania
-  } catch (error) {
-    console.error('Detailed login error:', error);
-    throw createError({
-      statusCode: 500,
-      message: 'Authentication error: ' + error, // zmieniono treść wiadomości z oryginalnej
-      cause: error
-    });
-  }
-})
-// Funkcja pomocnicza do pobierania IP klienta
-function getClientIp(event: H3Event) {
-  const forwarded = event.node.req.headers['x-forwarded-for']
 
-  if (forwarded) {
-    return (typeof forwarded === 'string' ? forwarded : forwarded[0]).split(',')[0]
-  }
-  return event.node.req.socket.remoteAddress || ''
+  })
+// // Funkcja pomocnicza do pobierania IP klienta
+// function getClientIp(event: H3Event) {
+//   const forwarded = event.node.req.headers['x-forwarded-for']
+
+if (forwarded) {
+  return (typeof forwarded === 'string' ? forwarded : forwarded[0]).split(',')[0]
+}
+return event.node.req.socket.remoteAddress || ''
 }
 
 /**
