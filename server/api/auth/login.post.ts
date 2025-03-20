@@ -45,12 +45,12 @@ export default defineEventHandler(async (event) => {
     //   : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    // await setUserSession(event, {
-    //   user: userResource(user),
-    //   loggedInAt: Date.now(),
-    //   expiresAt: Date.now(),
-    //   rememberMe: body.rememberMe || false
-    // })
+    await setUserSession(event, {
+      user: userResource(user),
+      loggedInAt: Date.now(),
+      expiresAt: Date.now(),
+      rememberMe: body.rememberMe || false
+    })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
     // await useDatabase()
