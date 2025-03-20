@@ -2,7 +2,8 @@
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js' 
-const {fetch} = useUserSession() 
+const { fetch } = useUserSession() 
+const toast = useToast()
 
 type loginSchema = v.InferOutput<typeof loginSchema>
 
@@ -14,26 +15,26 @@ const state = reactive({
 
 const previewPassword = ref(false)
 
-const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<loginSchema>) {
-  const {data, error} = await useFetch('/api/auth/login', {
-    method: 'POST',
-    body: event.data
-  })
-
-  if(error.value) {
-    toast.add({
-      title: 'Error',
-      description: error.value.data.message,
-      color: 'error'
+  await useAsyncData('login', async () => $fetch('/api/auth/login', {
+      method: 'POST',
+      body: event.data
     })
-    return
-  }
-
-  fetch()
-
-  navigateTo('/dashboard')
-  toast.add(data.value?.message as Toast)
+    .then( res => {
+      fetch()
+      toast.add(res.message as Toast)
+    })
+    .catch( error => {
+      toast.add({
+        title: 'Error',
+        description: error.data.message,
+        color: 'error'
+      })
+    })
+    .finally(() => {
+      navigateTo('/dashboard')
+    })
+  )
 }
 </script>
 
