@@ -5,85 +5,72 @@ import { userResource } from '~~/server/database/resources/user'
 import { createApiResponse } from '~~/server/utils/response'
 
 export default defineEventHandler(async (event) => {
-  try {
-    const body = await useValidatedBody(event, loginSchema)
+  const body = await useValidatedBody(event, loginSchema)
 
-    // Ustawienie nagłówków bezpieczeństwa
-    // setHeaders(event, {
-    //   'Cache-Control': 'no-store, max-age=0, must-revalidate',
-    //   'Pragma': 'no-cache'
-    // })
+  // Ustawienie nagłówków bezpieczeństwa
+  // setHeaders(event, {
+  //   'Cache-Control': 'no-store, max-age=0, must-revalidate',
+  //   'Pragma': 'no-cache'
+  // })
 
-    // Sprawdź czy użytkownik istnieje
-    const user = await useDatabase()
-      .select()
-      .from(tables.users)
-      .where(eq(tables.users.email, body.email))
-      .get()
+  // Sprawdź czy użytkownik istnieje
+  const user = await useDatabase()
+    .select()
+    .from(tables.users)
+    .where(eq(tables.users.email, body.email))
+    .get()
 
-    if (!user) {
-      throw createError({
-        status: 401,
-        message: 'Invalid email'
-      })
-    }
-
-    // Sprawdź czy hasło jest poprawne
-    if (!await verifyPassword(user.password, body.password)) {
-      throw createError({
-        status: 401,
-        message: 'Invalid password'
-      })
-    }
-
-    // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
-    // Dla "zapamiętaj mnie" ustaw na 30 dni
-    const sessionDuration = body.rememberMe
-      ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
-      : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
-
-    // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    await setUserSession(event, {
-      user: userResource(user),
-      loggedInAt: Date.now(),
-      expiresAt: Date.now() + sessionDuration,
-      rememberMe: body.rememberMe || false
-    })
-
-    // Dodaj logowanie aktywności użytkownika (opcjonalnie)
-    await useDatabase()
-      .insert(tables.userActivities)
-      .values({
-        userId: user.id,
-        action: 'login',
-        ip: getClientIp(event),
-        userAgent: event.node.req.headers['user-agent'] || 'unknown',
-        details: JSON.stringify({
-          rememberMe: body.rememberMe || false,
-          platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
-        }),
-        createdAt: new Date()
-      })
-      .execute()
-      .catch(error => console.error('Failed to log user activity:', error))
-
-    return createApiResponse(
-      null,
-      { title: 'Login successful', description: 'You have been successfully logged in' }
-    )
-  } catch (error: unknown) {
-    // Sprawdź czy to już obsłużony błąd HTTP
-    if (error && typeof error === 'object' && 'statusCode' in error) throw error
-
-    // Loguj nieoczekiwane błędy
-    console.error('Login error:', error)
-
-    // Zwróć ogólny błąd
+  if (!user) {
     throw createError({
-      status: 500,
-      message: 'An error occurred during login'
+      status: 401,
+      message: 'Invalid email'
     })
   }
+
+  // Sprawdź czy hasło jest poprawne
+  if (!await verifyPassword(user.password, body.password)) {
+    throw createError({
+      status: 401,
+      message: 'Invalid password'
+    })
+  }
+
+  // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
+  // Dla "zapamiętaj mnie" ustaw na 30 dni
+  const sessionDuration = body.rememberMe
+    ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
+    : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
+
+  // Utwórz sesję z odpowiednim czasem wygaśnięcia
+  await setUserSession(event, {
+    user: userResource(user),
+    loggedInAt: Date.now(),
+    expiresAt: Date.now() + sessionDuration,
+    rememberMe: body.rememberMe || false
+  })
+
+  // Dodaj logowanie aktywności użytkownika (opcjonalnie)
+  await useDatabase()
+    .insert(tables.userActivities)
+    .values({
+      userId: user.id,
+      action: 'login',
+      ip: getClientIp(event),
+      userAgent: event.node.req.headers['user-agent'] || 'unknown',
+      details: JSON.stringify({
+        rememberMe: body.rememberMe || false,
+        platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
+      }),
+      createdAt: new Date()
+    })
+    .execute()
+    .catch(error => console.error('Failed to log user activity:', error))
+
+  return createApiResponse(
+    null,
+    { title: 'Login successful', description: 'You have been successfully logged in' }
+  )
+
 })
 // Funkcja pomocnicza do pobierania IP klienta
 function getClientIp(event: H3Event) {
