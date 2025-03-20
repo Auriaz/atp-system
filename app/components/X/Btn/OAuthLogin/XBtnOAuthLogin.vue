@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { button } from '#build/ui'
-
  const oauthEndpoints = {
   connect: (provider: string) => `/api/auth/oauth/connect/${provider}`,
   disconnect: (provider: string) => `/api/auth/oauth/disconnect/${provider}`,

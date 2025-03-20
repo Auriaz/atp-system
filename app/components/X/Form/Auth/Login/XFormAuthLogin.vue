@@ -16,24 +16,25 @@ const previewPassword = ref(false)
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<loginSchema>) {
-  const {data, error} = await useFetch('/api/auth/login', {
+  await $fetch('/api/auth/login', {
     method: 'POST',
     body: event.data
   })
+  .then((res) => {
+    fetch()
 
-  if(error.value) {
+    toast.add(res.message as Toast)
+    navigateTo('/dashboard')
+  })
+  .catch((error) => {
     toast.add({
       title: 'Error',
-      description: error.value.data.message,
+      description: error.message,
       color: 'error'
     })
-    return
-  }
 
-  fetch()
-
-  toast.add(data.value?.message as Toast)
-  navigateTo('/dashboard')
+    console.error(error)
+  })
 }
 </script>
 
