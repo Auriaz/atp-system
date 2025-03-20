@@ -16,17 +16,15 @@ const previewPassword = ref(false)
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<loginSchema>) {
-  const {data, error} = await useAsyncData('login' , () => {
-    return $fetch('/api/auth/login', {
-      method: 'POST',
-      body: state
-    })
+  const {data, error} = await useFetch('/api/auth/login', {
+    method: 'POST',
+    body: event.data
   })
 
   if(error.value) {
     toast.add({
       title: 'Error',
-      description: error.value.data?.message as string,
+      description: error.value.data.message,
       color: 'error'
     })
     return
@@ -40,41 +38,39 @@ async function onSubmit(event: FormSubmitEvent<loginSchema>) {
 </script>
 
 <template>
-  <div class="w-full space-y-6 px-6">
-    <UForm :schema="v.safeParser(loginSchema)" :state="state" class="w-full space-y-6" @submit="onSubmit">
-      <UFormField required label="Email" name="email" class="w-full">
-        <UInput v-model="state.email" class="w-full"/>
-      </UFormField>
-  
-      <UFormField required class="w-full relative" label="Password" name="password">
-        <UInput v-model="state.password" :type="previewPassword ? 'text' : 'password'" class="w-full" >
-          <template #trailing>
-            <UButton
-              @click="previewPassword = !previewPassword"
-              color="secondary"
-              size="sm"
-              variant="link"
-              :icon="previewPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-              :aria-label="previewPassword ? 'Hide password' : 'Show password'"
-              :aria-pressed="previewPassword"
-              aria-controls="password"
-            />
-          </template>
-        </UInput>
-      </UFormField>
-  
-      <div class="flex items-center space-x-2">
-        <UCheckbox v-model="state.rememberMe"  color="primary" />
-        <span class="text-sm">Remember me</span>
-      </div>
-  
-      <UButton type="submit" color="primary" variant="solid" block class="text-bold">
-        Submit
-      </UButton>
-    </UForm>
-  
+  <UForm :schema="v.safeParser(loginSchema)" :state="state" class="w-full space-y-6 px-6" @submit="onSubmit">
+    <UFormField required label="Email" name="email" class="w-full">
+      <UInput v-model="state.email" class="w-full"/>
+    </UFormField>
+
+    <UFormField required class="w-full relative" label="Password" name="password">
+      <UInput v-model="state.password" :type="previewPassword ? 'text' : 'password'" class="w-full" >
+        <template #trailing>
+          <UButton
+            @click="previewPassword = !previewPassword"
+            color="secondary"
+            size="sm"
+            variant="link"
+            :icon="previewPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+            :aria-label="previewPassword ? 'Hide password' : 'Show password'"
+            :aria-pressed="previewPassword"
+            aria-controls="password"
+          />
+        </template>
+      </UInput>
+    </UFormField>
+
+    <div class="flex items-center space-x-2">
+      <UCheckbox v-model="state.rememberMe"  color="primary" />
+      <span class="text-sm">Remember me</span>
+    </div>
+
+    <UButton type="submit" color="primary" variant="solid" block class="text-bold">
+      Submit
+    </UButton>
+
     <USeparator />
-  
+
     <XBtnOAuthLogin />
-  </div>
+  </UForm>
 </template>
