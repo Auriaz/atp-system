@@ -46,7 +46,12 @@ export default defineEventHandler(async (event) => {
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
     await setUserSession(event, {
-      user: userResource(user),
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        avatarUrl: user.avatarUrl || '',
+      },
       loggedInAt: Date.now(),
       expiresAt: Date.now(),
       rememberMe: body.rememberMe || false
