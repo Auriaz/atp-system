@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
     //   .execute()
 
     return createApiResponse(
-      { user: userResource(user), session },
+      { user: userResource(user) },
       { title: 'Login successful', description: 'You have been successfully logged in' }
     )
     // kod logowania
