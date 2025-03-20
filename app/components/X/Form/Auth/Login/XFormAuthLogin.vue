@@ -32,8 +32,8 @@ async function onSubmit(event: FormSubmitEvent<loginSchema>) {
 
   fetch()
 
-  toast.add(data.value?.message as Toast)
   navigateTo('/dashboard')
+  toast.add(data.value?.message as Toast)
 }
 </script>
 
@@ -68,9 +68,10 @@ async function onSubmit(event: FormSubmitEvent<loginSchema>) {
     <UButton type="submit" color="primary" variant="solid" block class="text-bold">
       Submit
     </UButton>
+<!---  
+  <USeparator />
 
-    <USeparator />
-
-    <XBtnOAuthLogin />
+  <XBtnOAuthLogin />
+  --->
   </UForm>
 </template>
