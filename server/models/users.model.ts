@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { USER_STATUSES } from '../../shared/utils/constants/user.constants'
+import { USER_STATUSES } from '../../shared/utils/user.constants'
 
 export const users = sqliteTable('users', {
     id: integer('id').primaryKey({ autoIncrement: true }),

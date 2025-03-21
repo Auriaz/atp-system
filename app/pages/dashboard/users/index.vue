@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { h, resolveComponent } from 'vue'
 import type { TableColumn, DropdownMenuItem  } from '@nuxt/ui'
-import {USER_STATUS_COLORS} from '@@/shared/utils/constants/user.constants'
+// import {USER_STATUS_COLORS} from '@@/shared/utils/constants/user.constants'
 
 definePageMeta({
   layout: 'authorization',

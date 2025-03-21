@@ -5,7 +5,21 @@ import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
 const { fetch } = useUserSession() 
 const toast = useToast()
 
-type loginSchema = v.InferOutput<typeof loginSchema>
+// // Poprawna definicja schematu
+// const loginSchema = v.object({
+//   email: v.pipe(
+//     v.string(),
+//     v.email('Please enter a valid email address')
+//   ),
+//   password: v.pipe(
+//     v.string(),
+//     v.minLength(6, 'Password must be at least 6 characters')
+//   ),
+//   rememberMe: v.optional(v.boolean())
+// })
+
+// Typ wyprowadzony ze schematu
+type LoginFormData = v.InferOutput<typeof loginSchema>
 
 const state = reactive({
   email: '',
@@ -15,7 +29,7 @@ const state = reactive({
 
 const previewPassword = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<loginSchema>) {
+async function onSubmit(event: FormSubmitEvent<LoginFormData>) {
   await useAsyncData('login', async () => $fetch('/api/auth/login', {
       method: 'POST',
       body: event.data
@@ -27,7 +41,7 @@ async function onSubmit(event: FormSubmitEvent<loginSchema>) {
     .catch( error => {
       toast.add({
         title: 'Error',
-        description: error.data.message,
+        description: error.data?.message || 'Login failed',
         color: 'error'
       })
     })
