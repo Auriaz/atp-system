@@ -63,6 +63,17 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true,
       // websocket: true,
+    },
+    imports: {
+      dirs: [
+        'shared/utils/**'
+      ]
     }
+  },
+
+  imports: {
+    dirs: [
+      'shared/utils/**'
+    ]
   },
 })

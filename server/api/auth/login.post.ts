@@ -1,10 +1,7 @@
 import { useValidatedBody } from 'h3-valibot'
 import { createError, defineEventHandler } from 'h3'
 import { H3Event } from 'h3'
-import { loginSchema } from '~/utils/login'
-import { userResource } from '~~/server/database/resources/user'
 import { eq } from 'drizzle-orm'
-import { createApiResponse } from '~~/server/utils/response'
 
 export default defineEventHandler(async (event) => {
   try {

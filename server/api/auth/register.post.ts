@@ -1,7 +1,4 @@
 import { useValidatedBody } from 'h3-valibot'
-import { H3Event } from 'h3'
-import { registerSchema } from '~/utils/register'
-
 
 export default defineEventHandler(async (event) => {
   try {
@@ -50,7 +47,7 @@ export default defineEventHandler(async (event) => {
     }
 
     return createApiResponse(
-      { user: newUser[0] },
+      null,
       {
         title: 'Registration successful',
         description: 'Your account has been created successfully.'
