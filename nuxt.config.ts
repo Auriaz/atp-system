@@ -19,6 +19,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  colorMode: {
+    preference: 'system', // domyślnie użyj systemowych preferencji
+    fallback: 'light',    // domyślny tryb, gdy preferencje systemowe są niedostępne
+    classSuffix: '',      // usuwa sufiks z klasy (używa 'dark' zamiast 'dark-mode')
+  },
+
   // https://devtools.nuxt.com
   devtools: { enabled: true },
 

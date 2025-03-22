@@ -8,3 +8,6 @@ export const registerSchema = v.object({
   lastName: v.optional(v.string()),
   isAgreedToTerms: v.pipe(v.boolean(), v.custom((value) => value === true, 'Must be true')),
 })
+
+// Typ wyprowadzony ze schematu
+export type RegisterFormData = v.InferOutput<typeof registerSchema>

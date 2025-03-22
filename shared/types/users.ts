@@ -2,9 +2,10 @@ export type DatabaseUser = typeof tables.users.$inferSelect
 
 export interface IUserResource {
     id: number;
-    avatarUrl: string;
+    avatarUrl: string | null;
     email: string;
     username: string;
+    role: UserRole | null;
     status: string | null;
     createdAtAgo: string;
     updatedAtAgo: string | null;

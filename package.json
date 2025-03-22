@@ -54,6 +54,7 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.40.1",
     "drizzle-valibot": "^0.4.0",
+    "gsap": "^3.12.7",
     "h3-valibot": "^0.0.9",
     "lodash.clonedeep": "^4.5.0",
     "nuxt": "^3.16.1",
@@ -81,5 +82,5 @@
     "vue-tsc": "^2.2.8",
     "wrangler": "4.0.0"
   },
-  "packageManager": "pnpm@10.6.3"
+  "packageManager": "pnpm@10.6.5"
 }

@@ -10,6 +10,7 @@ export const userResource = (user: DatabaseUser): User => {
     return {
         id: user.id, // Konwersja na string
         avatarUrl: user.avatarUrl ? user.avatarUrl : '',
+        role: user.role as UserRole,
         email: user.email,
         username: user.username,
         createdAtAgo: formatDistanceToNow(createdDate, {
@@ -28,6 +29,7 @@ export const usersResource = (users: DatabaseUser[]): IUserResource[] => {
             avatarUrl: user.avatarUrl ? user.avatarUrl : '',
             email: user.email,
             username: user.username,
+            role: user.role as UserRole,
             status: user.status, // Provide empty string as default when null
             bio: user.bio,
             firstName: user.firstName,

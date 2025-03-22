@@ -1,4 +1,5 @@
 import { useValidatedBody } from 'h3-valibot'
+import { users } from '~~/server/models/users.model'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -36,7 +37,7 @@ export default defineEventHandler(async (event) => {
         createdAt: new Date(),
         updatedAt: new Date()
       })
-      .returning({ id: tables.users.id, email: tables.users.email, username: tables.users.username })
+      .returning()
       .execute()
 
     if (newUser.length !== 1) {
@@ -45,6 +46,31 @@ export default defineEventHandler(async (event) => {
         message: 'Failed to create user'
       })
     }
+
+    // Utwórz sesję z odpowiednim czasem wygaśnięcia
+    await setUserSession(event, {
+      user: userResource(newUser[0]), // newUser is an array with one element
+      loggedInAt: Date.now(),
+      expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 godziny w milisekundach
+      rememberMe: false
+    })
+
+    // Dodaj logowanie aktywności użytkownika (opcjonalnie)
+    await useDatabase()
+      .insert(tables.userActivities)
+      .values({
+        userId: newUser[0].id,
+        action: 'register',
+        ip: getClientIp(event),
+        userAgent: event.node.req.headers['user-agent'] || 'unknown',
+        details: JSON.stringify({
+          rememberMe: false,
+          platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
+        }),
+        createdAt: new Date()
+      })
+      .execute()
+      .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
       null,

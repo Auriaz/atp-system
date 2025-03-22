@@ -15,6 +15,13 @@
       "when": 1742507779256,
       "tag": "0001_groovy_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1742574896482,
+      "tag": "0002_thankful_shinko_yamashiro",
+      "breakpoints": true
     }
   ]
 }

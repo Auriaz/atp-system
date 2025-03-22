@@ -1,82 +1,50 @@
 <script setup lang="ts">
-import * as v from 'valibot'
-import type { FormSubmitEvent } from '@nuxt/ui'
-import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js' 
+  import * as v from 'valibot'
+  const auth = useAuthStore()
+  const { registerForm } = storeToRefs(auth)
+  const { onSubmitRegister } = auth
 
-type registerSchema = v.InferOutput<typeof registerSchema>
+  const canSeeThePassword = ref(false)
+  const canSeeTheConfirmPassword = ref(false)
 
-const state = reactive({
-  username: '',
-  email: '',
-  firstName: '',
-  lastName: '',
-  password: '',
-  password_confirmation: '',
-  isAgreedToTerms: false,
-})
+  const isOpenAgreementModel = ref<boolean>(false)
+  const lang = ref('en')
 
-const canSeeThePassword = ref(false)
-const canSeeTheConfirmPassword = ref(false)
+  const itemsSelected = ref(['en', 'pl'])
 
-const isOpenAgreementModel = ref<boolean>(false)
-const lang = ref('en')
-
-const itemsSelected = ref(['en', 'pl'])
-
-function agreement(value: boolean) {
-  state.isAgreedToTerms = value
-  isOpenAgreementModel.value = false
-}
+  function agreement(value: boolean) {
+    registerForm.value.data.isAgreedToTerms = value
+    isOpenAgreementModel.value = false
+  }
 
 // const {data: terms} = await useAsyncData(() => queryCollection('content').path(`/terms/${lang.value}`).first())
 
 // watch(() => lang.value, async () => {
 //   terms.value = await queryCollection('content').path(`/terms/${lang.value}`).first()
 // })
-
-const toast = useToast()
-
-async function onSubmit(event: FormSubmitEvent<registerSchema>)  {
-  const { data, error } = await useFetch('/api/auth/register', {
-    method: 'POST',
-    body: state,
-  })
-
-  if (error.value) {
-    toast.add({
-      title: 'Error',
-      description: error.value.data.message,
-      color: 'error',
-    })
-    return
-  }
-
-  toast.add(data.value?.message as Toast)
-}
-
 </script>
 
 <template>
   <div class="w-full">
-    <UForm :schema="v.safeParser(registerSchema)" :state="state" class="w-full space-y-6 px-6 overflow-y-auto" @submit="onSubmit" >
+    <UForm :schema="v.safeParser(registerSchema)" :state="registerForm.data" class="w-full space-y-6 px-6 overflow-y-auto" @submit="onSubmitRegister" >
       <UFormField required label="Username" name="username" class="w-full">
-        <UInput v-model="state.username" class="w-full" />
+        <UInput v-model="registerForm.data.username" class="w-full" />
       </UFormField>
       
       <UFormField label="First Name" name="first_name" class="w-full">
-        <UInput v-model="state.firstName" class="w-full" />
+        <UInput v-model="registerForm.data.firstName" class="w-full" />
       </UFormField>
 
       <UFormField label="Last Name" name="last_name" class="w-full">
-        <UInput v-model="state.lastName" class="w-full" />
+        <UInput v-model="registerForm.data.lastName" class="w-full" />
       </UFormField>
 
       <UFormField required label="Email" name="email" class="w-full">
-        <UInput v-model="state.email" class="w-full" />
+        <UInput v-model="registerForm.data.email" class="w-full" />
       </UFormField>
 
       <UFormField required class="w-full relative" label="Password" name="password">
-        <UInput v-model="state.password" :type="canSeeThePassword ? 'text' : 'password'" class="w-full">
+        <UInput v-model="registerForm.data.password" :type="canSeeThePassword ? 'text' : 'password'" class="w-full">
           <template #trailing>
             <UButton
               @click="canSeeThePassword = !canSeeThePassword"
@@ -93,7 +61,7 @@ async function onSubmit(event: FormSubmitEvent<registerSchema>)  {
       </UFormField>
 
       <UFormField required class="w-full relative" label="Confirm Password" name="password_confirmation">
-        <UInput v-model="state.password_confirmation" :type="canSeeTheConfirmPassword ? 'text' : 'password'" class="w-full">
+        <UInput v-model="registerForm.data.password_confirmation" :type="canSeeTheConfirmPassword ? 'text' : 'password'" class="w-full">
           <template #trailing>
             <UButton
               @click="canSeeTheConfirmPassword = !canSeeTheConfirmPassword"
@@ -109,7 +77,7 @@ async function onSubmit(event: FormSubmitEvent<registerSchema>)  {
         </UInput>
       </UFormField>
 
-      <UCheckbox v-model="state.isAgreedToTerms" required color="primary">
+      <UCheckbox v-model="registerForm.data.isAgreedToTerms" required color="primary">
         <template #label>
           <span class="italic">I accept the 
             <UButton variant="link" label="Terms and Conditions" class="p-0" @click="isOpenAgreementModel = true" />

@@ -60,10 +60,25 @@ definePageMeta({
             size: 'lg'
           }),
           h('div', undefined, [
-            h('p', { class: 'font-medium text-(--ui-text-highlighted)' }, row.original.username),
+            h('p', { class: 'font-medium text-(--ui-text-highlighted)' }, row.original.firstName + ' ' + row.original.lastName),
             h('p', { class: '' }, `@${row.original.username}`)
           ])
         ])
+      }
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email'
+    },
+    {
+      accessorKey: 'role',
+      header: 'Role',
+      cell: ({ row }) => {
+        const color = USER_ROLE_COLORS[row.getValue('role') as UserRole] || 'natural'
+
+        return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
+          row.getValue('role')
+        )
       }
     },
     {
@@ -77,13 +92,14 @@ definePageMeta({
         )
       }
     },
-    {
-      accessorKey: 'email',
-      header: 'Email'
-    },
+
     {
       accessorKey: 'createdAtAgo',
       header: 'Created'
+    },
+    {
+      accessorKey: 'updatedAtAgo',
+      header: 'Updated'
     },
     {
       id: 'action'

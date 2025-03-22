@@ -3,7 +3,7 @@ declare module '#auth-utils' {
     id: number
     avatarUrl: string
     email: string
-    // roles: string[]
+    role: UserRole
     username: string
     firstName?: string | null
     lastName?: string | null
