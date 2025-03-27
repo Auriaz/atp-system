@@ -1,35 +1,8 @@
 // server/middleware/check-permission.ts
 
-/**
- * Mapowanie ścieżek API na wymagane uprawnienia
- */
-const API_PERMISSION_MAP = {
-  // Użytkownicy
-  '/api/users': PERMISSIONS.USER_VIEW,
-  '/api/users/create': PERMISSIONS.USER_CREATE,
-  '/api/users/\\d+/edit': PERMISSIONS.USER_EDIT,
-  '/api/users/\\d+/delete': PERMISSIONS.USER_DELETE,
-
-  // Treningi
-  '/api/trainings': PERMISSIONS.TRAINING_VIEW,
-  '/api/trainings/all': PERMISSIONS.TRAINING_VIEW_ALL,
-  '/api/trainings/create': PERMISSIONS.TRAINING_CREATE,
-  '/api/trainings/\\d+/edit': PERMISSIONS.TRAINING_EDIT,
-
-  // Treści
-  '/api/content': PERMISSIONS.CONTENT_VIEW,
-  '/api/content/create': PERMISSIONS.CONTENT_CREATE,
-  '/api/content/\\d+/edit': PERMISSIONS.CONTENT_EDIT,
-  '/api/content/\\d+/publish': PERMISSIONS.CONTENT_PUBLISH,
-
-  // ... inne mapowania
-};
-
 export default defineEventHandler(async (event) => {
-  // Pobierz ścieżkę żądania
   const path = getRequestURL(event).pathname;
-  let userRole = USER_ROLES.OBSERVER as UserRole;
-  console.log('[ PATH ] ', path);
+  let userRole = '' as UserRole;
 
   // Ignoruj ścieżki publiczne i autoryzacyjne
   if (path.startsWith('/api/auth/') || path === '/api/health') {
@@ -39,15 +12,14 @@ export default defineEventHandler(async (event) => {
   // Pobierz sesję użytkownika
   const session = await getUserSession(event);
 
-  if (session?.user) {
+  // Sprawdź, czy użytkownik jest zalogowany
+  if (!session?.user) {
+    // Ustaw rolę użytkownika na obserwatora jeśli nie jest zalogowany
+    userRole = USER_ROLES.OBSERVER as UserRole;
+  } else {
+    // Pobierz rolę użytkownika
     userRole = session.user.role as UserRole;
-    // throw createError({
-    //   statusCode: 401,
-    //   message: 'Unauthorized'
-    // });
   }
-
-  // Pobierz rolę użytkownika
 
   // Znajdź wymagane uprawnienie dla danej ścieżki
   let requiredPermission: string | null = null;
@@ -65,10 +37,25 @@ export default defineEventHandler(async (event) => {
 
   // Sprawdź, czy użytkownik ma wymagane uprawnienie
   if (!hasPermission(userRole, requiredPermission as Permission)) {
+    // Ustaw status odpowiedzi z błędem i przerwij dalsze przetwarzanie
+    // event.respondWith(
+    //   new Response(JSON.stringify({
+    //     statusCode: 403,
+    //     message: 'Forbidden'
+    //   }), {
+    //     status: 403,
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     }
+    //   })
+    // );
 
     throw createError({
       statusCode: 403,
-      message: 'Insufficient privileges'
+      message: 'Forbidden'
     });
+
+    // Zatrzymaj dalsze przetwarzanie żądania
+    // return;
   }
 });

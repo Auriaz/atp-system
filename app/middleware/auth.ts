@@ -1,16 +1,14 @@
-export default defineNuxtRouteMiddleware(async (to) => {
+/**
+ * Middleware służący do kontroli dostępu do stron w zależności od uprawnień użytkownika.
+ * Jest uruchamiany przy każdej nawigacji i decyduje czy użytkownik ma dostęp do żądanej strony.
+ * @see https://nuxt.com/docs/guide/directory-structure/middleware
+ */
+export default defineNuxtRouteMiddleware((to) => {
+    // Podstawowe hooki i stany
     const { loggedIn, user } = useUserSession()
-    const sidebar = useSidebar()
     const toast = useToast()
-    const nuxtApp = useNuxtApp()
 
-    // Sprawdź czy mamy prawidłową ścieżkę
-    if (!to?.path) {
-        console.warn('No path provided')
-        return
-    }
-
-    // Publiczne ścieżki dostępne dla wszystkich
+    // Publiczne ścieżki dostępne dla wszystkich bez logowania
     const publicPaths = [
         '/',
         '/auth/login',
@@ -25,22 +23,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
         '/privacy'
     ]
 
-    // Jeśli ścieżka jest publiczna, pozwól na dostęp
+    // 1. Sprawdzenie publicznych ścieżek - szybkie wyjście
     if (publicPaths.includes(to.path)) {
         return
     }
 
-    // Sprawdzanie czy użytkownik jest zalogowany
+    // 2. Weryfikacja logowania
     if (!loggedIn.value) {
-        console.log('User not logged in, redirecting to login')
-
-        // Zapisz pierwotny cel nawigacji, aby wrócić po zalogowaniu
-        // Używaj localStorage tylko po stronie klienta
-        if (process.client) {
-            const returnPath = to.fullPath
-            if (returnPath !== '/auth/login') {
-                localStorage.setItem('returnPath', returnPath)
-            }
+        // Zapisz ścieżkę, do której użytkownik próbował się dostać (tylko po stronie klienta)
+        if (process.client && to.path !== '/auth/login') {
+            localStorage.setItem('returnPath', to.fullPath)
         }
 
         toast.add({
@@ -52,46 +44,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
         return navigateTo('/auth/login')
     }
 
-    // Pobierz rolę zalogowanego użytkownika
+    // Pobierz rolę użytkownika
     const userRole = user.value?.role || USER_ROLES.OBSERVER
 
-    // Sprawdź czy sidebar jest zainicjalizowany
-    if (sidebar?.sidebar?.value?.links) {
-        const currentPath = to.path
-        const links = sidebar.sidebar.value.links
-
-        // Sprawdź, czy link istnieje w sidebarze i wymaga specjalnych uprawnień
-        const requiredLink = links.find((link: any) => {
-            if (!link?.to || typeof link.to !== 'string') {
-                return false
-            }
-            return currentPath.startsWith(link.to) || currentPath === link.to
-        })
-
-        // Jeśli link istnieje i wymaga określonych uprawnień
-        if (requiredLink?.requiredPermission) {
-            const hasRequired = hasPermission(userRole, requiredLink.requiredPermission)
-
-            if (!hasRequired) {
-                console.log(`Access denied to ${currentPath}, required permission: ${requiredLink.requiredPermission}`)
-                toast.add({
-                    title: 'Niewystarczające uprawnienia',
-                    description: 'Nie masz wymaganych uprawnień, aby uzyskać dostęp do tej strony',
-                    color: 'error'
-                })
-
-                return navigateTo('/auth/403')
-            }
-        }
-    }
-
-    // Sprawdź meta wymagania strony
+    // 3. Sprawdzenie wymaganych uprawnień na podstawie meta strony
     if (to.meta.requiredPermission) {
-        const requiredPermission = to.meta.requiredPermission as string
-        const hasPagePermission = hasPermission(userRole, requiredPermission as Permission)
+        const requiredPermission = to.meta.requiredPermission as Permission
 
-        if (!hasPagePermission) {
-            console.log(`Access denied to ${to.path}, required permission: ${requiredPermission}`)
+        if (!hasPermission(userRole, requiredPermission)) {
             toast.add({
                 title: 'Niewystarczające uprawnienia',
                 description: 'Nie masz wymaganych uprawnień, aby uzyskać dostęp do tej strony',
@@ -102,9 +62,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
     }
 
-    // Specjalne sprawdzenia dla sekcji administracyjnych
+    // 4. Obsługa specjalnych przypadków dostępu
+
+    // Sekcja administracyjna
     if (to.path.startsWith('/dashboard/admin') && userRole !== USER_ROLES.ADMIN) {
-        console.log('Admin access denied')
         toast.add({
             title: 'Dostęp zabroniony',
             description: 'Tylko administratorzy mają dostęp do tej sekcji',
@@ -114,10 +75,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
         return navigateTo('/auth/403')
     }
 
-    // Specjalne sprawdzenia dla sekcji trenera
+    // Sekcja trenera
     if (to.path.startsWith('/dashboard/coach') &&
         !hasPermission(userRole, PERMISSIONS.TRAINING_CREATE)) {
-        console.log('Coach access denied')
         toast.add({
             title: 'Dostęp zabroniony',
             description: 'Tylko trenerzy mają dostęp do tej sekcji',
@@ -127,9 +87,32 @@ export default defineNuxtRouteMiddleware(async (to) => {
         return navigateTo('/auth/403')
     }
 
-    // Logowanie informacji o dostępie (pomocne podczas debugowania)
-    console.log(`Access granted to ${to.path} for user with role: ${userRole}`)
+    // 5. Sprawdzenie uprawnień na podstawie linków sidebar (opcjonalne)
+    const sidebar = useSidebar()
+    if (sidebar?.sidebar?.value?.links) {
+        const currentPath = to.path
+        const requiredLink = sidebar.sidebar.value.links.find((link: any) =>
+            link?.to && typeof link.to === 'string' &&
+            (currentPath.startsWith(link.to) || currentPath === link.to)
+        )
 
-    // Jeśli wszystkie warunki zostały spełnione, pozwól na dostęp
+        if (requiredLink?.requiredPermission &&
+            !hasPermission(userRole, requiredLink.requiredPermission)) {
+            toast.add({
+                title: 'Niewystarczające uprawnienia',
+                description: 'Nie masz wymaganych uprawnień, aby uzyskać dostęp do tej strony',
+                color: 'error'
+            })
+
+            return navigateTo('/dashboard/403')
+        }
+    }
+
+    // Logowanie dostępu (w trybie developerskim)
+    if (process.dev) {
+        console.log(`Access granted to ${to.path} for user with role: ${userRole}`)
+    }
+
+    // Dostęp przyznany
     return
 })

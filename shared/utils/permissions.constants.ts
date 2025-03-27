@@ -11,28 +11,33 @@ export const PERMISSIONS = {
   USER_EDIT: 'user:edit',           // Edycja użytkowników
   USER_DELETE: 'user:delete',        // Usuwanie użytkowników
   USER_ASSIGN_ROLE: 'user:assign_role',  // Przypisywanie ról
+  PROFILE_VIEW: 'profile:view',     // Przeglądanie profili użytkowników
 
   // ===== PROGRAMY TRENINGOWE =====
   TRAINING_VIEW: 'training:view',       // Przeglądanie programów treningowych
-  TRAINING_VIEW_ALL: 'training:view_all',  // Przeglądanie wszystkich programów
+  TRAINING_VIEW_ALL: 'training:view:all',  // Przeglądanie wszystkich programów
   TRAINING_CREATE: 'training:create',     // Tworzenie programów treningowych
   TRAINING_EDIT: 'training:edit',        // Edycja programów treningowych
   TRAINING_DELETE: 'training:delete',     // Usuwanie programów treningowych
   TRAINING_ASSIGN: 'training:assign',     // Przypisywanie programów sportowcom
+  TRAINING_ENROLL: 'training:enroll',     // Zapisywanie na treningi
 
   // ===== WYNIKI I POSTĘPY =====
   PROGRESS_VIEW: 'progress:view',       // Przeglądanie własnych postępów
-  PROGRESS_VIEW_ALL: 'progress:view_all',  // Przeglądanie wszystkich postępów
+  PROGRESS_VIEW_ALL: 'progress:view:all',  // Przeglądanie wszystkich postępów
   PROGRESS_ADD: 'progress:add',         // Dodawanie wyników
   PROGRESS_EDIT: 'progress:edit',       // Edycja wyników
   PROGRESS_DELETE: 'progress:delete',    // Usuwanie wyników
 
   // ===== ZARZĄDZANIE TREŚCIĄ =====
   CONTENT_VIEW: 'content:view',        // Przeglądanie treści
+  CONTENT_VIEW_PUBLIC: 'content:view:public', // Przeglądanie publicznych treści
   CONTENT_CREATE: 'content:create',     // Tworzenie treści
   CONTENT_EDIT: 'content:edit',        // Edycja treści
   CONTENT_DELETE: 'content:delete',     // Usuwanie treści
   CONTENT_PUBLISH: 'content:publish',   // Publikowanie treści
+  CONTENT_LIKE: 'content:like',          // Polubienie treści
+  CONTENT_COMMENT: 'content:comment',    // Komentowanie treści
 
   // ===== KALENDARZ I HARMONOGRAM =====
   SCHEDULE_VIEW: 'schedule:view',       // Przeglądanie własnego harmonogramu
@@ -55,6 +60,26 @@ export const PERMISSIONS = {
   STATS_VIEW: 'stats:view',           // Przeglądanie podstawowych statystyk
   STATS_ADVANCED: 'stats:advanced',     // Zaawansowane statystyki i wykresy
   REPORT_GENERATE: 'report:generate',   // Generowanie raportów
+
+  // Specjalne uprawnienia dla Observer
+  MATERIAL_VIEW: 'material:view',         // Przeglądanie materiałów
+  PROGRESS_UPDATE: 'progress:update',     // Aktualizacja własnych postępów
+  STATISTICS_VIEW: 'statistics:view',     // Przeglądanie własnych statystyk
+  STATISTICS_VIEW_GLOBAL: 'statistics:view:global', // Przeglądanie globalnych statystyk
+  CERTIFICATE_VIEW: 'certificate:view',   // Przeglądanie certyfikatów
+  CERTIFICATE_DOWNLOAD: 'certificate:download', // Pobieranie certyfikatów
+  NOTIFICATION_VIEW: 'notification:view', // Przeglądanie powiadomień
+  NOTIFICATION_MANAGE: 'notification:manage', // Zarządzanie powiadomieniami
+  SETTINGS_VIEW: 'settings:view',         // Przeglądanie ustawień
+  SETTINGS_EDIT: 'settings:edit',         // Edycja ustawień
+  SETTINGS_NOTIFICATIONS: 'settings:notifications', // Zarządzanie ustawieniami powiadomień
+  SEARCH: 'search',                       // Wyszukiwanie
+  SURVEY_VIEW: 'survey:view',             // Przeglądanie ankiet
+  SURVEY_RESPOND: 'survey:respond',       // Wypełnianie ankiet
+  FAQ_VIEW: 'faq:view',                   // Przeglądanie FAQ
+  DOCS_VIEW: 'docs:view',                 // Przeglądanie dokumentacji
+  CALENDAR_VIEW: 'calendar:view',         // Przeglądanie kalendarza
+  CALENDAR_EDIT: 'calendar:edit',         // Edycja kalendarza
 } as const;
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
@@ -170,7 +195,19 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 
   // Obserwator - tylko przeglądanie publicznych treści
   [USER_ROLES.OBSERVER]: [
-    PERMISSIONS.CONTENT_VIEW
+    PERMISSIONS.CONTENT_VIEW,
+    PERMISSIONS.PROFILE_VIEW,           // Przeglądanie profili
+    PERMISSIONS.CONTENT_VIEW_PUBLIC,    // Przeglądanie publicznych treści
+    PERMISSIONS.MATERIAL_VIEW,          // Przeglądanie materiałów
+    PERMISSIONS.NOTIFICATION_VIEW,      // Przeglądanie powiadomień
+    PERMISSIONS.NOTIFICATION_MANAGE,    // Zarządzanie własnymi powiadomieniami
+    PERMISSIONS.SETTINGS_VIEW,          // Przeglądanie ustawień
+    PERMISSIONS.SETTINGS_EDIT,          // Edycja własnych ustawień
+    PERMISSIONS.SETTINGS_NOTIFICATIONS, // Zarządzanie ustawieniami powiadomień
+    PERMISSIONS.SEARCH,                 // Podstawowe wyszukiwanie
+    PERMISSIONS.FAQ_VIEW,               // Przeglądanie FAQ
+    PERMISSIONS.DOCS_VIEW,              // Przeglądanie dokumentacji
+    PERMISSIONS.CALENDAR_VIEW,          // Przeglądanie kalendarza
   ]
 };
 

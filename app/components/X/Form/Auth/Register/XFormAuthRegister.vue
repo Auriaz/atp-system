@@ -1,8 +1,45 @@
 <script setup lang="ts">
   import * as v from 'valibot'
-  const auth = useAuthStore()
-  const { registerForm } = storeToRefs(auth)
-  const { onSubmitRegister } = auth
+  import type { FormSubmitEvent } from '@nuxt/ui'
+  import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
+  const { fetch } = useUserSession()
+  const toast = useToast()
+
+  const registerForm = reactive({
+    data: {
+      username: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+      firstName: '',
+      lastName: '',
+      isAgreedToTerms: false
+    },
+
+    loading: false,
+  })
+
+  async function onSubmitRegister(event: FormSubmitEvent<RegisterFormData>) {
+    await useAsyncData('login', async () => await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: event.data,
+    })
+      .then(res => {
+        fetch()
+        toast.add(res.message as Toast)
+      })
+      .catch(error => {
+        toast.add({
+          title: 'Error',
+          description: error.data?.message || 'Registration failed',
+          color: 'error'
+        })
+      })
+      .finally(() => {
+        navigateTo('/dashboard', { replace: true })
+      })
+    )
+  }
 
   const canSeeThePassword = ref(false)
   const canSeeTheConfirmPassword = ref(false)
@@ -13,7 +50,7 @@
   const itemsSelected = ref(['en', 'pl'])
 
   function agreement(value: boolean) {
-    registerForm.value.data.isAgreedToTerms = value
+    registerForm.data.isAgreedToTerms = value
     isOpenAgreementModel.value = false
   }
 

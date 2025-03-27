@@ -129,24 +129,24 @@ onMounted(() => {
 
 // Testimonials
 const testimonials = [
+  // {
+  //   quote: "System ATP pomógł mi zoptymalizować treningi i znacząco poprawić wyniki mojej drużyny w ciągu zaledwie jednego sezonu.",
+  //   author: "Marek Kowalski",
+  //   position: "Główny trener, KS Olimpia",
+  //   avatar: "/images/avatar-1.jpg"
+  // },
   {
-    quote: "System ATP pomógł mi zoptymalizować treningi i znacząco poprawić wyniki mojej drużyny w ciągu zaledwie jednego sezonu.",
-    author: "Marek Kowalski",
-    position: "Główny trener, KS Olimpia",
-    avatar: "/images/avatar-1.jpg"
-  },
-  {
-    quote: "Dzięki analizie danych treningowych mogłem lepiej zrozumieć mocne i słabe strony każdego zawodnika, co przełożyło się na indywidualne podejście w treningu.",
+    quote: "ATP System to narzędzie, które pozwala mi skupić się na pracy z zawodnikami, a nie na zbieraniu i analizie danych treningowych.",
     author: "Anna Nowak",
     position: "Trener personalny",
     avatar: "/images/avatar-2.jpg"
   },
-  {
-    quote: "Intuicyjny interfejs i zaawansowane możliwości analityczne czynią z ATP System niezastąpione narzędzie w codziennej pracy trenera.",
-    author: "Piotr Wiśniewski",
-    position: "Dyrektor sportowy, Akademia Sportowa",
-    avatar: "/images/avatar-3.jpg"
-  }
+  // {
+  //   quote: "Intuicyjny interfejs i zaawansowane możliwości analityczne czynią z ATP System niezastąpione narzędzie w codziennej pracy trenera.",
+  //   author: "Piotr Wiśniewski",
+  //   position: "Dyrektor sportowy, Akademia Sportowa",
+  //   avatar: "/images/avatar-3.jpg"
+  // }
 ]
 
 // Features
@@ -260,14 +260,16 @@ const features = [
       <!-- Trusted by section -->
       <section class="py-12 bg-white dark:bg-gray-900">
         <div class="container mx-auto px-4">
-          <h2 class="text-center text-lg text-gray-600 dark:text-gray-400 mb-8">Zaufały nam najlepsze kluby i organizacje sportowe</h2>
+          <h2 class="text-center text-lg text-gray-600 dark:text-gray-400 mb-8">Zaufały nam kluby</h2>
           
           <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            <img src="/images/logo-1.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-            <img src="/images/logo-2.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-            <img src="/images/logo-3.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-            <img src="/images/logo-4.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-            <img src="/images/logo-5.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+            <!-- Partner logos 
+              <img src="/images/logo-1.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <img src="/images/logo-2.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <img src="/images/logo-3.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <img src="/images/logo-4.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <img src="/images/logo-5.webp" alt="Partner logo" class="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+            -->
           </div>
         </div>
       </section>
@@ -347,25 +349,25 @@ const features = [
           
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div class="bg-white/10 dark:bg-gray-900/40 p-6 rounded-xl text-center stat-item">
-              <span class="counter-value text-4xl font-bold text-white" data-value="5000">0</span>
+              <span class="counter-value text-4xl font-bold text-white" data-value="0">0</span>
               <span class="text-4xl font-bold text-white">+</span>
               <p class="text-primary-200 dark:text-gray-300 mt-2">Aktywnych użytkowników</p>
             </div>
             
             <div class="bg-white/10 dark:bg-gray-900/40 p-6 rounded-xl text-center stat-item">
-              <span class="counter-value text-4xl font-bold text-white" data-value="250">0</span>
+              <span class="counter-value text-4xl font-bold text-white" data-value="0">0</span>
               <span class="text-4xl font-bold text-white">+</span>
               <p class="text-primary-200 dark:text-gray-300 mt-2">Klubów sportowych</p>
             </div>
             
             <div class="bg-white/10 dark:bg-gray-900/40 p-6 rounded-xl text-center stat-item">
-              <span class="counter-value text-4xl font-bold text-white" data-value="27">0</span>
+              <span class="counter-value text-4xl font-bold text-white" data-value="0">0</span>
               <span class="text-4xl font-bold text-white">%</span>
               <p class="text-primary-200 dark:text-gray-300 mt-2">Średni wzrost wydajności</p>
             </div>
             
             <div class="bg-white/10 dark:bg-gray-900/40 p-6 rounded-xl text-center stat-item">
-              <span class="counter-value text-4xl font-bold text-white" data-value="95">0</span>
+              <span class="counter-value text-4xl font-bold text-white" data-value="0">0</span>
               <span class="text-4xl font-bold text-white">%</span>
               <p class="text-primary-200 dark:text-gray-300 mt-2">Zadowolonych klientów</p>
             </div>

@@ -39,9 +39,9 @@ const faqs = ref([
 
 // Dane kontaktowe
 const contactInfo = {
-  address: 'ul. Sportowa 123, 00-001 Warszawa',
-  email: 'kontakt@atp-system.pl',
-  phone: '+48 123 456 789',
+  address: 'Lorem ipsum dolor sit amet',
+  email: 'przykład@atp-system.pl',
+  phone: '+48 111 111 111 ',
   hours: 'Pon-Pt: 9:00 - 17:00'
 }
 
@@ -87,22 +87,25 @@ const submitForm = async () => {
 }
 
 // Walidacja formularza
-const nameRules = [v => !!v || 'Imię i nazwisko jest wymagane']
+const nameRules = [(v: string | undefined) => !!v || 'Imię i nazwisko jest wymagane']
 const emailRules = [
-  v => !!v || 'Email jest wymagany',
-  v => /.+@.+\..+/.test(v) || 'Email musi być poprawny'
+  (v: string | undefined) => !!v || 'Email jest wymagany',
+  (v: string | undefined) => /.+@.+\..+/.test(v || '') || 'Email musi być poprawny'
 ]
-const subjectRules = [v => !!v || 'Temat jest wymagany']
+const subjectRules = [(v: string | undefined) => !!v || 'Temat jest wymagany']
 const messageRules = [
-  v => !!v || 'Wiadomość jest wymagana',
-  v => (v && v.length >= 10) || 'Wiadomość musi mieć co najmniej 10 znaków'
+  (v: string | undefined) => !!v || 'Wiadomość jest wymagana',
+  (v: string | undefined) => (v && v.length >= 10) || 'Wiadomość musi mieć co najmniej 10 znaków'
 ]
-const agreementRules = [v => !!v || 'Zgoda na przetwarzanie danych jest wymagana']
+const agreementRules = [(v: boolean | undefined) => !!v || 'Zgoda na przetwarzanie danych jest wymagana']
 
 // Obsługa FAQ
 const toggleFaq = (index: number) => {
   if (index >= 0 && index < faqs.value.length) {
-    faqs.value[index].open = !faqs.value[index].open
+    const faq = faqs.value[index];
+    if (faq) {
+      faq.open = !faq.open;
+    }
   }
 }
 </script>
@@ -137,57 +140,57 @@ const toggleFaq = (index: number) => {
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Wyślij wiadomość</h2>
               
-              <form @submit.prevent="submitForm" class="space-y-6">
+              <UForm :state="form" @submit="submitForm" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <UFormGroup label="Imię i nazwisko" required>
+                    <UFormField label="Imię i nazwisko" required>
                       <UInput
                         v-model="form.name"
                         placeholder="Twoje imię i nazwisko"
                         :rules="nameRules"
-                        :ui="{ icon: { trailing: { name: 'i-lucide-user' } } }"
+                        :ui="{ trailingIcon: 'i-lucide-user' }"
                       />
-                    </UFormGroup>
+                    </UFormField>
                   </div>
                   
                   <div>
-                    <UFormGroup label="Email" required>
+                    <UFormField label="Email" required>
                       <UInput
                         v-model="form.email"
                         placeholder="twoj@email.pl"
                         type="email"
                         :rules="emailRules"
-                        :ui="{ icon: { trailing: { name: 'i-lucide-mail' } } }"
+                        :ui="{ trailingIcon: 'i-lucide-mail' }"
                       />
-                    </UFormGroup>
+                    </UFormField>
                   </div>
                 </div>
                 
-                <UFormGroup label="Temat" required>
+                <UFormField label="Temat" required>
                   <UInput
                     v-model="form.subject"
                     placeholder="Czego dotyczy Twoja wiadomość?"
                     :rules="subjectRules"
-                    :ui="{ icon: { trailing: { name: 'i-lucide-tag' } } }"
+                    :ui="{ trailingIcon: 'i-lucide-tag' }"
                   />
-                </UFormGroup>
+                </UFormField>
                 
-                <UFormGroup label="Wiadomość" required>
+                <UFormField label="Wiadomość" required>
                   <UTextarea
                     v-model="form.message"
                     placeholder="W czym możemy Ci pomóc?"
                     :rows="6"
                     :rules="messageRules"
                   />
-                </UFormGroup>
+                </UFormField>
                 
-                <UFormGroup>
+                <UFormField>
                   <UCheckbox
                     v-model="form.agreement"
                     label="Wyrażam zgodę na przetwarzanie moich danych osobowych w celu udzielenia odpowiedzi na wiadomość zgodnie z polityką prywatności."
                     :rules="agreementRules"
                   />
-                </UFormGroup>
+                </UFormField>
                 
                 <div class="flex justify-end">
                   <UButton
@@ -202,7 +205,7 @@ const toggleFaq = (index: number) => {
                     {{ isSubmitting ? 'Wysyłanie...' : 'Wyślij wiadomość' }}
                   </UButton>
                 </div>
-              </form>
+              </UForm>
               
               <div v-if="submitSuccess" class="mt-6 p-4 bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 rounded-lg">
                 <p class="flex items-center">

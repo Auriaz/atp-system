@@ -288,7 +288,7 @@ const formatEventDate = (dateString: string) => {
       <template #main>
         <div class="p-6 space-y-8">
           <!-- Powitanie -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-start justify-between">
               <div>
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ greeting }}, {{ user?.name || 'Trenerze' }}!</h2>
@@ -305,7 +305,7 @@ const formatEventDate = (dateString: string) => {
           
           <!-- Statystyki -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div v-for="(stat, index) in stats" :key="index" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div v-for="(stat, index) in stats" :key="index" class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div class="flex justify-between">
                 <div>
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ stat.title }}</p>
@@ -331,7 +331,7 @@ const formatEventDate = (dateString: string) => {
           <!-- Wykresy i aktywność -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Wykres aktywności -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div class="flex justify-between items-start mb-6">
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Aktywność tygodniowa</h3>
@@ -353,11 +353,11 @@ const formatEventDate = (dateString: string) => {
                     <div class="relative w-full flex justify-center">
                       <div 
                         class="w-4/5 bg-primary-500/50 dark:bg-primary-400/50 rounded-t"
-                        :style="{ height: `${activityData.datasets?.[0]?.data && i < activityData.datasets[0].data.length ? activityData.datasets[0].data[i] * 5 : 0}px` }"
+                        :style="{ height: `${activityData.datasets[0].data[i] * 5}px` }"
                       ></div>
                       <div 
                         class="w-4/5 absolute bottom-0 bg-primary-500 dark:bg-primary-400 rounded-t"
-                        :style="{ height: `${activityData.datasets?.[1]?.data && i < activityData.datasets[1].data.length ? activityData.datasets[1].data[i] * 5 : 0}px` }"
+                        :style="{ height: `${activityData.datasets[1].data[i] * 5}px` }"
                       ></div>
                     </div>
                     <span class="text-xs text-gray-500 dark:text-gray-400">{{ day }}</span>
@@ -367,7 +367,7 @@ const formatEventDate = (dateString: string) => {
             </div>
             
             <!-- Postęp zawodników -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div class="flex justify-between items-start mb-6">
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Postęp zawodników</h3>
@@ -409,7 +409,7 @@ const formatEventDate = (dateString: string) => {
           <!-- Zadania i zawodnicy -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Zadania do wykonania -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Zadania do wykonania</h3>
                 <UButton color="primary" variant="ghost" size="sm" icon="i-lucide-plus" to="/dashboard/tasks">
@@ -448,7 +448,7 @@ const formatEventDate = (dateString: string) => {
             </div>
             
             <!-- Top zawodnicy -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Najlepsi zawodnicy</h3>
                 <UButton color="primary" variant="ghost" size="sm" to="/dashboard/athletes">
@@ -460,7 +460,7 @@ const formatEventDate = (dateString: string) => {
                   <div class="flex items-center">
                     <UAvatar 
                       :text="athlete.name.split(' ').map(n => n[0]).join('')"
-                      :ui="{ fallback: 'bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-primary-300' }"
+                      :ui="{ background: 'bg-primary-100 dark:bg-primary-800', text: 'text-primary-700 dark:text-primary-300' }"
                       size="sm"
                       class="mr-3"
                     />
@@ -483,7 +483,7 @@ const formatEventDate = (dateString: string) => {
           </div>
           
           <!-- Ostatnie wydarzenia -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <div class="bg-white dark:bg-slate-950 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex justify-between items-center mb-6">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Ostatnie wydarzenia</h3>
               <UButton color="primary" variant="ghost" size="sm" to="/dashboard/calendar">

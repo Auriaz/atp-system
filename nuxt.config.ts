@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     '@nuxt/ui',
     'nuxt-auth-utils',
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
+    // '@pinia/nuxt',
+    // 'pinia-plugin-persistedstate/nuxt',
     '@vueuse/nuxt'
   ],
 
@@ -70,16 +70,10 @@ export default defineNuxtConfig({
       tasks: true,
       // websocket: true,
     },
-    imports: {
-      dirs: [
-        'shared/utils/**'
-      ]
-    }
   },
 
-  imports: {
-    dirs: [
-      'shared/utils/**'
-    ]
-  },
+  // https://nuxt.com/docs/guide/directory-structure/plugins
+  plugins: [
+    '~/plugins/permission.directive.ts',
+  ],
 })

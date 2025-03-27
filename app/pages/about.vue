@@ -2,9 +2,9 @@
 // Dane zespołu
 const teamMembers = [
   {
-    name: 'Marcin Kowalski',
+    name: 'lorem ipsum',
     position: 'Założyciel & CEO',
-    bio: 'Były trener olimpijski z ponad 15-letnim doświadczeniem. Stworzył ATP System, aby zrewolucjonizować podejście do treningu sportowego.',
+    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
     image: null, // Placeholder do zastąpienia rzeczywistym obrazem
     social: {
       linkedin: '#',
@@ -12,9 +12,9 @@ const teamMembers = [
     }
   },
   {
-    name: 'Anna Nowak',
+    name: 'lorem ipsum',
     position: 'Dyrektor ds. Rozwoju',
-    bio: 'Specjalistka w dziedzinie analizy danych sportowych z doświadczeniem w pracy z najlepszymi klubami w kraju.',
+    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
     image: null,
     social: {
       linkedin: '#',
@@ -22,9 +22,9 @@ const teamMembers = [
     }
   },
   {
-    name: 'Piotr Wiśniewski',
+    name: 'lorem ipsum',
     position: 'Główny Architekt Systemu',
-    bio: 'Inżynier oprogramowania z pasją do sportu. Odpowiada za technologiczną stronę ATP System od początku istnienia firmy.',
+    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
     image: null,
     social: {
       linkedin: '#',
@@ -32,9 +32,9 @@ const teamMembers = [
     }
   },
   {
-    name: 'Katarzyna Dąbrowska',
+    name: 'lorem ipsum',
     position: 'Specjalista ds. UX/UI',
-    bio: 'Projektantka z doświadczeniem w tworzeniu intuicyjnych interfejsów dla złożonych systemów, zorientowana na potrzeby użytkownika.',
+    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
     image: null,
     social: {
       linkedin: '#',
@@ -46,29 +46,29 @@ const teamMembers = [
 // Kamienie milowe firmy
 const milestones = [
   {
-    year: '2018',
-    title: 'Początek',
-    description: 'Powstanie koncepcji ATP System jako odpowiedź na problemy nowoczesnego treningu.'
-  },
-  {
-    year: '2019',
-    title: 'Narodziny produktu',
-    description: 'Pierwsza wersja beta systemu udostępniona wybranym klubom sportowym do testów.'
-  },
-  {
-    year: '2020',
-    title: 'Oficjalny start',
-    description: 'Oficjalne uruchomienie platformy i pozyskanie pierwszych 50 klientów.'
-  },
-  {
-    year: '2022',
-    title: 'Ekspansja międzynarodowa',
-    description: 'Rozszerzenie działalności na rynki europejskie, ponad 500 klubów korzystających z systemu.'
-  },
-  {
     year: '2024',
+    title: 'Początek',
+    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+  },
+  {
+    year: '2025',
+    title: 'Narodziny produktu',
+    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+  },
+  {
+    year: '2025',
+    title: 'Oficjalny start',
+    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+  },
+  {
+    year: '2026',
+    title: 'Ekspansja międzynarodowa',
+    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+  },
+  {
+    year: '2026',
     title: 'Nowa wersja',
-    description: 'Wprowadzenie rewolucyjnych funkcji analitycznych opartych na sztucznej inteligencji.'
+    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
   }
 ]
 
@@ -98,20 +98,18 @@ const values = [
 
 // Statystyki
 const stats = [
-  { value: '1000+', label: 'Klubów sportowych' },
-  { value: '15 000+', label: 'Aktywnych użytkowników' },
-  { value: '30+', label: 'Krajów' },
-  { value: '98%', label: 'Zadowolonych klientów' }
+  { value: '0+', label: 'Klubów sportowych' },
+  { value: '0+', label: 'Aktywnych użytkowników' },
+  { value: '0+', label: 'Krajów' },
+  { value: '0%', label: 'Zadowolonych klientów' }
 ]
 
 // Partnerzy i klienci (logo placeholders)
 const partners = [
-  { name: 'Olympic Association', logo: null },
-  { name: 'National Sports Academy', logo: null },
-  { name: 'Pro Athletics', logo: null },
-  { name: 'Sports University', logo: null },
-  { name: 'Champions League', logo: null },
-  { name: 'Athletic Federation', logo: null }
+  { name: 'Lorem ipsus', logo: null },
+  { name: 'Lorem ipsus', logo: null },
+  { name: 'Lorem ipsus', logo: null },
+  { name: 'Lorem ipsus', logo: null },
 ]
 
 // Dane do sekcji "Nasz proces"
@@ -139,12 +137,12 @@ const process = [
 ]
 
 // Funkcja do generowania inicjałów
-const getInitials = (name) => {
+const getInitials = (name: string): string => {
   return name.split(' ').map(n => n[0]).join('')
 }
 
 // Randomowy kolor tła dla awatarów
-const getRandomBackground = (name) => {
+const getRandomBackground = (name: string) => {
   const colors = ['primary', 'info', 'success', 'warning']
   const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   return colors[hash % colors.length]
@@ -274,8 +272,7 @@ const getRandomBackground = (name) => {
                     size="xl"
                     :text="getInitials(member.name)"
                     :ui="{
-                      background: `bg-${getRandomBackground(member.name)}-100 dark:bg-${getRandomBackground(member.name)}-900/30`,
-                      text: `text-${getRandomBackground(member.name)}-700 dark:text-${getRandomBackground(member.name)}-300 text-4xl`
+                      fallback: `bg-${getRandomBackground(member.name)}-100 dark:bg-${getRandomBackground(member.name)}-900/30 text-${getRandomBackground(member.name)}-700 dark:text-${getRandomBackground(member.name)}-300 text-4xl`
                     }"
                   />
                 </div>
@@ -369,10 +366,10 @@ const getRandomBackground = (name) => {
           </p>
           
           <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <UButton to="/auth/register" size="xl" color="white" variant="solid" icon="i-lucide-user-plus">
+            <UButton to="/auth/register" size="xl" color="neutral" variant="solid" icon="i-lucide-user-plus">
               Zarejestruj się za darmo
             </UButton>
-            <UButton to="/contact" size="xl" variant="outline" color="white" icon="i-lucide-mail">
+            <UButton to="/contact" size="xl" variant="outline" color="neutral" icon="i-lucide-mail">
               Skontaktuj się z nami
             </UButton>
           </div>

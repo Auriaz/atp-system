@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { MenuItem } from '@@/types/navbar'
   defineProps({
     isShowMenu: {
       type: Boolean,

@@ -61,6 +61,17 @@ const footerLinks = [
 <template>
   <XLayout>
     <template #header>
+      <UAlert
+        title="Alpha version"
+        description="The site is currently in alpha (early development) phase. Functionality may be limited and errors are possible. All data on the home page is false."
+        color="warning"
+        variant="subtle"
+        :ui="{
+          wrapper: 'mb-4 mx-auto container max-w-7xl'
+        }"
+        class="w-full"
+      />
+
       <div class="w-full flex flex-col lg:flex-row gap-8">
         <x-navbar :container="true" :links="[
           { name: 'Home', to: '/' },

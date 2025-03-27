@@ -11,9 +11,9 @@ onMounted(() => {
   <div
     id="main-nav-dashboard"
     :class="[
-      navbar.isScroll ? 'fixed top-0 left-0' : 'fixed top-0 left-0',
+      navbar.isScroll ? 'fixed top-0 left-0 backdrop-blur-lg' : 'fixed top-0 left-0',
     ]"
-    class="w-screen z-40 box-border h-20 transition-all duration-500 bg-background dark:bg-background-dark shadow-black shadow-lg"
+    class="w-screen z-40 box-border h-20 transition-all duration-500  shadow-black shadow-lg "
   >
     <div class="h-full flex items-center justify-center lg:justify-between">
       <div class="relative  hidden lg:flex">
