@@ -16,13 +16,13 @@ const handleError = () => clearError({ redirect: '/' });
         <div class="mb-8">
           <img 
             v-if="error?.statusCode === 404" 
-            src="/images/404-illustration.svg" 
+            src="/images/404-illustration.webp" 
             alt="Page not found" 
             class="max-w-md mx-auto"
           >
           <img 
             v-else-if="error?.statusCode === 403" 
-            src="/images/403-illustration.svg" 
+            src="/images/403-illustration.webp" 
             alt="Access forbidden" 
             class="max-w-md mx-auto"
           >

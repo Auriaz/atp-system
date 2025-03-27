@@ -353,10 +353,10 @@ const toggleFaq = (index: number) => {
             Dołącz do tysięcy trenerów i zawodników, którzy już korzystają z ATP System.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <UButton to="/auth/register" size="xl" color="white" variant="solid" icon="i-lucide-user-plus">
+            <UButton to="/auth/register" size="xl" color="neutral" variant="solid" icon="i-lucide-user-plus">
               Zarejestruj się za darmo
             </UButton>
-            <UButton to="/pricing" size="xl" variant="outline" color="white" icon="i-lucide-info">
+            <UButton to="/pricing" size="xl" variant="outline" color="neutral" icon="i-lucide-info">
               Zobacz plany cenowe
             </UButton>
           </div>
