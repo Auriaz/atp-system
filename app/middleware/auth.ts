@@ -5,7 +5,8 @@
  */
 export default defineNuxtRouteMiddleware((to) => {
     // Podstawowe hooki i stany
-    const { loggedIn, user } = useUserSession()
+    const { loggedIn, session } = useUserSession()
+    const { can } = usePermissions() // Używamy zaktualizowanego composable
     const toast = useToast()
 
     // Publiczne ścieżki dostępne dla wszystkich bez logowania
@@ -31,30 +32,28 @@ export default defineNuxtRouteMiddleware((to) => {
     // 2. Weryfikacja logowania
     if (!loggedIn.value) {
         // Zapisz ścieżkę, do której użytkownik próbował się dostać (tylko po stronie klienta)
-        if (process.client && to.path !== '/auth/login') {
+        if (import.meta.client && to.path !== '/auth/login') {
             localStorage.setItem('returnPath', to.fullPath)
         }
 
         toast.add({
-            title: 'Dostęp zabroniony',
-            description: 'Musisz się zalogować, aby uzyskać dostęp do tej strony',
+            title: 'Access Denied',
+            description: 'You must be logged in to access this page',
             color: 'error'
         })
 
         return navigateTo('/auth/login')
     }
 
-    // Pobierz rolę użytkownika
-    const userRole = user.value?.role || USER_ROLES.OBSERVER
-
     // 3. Sprawdzenie wymaganych uprawnień na podstawie meta strony
     if (to.meta.requiredPermission) {
         const requiredPermission = to.meta.requiredPermission as Permission
 
-        if (!hasPermission(userRole, requiredPermission)) {
+        // Używamy composable 'can' do sprawdzenia uprawnień, które obsługuje wiele ról
+        if (!can(requiredPermission)) {
             toast.add({
-                title: 'Niewystarczające uprawnienia',
-                description: 'Nie masz wymaganych uprawnień, aby uzyskać dostęp do tej strony',
+                title: 'Insufficient Permissions',
+                description: 'You don\'t have the required permissions to access this page',
                 color: 'error'
             })
 
@@ -64,53 +63,60 @@ export default defineNuxtRouteMiddleware((to) => {
 
     // 4. Obsługa specjalnych przypadków dostępu
 
-    // Sekcja administracyjna
-    if (to.path.startsWith('/dashboard/admin') && userRole !== USER_ROLES.ADMIN) {
+    // Sekcja administracyjna - sprawdzamy czy użytkownik ma rolę ADMIN
+    if (to.path.startsWith('/dashboard/admin') && !session.value?.roles?.includes(USER_ROLES.ADMIN)) {
         toast.add({
-            title: 'Dostęp zabroniony',
-            description: 'Tylko administratorzy mają dostęp do tej sekcji',
+            title: 'Access Denied',
+            description: 'Only administrators have access to this section',
             color: 'error'
         })
 
         return navigateTo('/auth/403')
     }
 
-    // Sekcja trenera
-    if (to.path.startsWith('/dashboard/coach') &&
-        !hasPermission(userRole, PERMISSIONS.TRAINING_CREATE)) {
+    // Sekcja trenera - używamy 'can' do sprawdzenia uprawnień
+    if (to.path.startsWith('/dashboard/coach') && !can(PERMISSIONS.TRAINING_CREATE)) {
         toast.add({
-            title: 'Dostęp zabroniony',
-            description: 'Tylko trenerzy mają dostęp do tej sekcji',
+            title: 'Access Denied',
+            description: 'Only coaches have access to this section',
             color: 'error'
         })
 
         return navigateTo('/auth/403')
     }
 
-    // 5. Sprawdzenie uprawnień na podstawie linków sidebar (opcjonalne)
+    // 5. Sprawdzenie uprawnień na podstawie linków sidebar 
     const sidebar = useSidebar()
-    if (sidebar?.sidebar?.value?.links) {
-        const currentPath = to.path
-        const requiredLink = sidebar.sidebar.value.links.find((link: any) =>
-            link?.to && typeof link.to === 'string' &&
-            (currentPath.startsWith(link.to) || currentPath === link.to)
-        )
+    const sidebarLinks = sidebar?.sidebar?.value?.links || []
 
-        if (requiredLink?.requiredPermission &&
-            !hasPermission(userRole, requiredLink.requiredPermission)) {
+    if (sidebarLinks.length > 0) {
+        const currentPath = to.path
+
+        // Szukamy wszystkich pasujących linków (może być kilka)
+        const matchingLinks = sidebarLinks
+            .filter((link: SidebarLink) =>
+                link?.to && typeof link.to === 'string' &&
+                (currentPath.startsWith(link.to) || currentPath === link.to)
+            )
+            .sort((a, b) => (b.to?.length || 0) - (a.to?.length || 0)) // Sortuj od najdłuższej ścieżki
+
+        // Sprawdź najbardziej szczegółowy link (najdłuższa pasująca ścieżka)
+        const mostSpecificLink = matchingLinks[0]
+
+        if (mostSpecificLink?.requiredPermission && !can(mostSpecificLink.requiredPermission)) {
             toast.add({
-                title: 'Niewystarczające uprawnienia',
-                description: 'Nie masz wymaganych uprawnień, aby uzyskać dostęp do tej strony',
+                title: 'Insufficient Permissions',
+                description: 'You don\'t have the required permissions to access this page',
                 color: 'error'
             })
 
-            return navigateTo('/dashboard/403')
+            return navigateTo('/auth/403')
         }
     }
 
     // Logowanie dostępu (w trybie developerskim)
-    if (process.dev) {
-        console.log(`Access granted to ${to.path} for user with role: ${userRole}`)
+    if (import.meta.dev) {
+        console.log(`Access granted to ${to.path} for user with roles: ${session.value.roles.join(', ') || 'none'}`)
     }
 
     // Dostęp przyznany

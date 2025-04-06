@@ -1,4 +1,4 @@
-
+// TODO: Authenticate with GitHub OAuth and create a user if it doesn't exist is not working
 export default defineOAuthGitHubEventHandler({
   config: {
     emailRequired: true,
@@ -26,10 +26,12 @@ export default defineOAuthGitHubEventHandler({
           email: existingUserOAoth.email || user.email,
           username: existingUserOAoth.username || user.login,
           avatarUrl: existingUserOAoth.avatarUrl || user.avatar_url,
+          status: 'active',
         },
         expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         loggedInAt: Date.now(),
-        rememberMe: false
+        rememberMe: false,
+        roles: await getUserRoleSlugs(existingUserOAoth.userId),
       })
 
       return sendRedirect(event, '/dashboard')
@@ -64,10 +66,12 @@ export default defineOAuthGitHubEventHandler({
           email: user.email,
           username: user.login,
           avatarUrl: user.avatar_url,
+          status: 'active',
         },
+        roles: await getUserRoleSlugs(existingUser.id),
         expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         loggedInAt: Date.now(),
-        rememberMe: false
+        rememberMe: false,
       })
 
       return sendRedirect(event, '/dashboard')
@@ -115,7 +119,9 @@ export default defineOAuthGitHubEventHandler({
         email: user.email,
         username: user.login,
         avatarUrl: user.avatar_url,
+        status: 'active',
       },
+      roles: await getUserRoleSlugs(newUser[0].id),
       expiresAt: Date.now() + 24 * 60 * 60 * 1000,
       loggedInAt: Date.now(),
       rememberMe: false

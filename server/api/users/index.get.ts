@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
     const limit = parseInt(query.limit as string) || 10
     const offset = (page - 1) * limit
 
+    // TODO - Zastosuj filtrowanie i sortowanie na podstawie query oraz przenis do repozytorium
     let users = await useDatabase()
       .select()
       .from(tables.users)
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event) => {
     const total = users.length
 
     return createApiResponse({
-      data: [...usersResource(users)],
+      data: users,
       pagination: {
         page,
         limit,

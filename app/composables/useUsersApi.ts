@@ -6,7 +6,7 @@
  */
 export function useUsersApi() {
     // Współdzielony stan aplikacji - używamy useState, aby dane były dostępne między komponentami
-    const users = useState<IUserResource[]>('users', () => [])
+    const users = useState<UserResource[]>('users', () => [])
     const pagination = useState<Record<string, any>>('users-pagination', () => ({}))
     const isLoading = useState<boolean>('users-loading', () => false)
     const error = useState<Error | null>('users-error', () => null)

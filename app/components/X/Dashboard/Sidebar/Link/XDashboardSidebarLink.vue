@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { ISidebarLink } from '@@/types/sidebar';
 const { sidebar } = useSidebar()
+
 defineProps<{
-  link: ISidebarLink
+  link: SidebarLink
 }>()
 
 </script>

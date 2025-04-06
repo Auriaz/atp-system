@@ -106,7 +106,7 @@ const footerLinks = [
                 </UTooltip>
               </div>
 
-              <XDropdownManageAccount v-else :user="user" />
+              <XDropdownManageAccount v-if="loggedIn && user" :user="user" />
             </AuthState>
           </template>
 

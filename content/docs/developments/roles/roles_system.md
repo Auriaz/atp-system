@@ -1,17 +1,18 @@
+```markdown
 ---
 title: 'System ról w ATP'
 description: 'Kompleksowa dokumentacja systemu ról, uprawnień i kontroli dostępu w aplikacji ATP'
 category: 'Authorization'
-version: '1.0.0'
+version: '2.0.0'
 author: 'ATP Core Team'
-createdAt: '2025-03-21'
+createdAt: '2025-04-06'
 ---
 
 # System Ról i Uprawnień w ATP
 
 ## Wprowadzenie
 
-ATP wykorzystuje zaawansowany system ról i uprawnień (Role-Based Access Control - RBAC) z dziedziczeniem uprawnień. System ten definiuje co różni użytkownicy mogą widzieć i jakie działania mogą wykonywać w aplikacji.
+ATP wykorzystuje zaawansowany system ról i uprawnień (Role-Based Access Control - RBAC) z dziedziczeniem uprawnień oraz obsługą wielu ról dla jednego użytkownika. System ten definiuje, co różni użytkownicy mogą widzieć i jakie działania mogą wykonywać w aplikacji.
 
 ## Dostępne Role
 
@@ -27,118 +28,150 @@ System ATP definiuje następujące role użytkowników (w hierarchii od najwyżs
 | Użytkownik | `USER` | Podstawowe funkcje systemu |
 | Obserwator | `OBSERVER` | Tylko przeglądanie publicznych treści |
 
+## Wielorolowy System Uprawnień
+
+Kluczową nowością w systemie ATP jest obsługa wielu ról przypisanych jednemu użytkownikowi. Dzięki temu:
+
+1. Użytkownik może mieć jednocześnie kilka ról (np. być zarówno Trenerem, jak i Sportowcem)
+2. Uprawnienia są obliczane na podstawie wszystkich posiadanych ról
+3. Posiadanie dowolnej roli z wymaganym uprawnieniem daje dostęp do funkcjonalności
+
 ## Hierarchia Ról
 
 System ATP implementuje hierarchię ról, gdzie wyższe role dziedziczą uprawnienia niższych ról:
-ADMIN ├── MANAGER │ └── COACH │ └── ATHLETE │ └── USER │ └── OBSERVER ├── EDITOR │ └── USER │ └── OBSERVER └── (wszystkie inne role)
 
-Szczegółowy Opis Ról
-Administrator (ADMIN)
-Klucz: ADMIN
-Kolor: Primary (niebieski)
-Ikona: i-lucide-shield
+```
+ADMIN
+├── MANAGER
+│   └── COACH
+│       └── ATHLETE
+│           └── USER
+│               └── OBSERVER
+├── EDITOR
+│   └── USER
+│       └── OBSERVER
+└── (wszystkie inne role)
+```
+
+## Szczegółowy Opis Ról
+
+### Administrator (ADMIN)
+- **Klucz**: ADMIN
+- **Kolor**: Primary (niebieski)
+- **Ikona**: i-lucide-shield
 
 Administrator ma pełen dostęp do systemu, w tym:
+- Zarządzanie użytkownikami i ich rolami
+- Dostęp do ustawień systemu
+- Zarządzanie wszystkimi treściami
+- Tworzenie i zarządzanie programami treningowymi
+- Dostęp do wszystkich statystyk i raportów
 
-Zarządzanie użytkownikami i ich rolami
-Dostęp do ustawień systemu
-Zarządzanie wszystkimi treściami
-Tworzenie i zarządzanie programami treningowymi
-Dostęp do wszystkich statystyk i raportów
-Manager (MANAGER)
-Klucz: MANAGER
-Kolor: Indigo
-Ikona: i-lucide-briefcase
+### Manager (MANAGER)
+- **Klucz**: MANAGER
+- **Kolor**: Indigo
+- **Ikona**: i-lucide-briefcase
 
 Manager zarządza aspektami organizacyjnymi:
+- Zarządzanie trenerami i sportowcami
+- Przydzielanie trenerów do sportowców
+- Tworzenie i zarządzanie grupami treningowymi
+- Dostęp do statystyk i raportów
+- Zarządzanie harmonogramami
 
-Zarządzanie trenerami i sportowcami
-Przydzielanie trenerów do sportowców
-Tworzenie i zarządzanie grupami treningowymi
-Dostęp do statystyk i raportów
-Zarządzanie harmonogramami
-Trener (COACH)
-Klucz: COACH
-Kolor: Green (zielony)
-Ikona: i-lucide-dumbbell
+### Trener (COACH)
+- **Klucz**: COACH
+- **Kolor**: Green (zielony)
+- **Ikona**: i-lucide-dumbbell
 
 Trener skupia się na aspektach treningowych:
+- Tworzenie i zarządzanie programami treningowymi
+- Monitorowanie postępów sportowców
+- Dodawanie i edycja ćwiczeń
+- Komunikacja ze sportowcami
+- Dostęp do statystyk swoich podopiecznych
 
-Tworzenie i zarządzanie programami treningowymi
-Monitorowanie postępów sportowców
-Dodawanie i edycja ćwiczeń
-Komunikacja ze sportowcami
-Dostęp do statystyk swoich podopiecznych
-Redaktor (EDITOR)
-Klucz: EDITOR
-Kolor: Violet (fioletowy)
-Ikona: i-lucide-edit-3
+### Redaktor (EDITOR)
+- **Klucz**: EDITOR
+- **Kolor**: Violet (fioletowy)
+- **Ikona**: i-lucide-edit-3
 
 Redaktor zajmuje się treściami w systemie:
+- Tworzenie i edycja artykułów
+- Zarządzanie biblioteką mediów
+- Publikowanie treści
+- Moderacja komentarzy
+- Kategoryzowanie i tagowanie treści
 
-Tworzenie i edycja artykułów
-Zarządzanie biblioteką mediów
-Publikowanie treści
-Moderacja komentarzy
-Kategoryzowanie i tagowanie treści
-Sportowiec (ATHLETE)
-Klucz: ATHLETE
-Kolor: Orange (pomarańczowy)
-Ikona: i-lucide-running
+### Sportowiec (ATHLETE)
+- **Klucz**: ATHLETE
+- **Kolor**: Orange (pomarańczowy)
+- **Ikona**: i-lucide-running
 
 Sportowiec korzysta z programów treningowych:
+- Przeglądanie przypisanych programów treningowych
+- Rejestrowanie ukończonych treningów
+- Śledzenie własnych postępów
+- Komunikacja z trenerem
+- Dostęp do osobistych statystyk
 
-Przeglądanie przypisanych programów treningowych
-Rejestrowanie ukończonych treningów
-Śledzenie własnych postępów
-Komunikacja z trenerem
-Dostęp do osobistych statystyk
-Użytkownik (USER)
-Klucz: USER
-Kolor: Blue (niebieski)
-Ikona: i-lucide-user
+### Użytkownik (USER)
+- **Klucz**: USER
+- **Kolor**: Blue (niebieski)
+- **Ikona**: i-lucide-user
 
 Użytkownik ma podstawowy dostęp do systemu:
+- Przeglądanie treści
+- Podstawowe interakcje z systemem
+- Zarządzanie własnym profilem
+- Komunikacja z innymi użytkownikami
+- Brak dostępu do funkcji premium
 
-Przeglądanie treści
-Podstawowe interakcje z systemem
-Zarządzanie własnym profilem
-Komunikacja z innymi użytkownikami
-Brak dostępu do funkcji premium
-Obserwator (OBSERVER)
-Klucz: OBSERVER
-Kolor: Gray (szary)
-Ikona: i-lucide-eye
+### Obserwator (OBSERVER)
+- **Klucz**: OBSERVER
+- **Kolor**: Gray (szary)
+- **Ikona**: i-lucide-eye
 
 Obserwator może tylko przeglądać publiczne treści:
+- Przeglądanie publicznych artykułów
+- Dostęp do publicznych harmonogramów
+- Brak możliwości interakcji z systemem
+- Brak dostępu do treści premium
+- Dostęp bez konieczności logowania
 
-Przeglądanie publicznych artykułów
-Dostęp do publicznych harmonogramów
-Brak możliwości interakcji z systemem
-Brak dostępu do treści premium
-Dostęp bez konieczności logowania
-System Uprawnień
-Poza rolami, system ATP definiuje szczegółowe uprawnienia (permissions) w pliku permissions.constants.ts. Uprawnienia są pogrupowane tematycznie i przypisane do ról.
+## System Uprawnień
 
-Przykładowe Uprawnienia
-Implementacja w Modelu Użytkownika
-Role są przechowywane w tabeli użytkowników:
-```
-// server/models/users.model.ts
-export const users = sqliteTable('users', {
-  // ... inne pola
-  role: text('role').default(USER_ROLES.USER).$type<UserRole>(),
-  // ... inne pola
-})
+Poza rolami, system ATP definiuje szczegółowe uprawnienia (permissions) w pliku `permissions.constants.ts`. Uprawnienia są pogrupowane tematycznie i przypisane do ról.
+
+### Implementacja w Modelu Użytkownika
+
+Role są przechowywane w tabeli powiązań `user_roles`:
+
+```typescript
+// server/database/schema.ts
+export const userRoles = sqliteTable('user_roles', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  roleId: integer('role_id')
+    .notNull()
+    .references(() => roles.id, { onDelete: 'cascade' }),
+  assignedAt: text('assigned_at').notNull(),
+  assignedBy: integer('assigned_by')
+    .references(() => users.id),
+});
 ```
 
-Używanie Systemu Ról w Kodzie
-Sprawdzanie Ról w Komponentach Vue
-```
+## Używanie Systemu Ról w Kodzie
+
+### Sprawdzanie Uprawnień w Komponentach Vue
+
+```vue
 <script setup>
 import { usePermissions } from '~/composables/usePermissions';
 
-const { can, userRole } = usePermissions();
+const { can, userRoles } = usePermissions();
 
 // Sprawdzanie uprawnień
 const canCreateTraining = can(PERMISSIONS.TRAINING_CREATE);
@@ -150,16 +183,25 @@ const canCreateTraining = can(PERMISSIONS.TRAINING_CREATE);
     Utwórz trening
   </UButton>
   
-  <!-- Użyj dyrektywy v-can -->
-  <UButton v-can="PERMISSIONS.USER_EDIT">
-    Edytuj użytkownika
-  </UButton>
+  <!-- Wyświetl role użytkownika -->
+  <div>
+    Twoje role:
+    <UBadge 
+      v-for="role in userRoles" 
+      :key="role" 
+      :color="USER_ROLE_COLORS[role]"
+    >
+      {{ ROLE_NAMES[role] }}
+    </UBadge>
+  </div>
 </template>
 ```
-Zabezpieczanie Endpointów API
-```
+
+### Zabezpieczanie Endpointów API
+
+```typescript
 // server/api/trainings/create.post.ts
-import { PERMISSIONS, hasPermission } from '~/shared/utils/permissions.constants';
+import { PERMISSIONS } from '~/shared/utils/permissions.constants';
 
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event);
@@ -171,8 +213,17 @@ export default defineEventHandler(async (event) => {
     });
   }
   
-  // Sprawdź uprawnienia
-  if (!hasPermission(session.user.role, PERMISSIONS.TRAINING_CREATE)) {
+  // Pobierz role użytkownika
+  const userRoles = await getUserRoleSlugs(session.user.id);
+  
+  // Sprawdź uprawnienia z wykorzystaniem cache'a
+  const hasRequiredPermission = await checkPermissionByRoles(
+    session.user.id,
+    userRoles,
+    PERMISSIONS.TRAINING_CREATE
+  );
+  
+  if (!hasRequiredPermission) {
     throw createError({
       statusCode: 403,
       message: 'Insufficient privileges'
@@ -182,49 +233,154 @@ export default defineEventHandler(async (event) => {
   // Kontynuuj obsługę żądania...
 });
 ```
-Kontrola Dostępu w Routingu
-```
-// Definiowanie wymaganych ról dla stron
+
+### Kontrola Dostępu w Routingu
+
+```typescript
+// Definiowanie wymaganych uprawnień dla stron
 definePageMeta({
   middleware: ['auth'],
   requiredPermission: PERMISSIONS.SYSTEM_SETTINGS
 })
 ```
 
-### Kontrola Dostępu w Routingu
-## Rozszerzanie Systemu Ról
-# Dodawanie Nowej Roli
-1. Dodaj nową rolę w roles.constants.ts:
+## Elementy Systemu Uprawnień
+
+### Composable `usePermissions`
+
+Ten composable jest głównym punktem dostępu do systemu uprawnień po stronie klienta:
+
+```typescript
+export function usePermissions() {
+  const userSession = useState<UserSession>('user-session');
+  const { session: authSession } = useUserSession();
+
+  // Pobierz role użytkownika
+  const userRoles = computed(() => {
+    if (userSession.value?.roles && Array.isArray(userSession.value.roles) && userSession.value.roles.length > 0) {
+      return userSession.value.roles;
+    } else if (authSession.value?.roles && Array.isArray(authSession.value.roles) && authSession.value.roles.length > 0) {
+      return authSession.value.roles;
+    } else {
+      return [USER_ROLES.OBSERVER];
+    }
+  });
+
+  // Funkcje sprawdzające uprawnienia
+  const can = (permission: Permission) => {
+    return hasPermissionMultiRole(userRoles.value, permission);
+  };
+
+  const canAll = (permissions: Permission[]) => {
+    return hasAllPermissionsMultiRole(userRoles.value, permissions);
+  };
+
+  const canAny = (permissions: Permission[]) => {
+    return hasAnyPermissionMultiRole(userRoles.value, permissions);
+  };
+
+  return { userRoles, can, canAll, canAny };
+}
 ```
+
+### Middleware check-permission.ts
+
+Middleware po stronie serwera zabezpieczające dostęp do endpointów API:
+
+```typescript
+export default defineEventHandler(async (event) => {
+  const path = getRequestURL(event).pathname;
+
+  // Ignoruj ścieżki publiczne i autoryzacyjne
+  if (path.startsWith('/api/auth/') || path === '/api/health') {
+    return;
+  }
+
+  // Pobierz sesję użytkownika
+  const session = await getUserSession(event);
+
+  // Znajdź wymagane uprawnienie dla danej ścieżki
+  let requiredPermission = findPermissionForPath(path);
+
+  // Jeśli nie znaleziono mapowania uprawnienia, kontynuuj
+  if (!requiredPermission) return;
+
+  // Sprawdź uprawnienia użytkownika
+  // ... (implementacja sprawdzania uprawnień)
+});
+```
+
+### Cachowanie Uprawnień
+
+Dla zwiększenia wydajności system wykorzystuje cachowanie uprawnień użytkownika:
+
+```typescript
+async function checkPermissionByRoles(
+  userId: number,
+  roleSlugs: RoleSlug[],
+  requiredPermission: Permission
+): Promise<boolean> {
+  // Spróbuj pobrać uprawnienia z cache'a
+  const cachedPermissions = getCachedPermissions(userId);
+
+  // Jeśli uprawnienia są w cache, użyj ich
+  if (cachedPermissions) {
+    return cachedPermissions.has(requiredPermission);
+  }
+
+  // Jeśli nie ma w cache, oblicz wszystkie uprawnienia
+  const allPermissions = getAllPermissionsForRoles(roleSlugs);
+
+  // Zapisz obliczone uprawnienia do cache'a
+  setCachedPermissions(userId, allPermissions);
+
+  // Zwróć wynik sprawdzenia
+  return allPermissions.includes(requiredPermission);
+}
+```
+
+## Rozszerzanie Systemu Ról
+
+### Dodawanie Nowej Roli
+
+1. Dodaj nową rolę w roles.constants.ts:
+
+```typescript
 export const USER_ROLES = {
   // ... istniejące role
   NUTRITIONIST: 'nutritionist',
 } as const;
 ```
+
 2. Dodaj kolor i ikonę dla nowej roli:
-```
-export const USER_ROLE_COLORS: Record<UserRole, string> = {
+
+```typescript
+export const USER_ROLE_COLORS: Record<RoleSlug, string> = {
   // ... istniejące kolory
   [USER_ROLES.NUTRITIONIST]: 'emerald',
 };
 
-export const USER_ROLE_ICONS: Record<UserRole, string> = {
+export const USER_ROLE_ICONS: Record<RoleSlug, string> = {
   // ... istniejące ikony
   [USER_ROLES.NUTRITIONIST]: 'i-lucide-utensils',
 };
 ```
+
 3. Zaktualizuj hierarchię ról:
-```
-export const ROLE_HIERARCHY: Record<UserRole, UserRole[]> = {
+
+```typescript
+export const ROLE_HIERARCHY: Record<RoleSlug, RoleSlugs> = {
   // ... istniejące role
   [USER_ROLES.NUTRITIONIST]: [USER_ROLES.USER, USER_ROLES.OBSERVER],
   // Zaktualizuj też inne role, które mają dostęp do NUTRITIONIST
   [USER_ROLES.ADMIN]: [...existingRoles, USER_ROLES.NUTRITIONIST],
 };
 ```
+
 4. Przypisz uprawnienia do nowej roli:
-```
-export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+
+```typescript
+export const ROLE_PERMISSIONS: Record<RoleSlug, Permission[]> = {
   // ... istniejące role
   [USER_ROLES.NUTRITIONIST]: [
     PERMISSIONS.USER_VIEW,
@@ -236,9 +392,18 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 };
 ```
 
-## Dodawanie Nowych Uprawnień
-1. Zdefiniuj nowe uprawnienie w permissions.constants.ts:
+5. Dodaj rolę do bazy danych:
+
+```sql
+INSERT INTO roles (name, slug, description, is_system, created_at)
+VALUES ('Dietetyk', 'nutritionist', 'Zarządzanie dietą i planami żywieniowymi', 1, CURRENT_TIMESTAMP);
 ```
+
+### Dodawanie Nowych Uprawnień
+
+1. Zdefiniuj nowe uprawnienie w permissions.constants.ts:
+
+```typescript
 export const PERMISSIONS = {
   // ... istniejące uprawnienia
   NUTRITION_VIEW: 'nutrition:view',
@@ -248,422 +413,97 @@ export const PERMISSIONS = {
 ```
 
 2. Przypisz uprawnienia do odpowiednich ról:
-```
-export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+
+```typescript
+export const ROLE_PERMISSIONS: Record<RoleSlug, Permission[]> = {
   [USER_ROLES.ADMIN]: [...existingPermissions, PERMISSIONS.NUTRITION_VIEW, PERMISSIONS.NUTRITION_CREATE, PERMISSIONS.NUTRITION_EDIT],
   [USER_ROLES.NUTRITIONIST]: [...existingPermissions, PERMISSIONS.NUTRITION_VIEW, PERMISSIONS.NUTRITION_CREATE, PERMISSIONS.NUTRITION_EDIT],
   // ... inne role
 };
 ```
+
 ## Najlepsze Praktyki
-    1. **Użyj hierarchii ról** - pozwoli to na łatwiejsze zarządzanie uprawnieniami
-    2. **Sprawdzaj uprawnienia, nie role** - korzystaj z uprawnień zamiast bezpośrednio sprawdzać role
-    3. **Centralizuj logikę dostępu** - używaj composables i middleware do sprawdzania uprawnień
-    4. **Dokumentuj zmiany** - każda nowa rola lub uprawnienie powinny być udokumentowane
-    5. **Testuj kontrolę dostępu** - twórz testy sprawdzające czy uprawnienia działają poprawnie
 
-## Przykładowe Przypadki Użycia
-# Przypisywanie Roli Użytkownikowi
-```
-/ server/api/users/[id]/role.patch.ts
-export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-  const body = await readBody(event);
-  const userId = getRouterParam(event, 'id');
-  
-  // Sprawdź uprawnienia
-  if (!hasPermission(session.user.role, PERMISSIONS.USER_ASSIGN_ROLE)) {
-    throw createError({
-      statusCode: 403,
-      message: 'Insufficient privileges'
-    });
-  }
-  
-  // Sprawdź poprawność roli
-  if (!Object.values(USER_ROLES).includes(body.role)) {
-    throw createError({
-      statusCode: 400,
-      message: 'Invalid role'
-    });
-  }
-  
-  // Zaktualizuj rolę użytkownika
-  // ...kod aktualizacji...
-  
-  return { success: true };
-});
-```
-# Filtrowanie Menu na Podstawie Uprawnień
-```
-// composables/useNavigationMenu.ts
-export function useNavigationMenu() {
-  const { can } = usePermissions();
-  
-  const menuItems = computed(() => [
-    {
-      title: 'Dashboard',
-      icon: 'i-lucide-home',
-      to: '/dashboard',
-      visible: true
-    },
-    {
-      title: 'Użytkownicy',
-      icon: 'i-lucide-users',
-      to: '/dashboard/users',
-      visible: can(PERMISSIONS.USER_VIEW)
-    },
-    {
-      title: 'Treningi',
-      icon: 'i-lucide-dumbbell',
-      to: '/dashboard/trainings',
-      visible: can(PERMISSIONS.TRAINING_VIEW)
-    },
-    {
-      title: 'Zarządzanie treścią',
-      icon: 'i-lucide-file-text',
-      to: '/dashboard/content',
-      visible: can(PERMISSIONS.CONTENT_VIEW)
-    },
-    {
-      title: 'Ustawienia',
-      icon: 'i-lucide-settings',
-      to: '/dashboard/settings',
-      visible: can(PERMISSIONS.SYSTEM_SETTINGS)
-    }
-  ]);
-  
-  const visibleMenuItems = computed(() => 
-    menuItems.value.filter(item => item.visible)
-  );
-  
-  return {
-    menuItems,
-    visibleMenuItems
-  };
-}
-```
+1. **Używaj uprawnień, nie ról** - zawsze sprawdzaj uprawnienia (`can(PERMISSION)`), zamiast bezpośrednio sprawdzać role użytkownika
+2. **Wykorzystuj composable `usePermissions`** - zapewnia to spójne sprawdzanie uprawnień w całej aplikacji
+3. **Pamiętaj o cache'owaniu** - dla wydajności, uprawnienia są cachowane po stronie klienta i serwera
+4. **Dokumentuj nowe uprawnienia** - każde nowe uprawnienie powinno mieć jasno określony cel i być przypisane do odpowiednich ról
+5. **Testuj kontrolę dostępu** - szczególnie przy dodawaniu nowych funkcjonalności
 
-## Podsumowanie
-System ról i uprawnień w ATP pozwala na precyzyjne kontrolowanie dostępu użytkowników do różnych funkcji systemu. Poprzez kombinację hierarchii ról i szczegółowych uprawnień, system zapewnia elastyczność i skalowalność.
+## Debugowanie Uprawnień
 
----
+Podczas rozwoju aplikacji przydatne jest narzędzie do debugowania uprawnień:
 
-### Dokumentacja Role-Based Access Control API
-## Wprowadzenie do API RBAC
-System ATP udostępnia zestaw API do zarządzania rolami i uprawnieniami użytkowników. Poniżej znajduje się dokumentacja dostępnych endpointów.
-
-## Endpointy API
-# Pobieranie Listy Ról
-```
-GET /api/roles
-```
-
-Zwraca listę wszystkich dostępnych ról w systemie.
-
-# Wymagane uprawnienia: USER_VIEW
-Przykładowa odpowiedź:
-```
-{
-  "status": "success",
-  "data": [
-    {
-      "key": "admin",
-      "label": "Administrator",
-      "color": "primary",
-      "icon": "i-lucide-shield"
-    },
-    {
-      "key": "manager",
-      "label": "Manager",
-      "color": "indigo",
-      "icon": "i-lucide-briefcase"
-    },
-    // ... inne role
-  ]
-}
-```
-
-# Pobieranie Uprawnień dla Roli
-```
-GET /api/roles/[key]/permissions
-``` 
-Zwraca listę uprawnień przypisanych do danej roli.
-
-# Wymagane uprawnienia: USER_VIEW
-Przykładowa odpowiedź:
-```
-{
-  "status": "success",
-  "data": {
-    "role": "coach",
-    "permissions": [
-      "user:view",
-      "training:view",
-      "training:create",
-      "training:edit",
-      // ... inne uprawnienia
-    ]
-  }
-}
-```
-
-# Zmiana Roli Użytkownika
-```
-PATCH /api/users/[id]/role
-```
-Zmienia rolę danego użytkownika.
-
-# Wymagane uprawnienia: USER_ASSIGN_ROLE
-
-Parametry:
-```
-{
-  "role": "coach"
-}
-```
-Przykładowa odpowiedź:
-```
-{
-  "status": "success",
-  "message": {
-    "title": "Rola zmieniona",
-    "description": "Rola użytkownika została zmieniona na Trener"
-  }
-}
-```
-
-Sprawdzenie Uprawnień Użytkownika
-```
-GET /api/users/[userId]/permissions
-```
-
-Zwraca listę uprawnień danego użytkownika.
-
-# Wymagane uprawnienia: USER_VIEW lub być zalogowanym jako dany użytkownik
-
-Przykładowa odpowiedź:
-```
-{
-  "status": "success",
-  "data": {
-    "userId": 123,
-    "role": "coach",
-    "permissions": [
-      "user:view",
-      "training:view",
-      "training:create",
-      // ... inne uprawnienia
-    ]
-  }
-}
-```
-Kody Błędów API
-| Kod | Opis |
-|-----|------|
-| 400 | Nieprawidłowe żądanie, np. niewłaściwa rola |
-| 401 | Brak autoryzacji |
-| 403 | Brak wystarczających uprawnień |
-| 404 | Nie znaleziono zasobu |
-| 500 | Błąd serwera |
-
-
-## Przykłady Użycia API
-# Zmiana Roli Użytkownika za Pomocą Fetch API
-```
-async function changeUserRole(userId, newRole) {
-  try {
-    const response = await $fetch(`/api/users/${userId}/role`, {
-      method: 'PATCH',
-      body: { role: newRole }
-    });
-    
-    if (response.status === 'success') {
-      toast.add({
-        title: response.message.title,
-        description: response.message.description,
-        color: 'success'
-      });
-      return true;
-    }
-  } catch (error) {
-    toast.add({
-      title: 'Błąd',
-      description: error.message || 'Nie udało się zmienić roli',
-      color: 'error'
-    });
-    return false;
-  }
-}
-```
-# Pobieranie Uprawnień Użytkownika za Pomocą Axios
-```
-async function getUserPermissions(userId) {
-  try {
-    const { data } = await useFetch(`/api/users/${userId}/permissions`);
-    
-    return data.value?.permissions || [];
-  } catch (error) {
-    console.error('Błąd pobierania uprawnień:', error);
-    return [];
-  }
-}
-```
-
-### Testy Jednostkowe dla Kontroli Dostępu
-Rekomendowane jest pisanie testów jednostkowych dla sprawdzania uprawnień:
-```
-// tests/permissions.test.ts
-import { describe, test, expect } from 'vitest'
-import { USER_ROLES } from '~/shared/utils/roles.constants'
-import { PERMISSIONS, hasPermission } from '~/shared/utils/permissions.constants'
-
-describe('System uprawnień', () => {
-  test('Administrator ma dostęp do wszystkich uprawnień', () => {
-    expect(hasPermission(USER_ROLES.ADMIN, PERMISSIONS.USER_CREATE)).toBe(true)
-    expect(hasPermission(USER_ROLES.ADMIN, PERMISSIONS.SYSTEM_SETTINGS)).toBe(true)
-    expect(hasPermission(USER_ROLES.ADMIN, PERMISSIONS.CONTENT_PUBLISH)).toBe(true)
-  })
-  
-  test('Trener ma dostęp do zarządzania treningami', () => {
-    expect(hasPermission(USER_ROLES.COACH, PERMISSIONS.TRAINING_CREATE)).toBe(true)
-    expect(hasPermission(USER_ROLES.COACH, PERMISSIONS.TRAINING_EDIT)).toBe(true)
-  })
-  
-  test('Trener nie ma dostępu do ustawień systemu', () => {
-    expect(hasPermission(USER_ROLES.COACH, PERMISSIONS.SYSTEM_SETTINGS)).toBe(false)
-  })
-  
-  test('Obserwator ma dostęp tylko do przeglądania treści', () => {
-    expect(hasPermission(USER_ROLES.OBSERVER, PERMISSIONS.CONTENT_VIEW)).toBe(true)
-    expect(hasPermission(USER_ROLES.OBSERVER, PERMISSIONS.CONTENT_CREATE)).toBe(false)
-  })
-})
-```
-
-### Debugowanie Uprawnień
-Podczas rozwoju aplikacji przydatne może być narzędzie do debugowania uprawnień:
-```
+```vue
 <!-- components/PermissionDebugger.vue -->
 <template>
-  <div v-if="developmentMode" class="border p-4 rounded-lg">
+  <div v-if="import.meta.dev" class="border p-4 rounded-lg">
     <h3 class="text-lg font-medium mb-2">Debugger uprawnień</h3>
     <div class="flex items-center gap-2 mb-2">
-      <span>Aktualna rola:</span>
-      <UBadge :color="roleColor">{{ userRole }}</UBadge>
+      <span>Role użytkownika:</span>
+      <UBadge 
+        v-for="role in userRoles" 
+        :key="role" 
+        :color="USER_ROLE_COLORS[role]"
+      >
+        {{ role }}
+      </UBadge>
     </div>
     <div class="mb-4">
-      <p class="text-sm text-gray-500">Dostępne uprawnienia:</p>
-      <div class="flex flex-wrap gap-1 mt-1">
-        <UBadge 
-          v-for="perm in userPermissions" 
-          :key="perm" 
-          color="gray" 
-          size="xs"
-        >
-          {{ perm }}
-        </UBadge>
+      <p class="text-sm text-gray-500">Testuj uprawnienia:</p>
+      <div class="flex gap-2 mt-1">
+        <UInput v-model="testPermission" placeholder="Wpisz uprawnienie" />
+        <UButton @click="testCan">Sprawdź</UButton>
       </div>
-    </div>
-    <div>
-      <UInput 
-        v-model="testPermission" 
-        placeholder="Wpisz uprawnienie do sprawdzenia" 
-      />
-      <div class="mt-2">
-        <UButton 
-          size="sm" 
-          :color="hasPermission ? 'success' : 'error'"
-          @click="checkPermission"
-        >
-          {{ hasPermission ? 'Masz uprawnienie' : 'Brak uprawnienia' }}
-        </UButton>
-      </div>
+      <p class="mt-2" v-if="testedPermission">
+        {{ canAccess ? '✓ Masz uprawnienie' : '✗ Brak uprawnienia' }}
+        <code>{{ testedPermission }}</code>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { USER_ROLE_COLORS } from '~/shared/utils/roles.constants';
 import { usePermissions } from '~/composables/usePermissions';
+import { USER_ROLE_COLORS } from '~/shared/utils/roles.constants';
 
-const { userRole, userPermissions, can } = usePermissions();
-const developmentMode = process.env.NODE_ENV === 'development';
-
+const { userRoles, can } = usePermissions();
 const testPermission = ref('');
-const hasPermission = ref(false);
+const testedPermission = ref('');
+const canAccess = ref(false);
 
-const roleColor = computed(() => USER_ROLE_COLORS[userRole.value] || 'gray');
-
-function checkPermission() {
-  hasPermission.value = can(testPermission.value);
+function testCan() {
+  testedPermission.value = testPermission.value;
+  canAccess.value = can(testPermission.value);
 }
 </script>
 ```
-### Zaawansowane Techniki RBAC
-## Dynamiczne Uprawnienia na Podstawie Kontekstu
-W niektórych przypadkach uprawnienia mogą zależeć nie tylko od roli, ale również od kontekstu (np. relacji między użytkownikami):
-```
-// composables/useContextualPermissions.ts
-export function useContextualPermissions() {
-  const { userRole, can } = usePermissions();
-  
-  // Sprawdza, czy użytkownik może edytować konkretny trening
-  const canEditTraining = (training) => {
-    // Administrator i manager mogą edytować wszystkie treningi
-    if (can(PERMISSIONS.TRAINING_EDIT_ALL)) return true;
-    
-    // Trener może edytować tylko swoje treningi lub treningi swoich podopiecznych
-    if (userRole.value === USER_ROLES.COACH) {
-      return training.coachId === userSession.value.user.id || 
-             isAthleteUnderCoach(training.athleteId, userSession.value.user.id);
-    }
-    
-    return false;
-  };
-  
-  return {
-    canEditTraining,
-    // Inne kontekstowe sprawdzenia uprawnień...
-  };
-}
-```
-## Uprawnienia Oparte na Atrybutach (ABAC)
-Dla bardziej zaawansowanych przypadków można rozszerzyć system o uprawnienia oparte na atrybutach:
-```
-// shared/utils/abac.ts
-export function checkAttributeBasedAccess(
-  userRole: UserRole, 
-  action: string, 
-  resource: any, 
-  context: any = {}
-): boolean {
-  // Reguły dostępu oparte na atrybutach
-  const rules = {
-    'training:edit': (role, resource, context) => {
-      // Administrator i manager mają pełen dostęp
-      if (role === USER_ROLES.ADMIN || role === USER_ROLES.MANAGER) return true;
-      
-      // Trener może edytować tylko swoje treningi
-      if (role === USER_ROLES.COACH) {
-        return resource.coachId === context.userId;
-      }
-      
-      return false;
-    },
-    // Inne reguły...
-  };
-  
-  // Sprawdź, czy istnieje reguła dla danej akcji
-  if (rules[action]) {
-    return rules[action](userRole, resource, context);
-  }
-  
-  // Domyślnie sprawdź zwykłe uprawnienia
-  return hasPermission(userRole, action);
-}
-```
-### Wnioski
-System ról i uprawnień w ATP zapewnia elastyczne zarządzanie dostępem użytkowników. Dzięki hierarchii ról, szczegółowym uprawnieniom i możliwości rozszerzania, system może być łatwo dostosowany do zmieniających się wymagań aplikacji.
+
+## Wnioski
+
+System ról i uprawnień w ATP został zmodernizowany, aby obsługiwać wielu użytkowników z wieloma rolami. Dzięki temu:
+
+1. Użytkownicy mogą mieć różne zestawy uprawnień w zależności od kontekstu
+2. Uprawnienia są sprawdzane na podstawie wszystkich ról użytkownika
+3. System jest bardziej elastyczny i skalowalny
 
 Właściwe wykorzystanie tego systemu pomaga w implementacji zasady najmniejszych uprawnień (Principle of Least Privilege), zwiększając bezpieczeństwo i kontrolę nad dostępem do zasobów i funkcji aplikacji.
+```
 
+Ta poprawiona dokumentacja uwzględnia:
+
+1. Wielorolowy system uprawnień zamiast pojedynczej roli
+2. Aktualne implementacje funkcji `usePermissions`, `useGuard` i innych komponentów
+3. Wprowadzony system cachowania uprawnień
+4. Nowe podejście do filtrowania elementów sidebar według uprawnień
+5. Aktualizację metod sprawdzania uprawnień z uwzględnieniem wielu ról
+
+Dokument jest aktualny względem obecnego stanu kodu i najlepszych praktyk w systemie ATP.Ta poprawiona dokumentacja uwzględnia:
+
+1. Wielorolowy system uprawnień zamiast pojedynczej roli
+2. Aktualne implementacje funkcji `usePermissions`, `useGuard` i innych komponentów
+3. Wprowadzony system cachowania uprawnień
+4. Nowe podejście do filtrowania elementów sidebar według uprawnień
+5. Aktualizację metod sprawdzania uprawnień z uwzględnieniem wielu ról
+
+Dokument jest aktualny względem obecnego stanu kodu i najlepszych praktyk w systemie ATP.

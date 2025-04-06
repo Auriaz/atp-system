@@ -1,11 +1,10 @@
-import type { Access } from './guard'
-
-export interface ISidebarLink {
+export interface SidebarLink {
     label: string
     icon: string
     to: string
     type: 'basic' | 'settings'
-    requiredRoles: Access[] // Role wymagane do wyświetlenia i dostępu
+    requiredPermission?: Permission | null  // Zmiana: używamy uprawnień zamiast ról
+    requiredRoles?: RoleSlugs | null        // Zachowujemy dla kompatybilności wstecznej
     name?: string
     tree?: {
         label: string
@@ -14,11 +13,11 @@ export interface ISidebarLink {
     }[]
 }
 
-export interface ISidebar {
+export interface Sidebar {
     isShow: boolean
     isRail: boolean
     isRightSide: boolean
     isShowHelperBar: boolean
     isShowMenuBar: boolean
-    links: ISidebarLink[]
+    links: SidebarLink[]
 }

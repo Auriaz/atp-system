@@ -83,14 +83,15 @@ export const PERMISSIONS = {
 } as const;
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
+export type Permissions = Permission[];
 
 /**
  * Mapowanie ról na konkretne uprawnienia
  * Każda rola ma przypisany zestaw uprawnień
  */
-export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+export const ROLE_PERMISSIONS: Record<RoleSlug, Permissions> = {
   // Administrator ma wszystkie uprawnienia
-  [USER_ROLES.ADMIN]: Object.values(PERMISSIONS) as Permission[],
+  [USER_ROLES.ADMIN]: Object.values(PERMISSIONS) as Permissions,
 
   // Manager - zarządza organizacją, trenerami i sportowcami
   [USER_ROLES.MANAGER]: [
@@ -211,47 +212,78 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   ]
 };
 
-
 /**
- * Sprawdza, czy użytkownik ma konkretne uprawnienie na podstawie jego roli
- * @param userRole Rola użytkownika
+ * Sprawdza, czy użytkownik z podanymi rolami ma konkretne uprawnienie
+ * @param userRoles Lista ról użytkownika
  * @param permission Wymagane uprawnienie
  * @returns true jeśli użytkownik ma uprawnienie, false w przeciwnym przypadku
  */
-export function hasPermission(userRole: UserRole, permission: Permission): boolean {
-  // Administrator ma wszystkie uprawnienia
-  if (userRole === USER_ROLES.ADMIN) return true;
+export function hasPermissionMultiRole(userRoles: RoleSlugs, permission: Permission): boolean {
+  // Sprawdź, czy użytkownik ma rolę administratora
+  if (userRoles.includes(USER_ROLES.ADMIN)) return true;
 
-  // Sprawdzamy bezpośrednie uprawnienia roli
-  if (ROLE_PERMISSIONS[userRole]?.includes(permission)) return true;
-
-  // Sprawdzamy uprawnienia dziedziczone z innych ról
-  const inheritedRoles = ROLE_HIERARCHY[userRole] || [];
-  for (const inheritedRole of inheritedRoles) {
-    if (ROLE_PERMISSIONS[inheritedRole]?.includes(permission)) return true;
+  // Sprawdź we wszystkich rolach
+  for (const role of userRoles) {
+    if (hasPermission(role, permission)) return true;
   }
 
   return false;
 }
 
 /**
- * Sprawdza, czy użytkownik ma wszystkie z podanych uprawnień
- * @param userRole Rola użytkownika
+ * Sprawdza, czy użytkownik z podanymi rolami ma wszystkie z podanych uprawnień
+ * @param userRoles Lista ról użytkownika
  * @param permissions Lista wymaganych uprawnień
  * @returns true jeśli użytkownik ma wszystkie uprawnienia, false w przeciwnym przypadku
  */
-export function hasAllPermissions(userRole: UserRole, permissions: Permission[]): boolean {
-  return permissions.every(permission => hasPermission(userRole, permission));
+export function hasAllPermissionsMultiRole(userRoles: RoleSlugs, permissions: Permissions): boolean {
+  return permissions.every(permission => hasPermissionMultiRole(userRoles, permission));
 }
 
 /**
- * Sprawdza, czy użytkownik ma którekolwiek z podanych uprawnień
- * @param userRole Rola użytkownika
+ * Sprawdza, czy użytkownik z podanymi rolami ma którekolwiek z podanych uprawnień
+ * @param userRoles Lista ról użytkownika
  * @param permissions Lista wymaganych uprawnień
  * @returns true jeśli użytkownik ma przynajmniej jedno uprawnienie, false w przeciwnym przypadku
  */
-export function hasAnyPermission(userRole: UserRole, permissions: Permission[]): boolean {
-  return permissions.some(permission => hasPermission(userRole, permission));
+export function hasAnyPermissionMultiRole(userRoles: RoleSlugs, permissions: Permissions): boolean {
+  return permissions.some(permission => hasPermissionMultiRole(userRoles, permission));
+}
+
+/**
+ * Sprawdza, czy użytkownik ma konkretne uprawnienie na podstawie jego roli lub ról
+ * @param userRole Rola użytkownika lub tablica ról
+ * @param permission Wymagane uprawnienie
+ * @returns true jeśli użytkownik ma uprawnienie, false w przeciwnym przypadku
+ */
+export function hasPermission(
+  userRole: RoleSlug | RoleSlugs,
+  permission: Permission
+): boolean {
+  // Obsługa pojedynczej roli (zachowanie kompatybilności wstecznej)
+  if (typeof userRole === 'string') {
+    // Istniejąca logika dla pojedynczej roli
+    if (userRole === USER_ROLES.ADMIN) return true;
+    if (ROLE_PERMISSIONS[userRole]?.includes(permission)) return true;
+    const inheritedRoles = ROLE_HIERARCHY[userRole] || [];
+    for (const inheritedRole of inheritedRoles) {
+      if (ROLE_PERMISSIONS[inheritedRole]?.includes(permission)) return true;
+    }
+    return false;
+  }
+
+  // Nowa logika dla tablicy ról
+  else {
+    // Sprawdź, czy użytkownik ma rolę administratora
+    if (userRole.includes(USER_ROLES.ADMIN)) return true;
+
+    // Sprawdź każdą rolę
+    for (const role of userRole) {
+      if (hasPermission(role, permission)) return true;
+    }
+
+    return false;
+  }
 }
 
 /**
@@ -259,7 +291,7 @@ export function hasAnyPermission(userRole: UserRole, permissions: Permission[]):
  * @param userRole Rola użytkownika
  * @returns Lista wszystkich uprawnień
  */
-export function getAllUserPermissions(userRole: UserRole): Permission[] {
+export function getAllUserPermissions(userRole: RoleSlug): Permissions {
   // Zbiór unikalnych uprawnień
   const permissionsSet = new Set<Permission>();
 
@@ -272,5 +304,25 @@ export function getAllUserPermissions(userRole: UserRole): Permission[] {
     ROLE_PERMISSIONS[inheritedRole]?.forEach(perm => permissionsSet.add(perm));
   }
 
+  return [...permissionsSet];
+}
+
+/**
+ * Pobiera wszystkie uprawnienia dla wielu ról użytkownika
+ * @param roleSlugs Lista ról użytkownika
+ * @returns Lista wszystkich unikalnych uprawnień posiadanych przez użytkownika
+ */
+export function getAllPermissionsForRoles(roleSlugs: RoleSlugs): Permissions {
+  // Zbiór unikalnych uprawnień dla wszystkich ról
+  const permissionsSet = new Set<Permission>();
+
+  // Dla każdej roli użytkownika pobierz wszystkie uprawnienia
+  for (const roleSlug of roleSlugs) {
+    const rolePermissions = getAllUserPermissions(roleSlug as RoleSlug);
+    // Dodaj do zbioru wszystkie uprawnienia z danej roli
+    rolePermissions.forEach(perm => permissionsSet.add(perm));
+  }
+
+  // Konwertuj zbiór z powrotem na tablicę
   return [...permissionsSet];
 }

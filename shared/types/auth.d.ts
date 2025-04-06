@@ -1,23 +1,26 @@
 declare module '#auth-utils' {
   interface User {
     id: number
-    avatarUrl: string
+    avatarUrl?: string | null
     email: string
-    role: UserRole
+    status: string
     username: string
     firstName?: string | null
     lastName?: string | null
     bio?: string | null
     createdAtAgo?: string
-    updatedAt?: string | null
   }
 
   interface UserSession {
     user: User
+    roles: RoleSlugs
     expiresAt: Number
     loggedInAt: Number
     rememberMe: boolean
-    // Add your own fields
+    preferences?: {
+      theme?: 'light' | 'dark' | 'system';
+      notifications?: boolean;
+    };
   }
 
   interface SecureSessionData {
@@ -25,3 +28,8 @@ declare module '#auth-utils' {
 
   }
 }
+
+
+
+
+

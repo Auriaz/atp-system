@@ -1,35 +1,53 @@
+import type { UserSession } from '#auth-utils';
 export function usePermissions() {
-  const { userSession } = useUserSession();
+  // Użyj istniejącej sesji lub proxy, które będzie reaktywnie aktualizowane
+  const userSession = useState<UserSession>('user-session');
+  // Użyj useUserSession z Nuxt Auth do uzyskania sesji
+  const { session: authSession } = useUserSession();
 
-  // Obliczanie roli użytkownika z sesji
-  const userRole = computed<UserRole>(() =>
-    userSession.value?.user?.role || 'observer'
-  );
+  // Połączenie obu źródeł sesji dla większej niezawodności
+  const combinedSession = computed(() => {
+    return userSession.value || authSession.value;
+  });
 
-  // Wszystkie uprawnienia użytkownika
-  const userPermissions = computed(() =>
-    getAllUserPermissions(userRole.value)
-  );
+  // Pobierz role użytkownika
+  const userRoles = computed(() => {
+    // Najpierw spróbuj pobrać z userSession
+    if (userSession.value?.roles && Array.isArray(userSession.value.roles) && userSession.value.roles.length > 0) {
+      return userSession.value.roles;
+    }
+    // Następnie spróbuj pobrać z authSession
+    else if (authSession.value?.roles && Array.isArray(authSession.value.roles) && authSession.value.roles.length > 0) {
+      return authSession.value.roles;
+    }
+    // Fallback do roli obserwatora
+    else {
+      return [USER_ROLES.OBSERVER];
+    }
+  });
 
-  // Sprawdzanie czy użytkownik ma konkretne uprawnienie
-  const can = (permission: Permission) =>
-    hasPermission(userRole.value, permission);
+  // Sprawdź, czy użytkownik ma określone uprawnienie
+  const can = (permission: Permission) => {
+    // Użyj hasPermissionMultiRole do sprawdzenia uprawnień
+    const result = hasPermissionMultiRole(userRoles.value, permission);
 
-  // Sprawdzanie czy użytkownik ma wszystkie z podanych uprawnień
-  const canAll = (permissions: Permission[]) =>
-    hasAllPermissions(userRole.value, permissions);
+    return result;
+  };
 
-  // Sprawdzanie czy użytkownik ma którekolwiek z podanych uprawnień
-  const canAny = (permissions: Permission[]) =>
-    hasAnyPermission(userRole.value, permissions);
+  // Sprawdź, czy użytkownik ma wszystkie z podanych uprawnień
+  const canAll = (permissions: Permission[]) => {
+    return hasAllPermissionsMultiRole(userRoles.value, permissions);
+  };
+
+  // Sprawdź, czy użytkownik ma którekolwiek z podanych uprawnień
+  const canAny = (permissions: Permission[]) => {
+    return hasAnyPermissionMultiRole(userRoles.value, permissions);
+  };
 
   return {
-    userRole,
-    userPermissions,
+    userRoles,
     can,
     canAll,
     canAny
   };
-} export const useUsePermissions = () => {
-  return ref()
 }

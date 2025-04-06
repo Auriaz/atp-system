@@ -25,9 +25,8 @@ let query = ref('')
         </template>
         
         <template #action>
-
           <!-- Manage Account -->
-          <XDropdownManageAccount v-if="loggedIn" :user="user" />
+          <XDropdownManageAccount v-if="loggedIn && user" :user="user" />
         </template>
       </XDashboardNavbar>
     </template>

@@ -1,10 +1,9 @@
-import type { ISidebarLink } from '~~/types/sidebar'
-
 export const useGuard = () => {
   const { session } = useUserSession()
+  const { can } = usePermissions()
 
   const getUserRoles = (): string[] => {
-    return session.value?.user?.roles || []
+    return session.value?.roles || []
   }
 
   const hasRole = (role: string): boolean => {
@@ -13,7 +12,7 @@ export const useGuard = () => {
   }
 
   const hasRequiredRoles = (requiredRoles: string[]): boolean => {
-    if (!requiredRoles.length) return true
+    if (!requiredRoles?.length) return true
     const userRoles = getUserRoles()
     if (!userRoles.length) return false
 
@@ -22,8 +21,26 @@ export const useGuard = () => {
     )
   }
 
-  const filterLinksByRoles = (links: ISidebarLink[]): ISidebarLink[] => {
+  // Nowa funkcja do filtrowania linków według uprawnień
+  const filterLinksByPermissions = (links: SidebarLink[]): SidebarLink[] => {
     return links.filter(link => {
+      // Jeśli link nie wymaga uprawnień, pokaż go
+      if (!link.requiredPermission) return true
+
+      // W przeciwnym razie sprawdź uprawnienie
+      return can(link.requiredPermission)
+    })
+  }
+
+  // Zachowujemy dla kompatybilności wstecznej
+  const filterLinksByRoles = (links: SidebarLink[]): SidebarLink[] => {
+    return links.filter(link => {
+      // Jeśli link używa nowego systemu uprawnień
+      if (link.requiredPermission) {
+        return can(link.requiredPermission)
+      }
+
+      // Jeśli używa starego systemu ról
       if (!link.requiredRoles?.length) return true
       return hasRequiredRoles(link.requiredRoles)
     })
@@ -34,5 +51,6 @@ export const useGuard = () => {
     hasRole,
     hasRequiredRoles,
     filterLinksByRoles,
+    filterLinksByPermissions,
   }
 }

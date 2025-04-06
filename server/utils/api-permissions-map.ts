@@ -4,7 +4,7 @@
  * Ten plik zawiera mapowanie wszystkich ścieżek API na uprawnienia,
  * które są wymagane do dostępu do danego zasobu.
  */
-export const API_PERMISSION_MAP = {
+export const API_PERMISSION_MAP: Record<string, Permission> = {
   // Użytkownicy
   '/api/users': PERMISSIONS.USER_VIEW,             // Lista użytkowników
   '/api/users/profile': PERMISSIONS.PROFILE_VIEW,  // Przeglądanie profili
@@ -94,7 +94,7 @@ export function findPermissionForPath(path: string): string | null {
  * Funkcja pomocnicza do znajdowania wszystkich ścieżek dla podanego uprawnienia
  * Przydatne do dokumentacji
  */
-export function findPathsForPermission(permission: string): string[] {
+export function findPathsForPermission(permission: Permission): string[] {
   return Object.entries(API_PERMISSION_MAP)
     .filter(([_, perm]) => perm === permission)
     .map(([path]) => path);

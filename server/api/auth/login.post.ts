@@ -1,39 +1,17 @@
 import { useValidatedBody } from 'h3-valibot'
 import { createError, defineEventHandler } from 'h3'
-import { H3Event } from 'h3'
-import { eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await useValidatedBody(event, loginSchema)
+    const body = await useValidatedBody(event, loginSchema) as LoginFormData
 
     // Ustawienie nagłówków bezpieczeństwa
-    // setHeaders(event, {
-    //   'Cache-Control': 'no-store, max-age=0, must-revalidate',
-    //   'Pragma': 'no-cache'
-    // })
-
+    setHeaders(event, {
+      'Cache-Control': 'no-store, max-age=0, must-revalidate',
+      'Pragma': 'no-cache'
+    })
     // Sprawdź czy użytkownik istnieje
-    const user = await useDatabase()
-      .select()
-      .from(tables.users)
-      .where(eq(tables.users.email, body.email))
-      .get()
-
-    if (!user) {
-      throw createError({
-        status: 401,
-        message: 'Invalid email'
-      })
-    }
-
-    // Sprawdź czy hasło jest poprawne
-    if (!await verifyPassword(user.password, body.password)) {
-      throw createError({
-        status: 401,
-        message: 'Invalid password'
-      })
-    }
+    const user = await authenticateUser(body)
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
@@ -41,9 +19,11 @@ export default defineEventHandler(async (event) => {
       ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
       : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
+
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
     await setUserSession(event, {
-      user: userResource(user),
+      user,
+      roles: await getUserRoleSlugs(user.id),
       loggedInAt: Date.now(),
       expiresAt: Date.now() + sessionDuration,
       rememberMe: body.rememberMe || false

@@ -1,11 +1,12 @@
-export type DatabaseUser = typeof tables.users.$inferSelect
+export type DatabaseUser = typeof tables.users.$inferSelect;
 
-export interface IUserResource {
+// Typy dla API i zasobów
+export interface UserResource {
     id: number;
     avatarUrl: string | null;
     email: string;
     username: string;
-    role: UserRole | null;
+    roles: RoleSlugs;
     status: string | null;
     createdAtAgo: string;
     updatedAtAgo: string | null;

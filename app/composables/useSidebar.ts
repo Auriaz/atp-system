@@ -1,21 +1,18 @@
-import type { Access } from '@@/types/guard'
-import type { ISidebar, ISidebarLink } from '@@/types/sidebar'
-
 export const useSidebar = () => {
-  const sidebarLinks: ISidebarLink[] = [
+  const sidebarLinks: SidebarLink[] = [
     {
       label: 'Homepage',
       icon: 'i-heroicons-home-modern-solid',
       to: '/',
       type: 'basic' as const,
-      requiredRoles: ['ROLE_USER', 'ROLE_ADMIN'] as Access[],
+      requiredPermission: null, // Dostępne dla wszystkich
     },
     {
       label: 'Dashboard',
       icon: 'i-heroicons-presentation-chart-line-20-solid',
       to: '/dashboard',
       type: 'basic' as const,
-      requiredRoles: ['ROLE_USER', 'ROLE_ADMIN'] as Access[],
+      requiredPermission: null, // Dostępne dla zalogowanych (middleware auth już to sprawdza)
       name: 'dashboard',
       tree: [
         {
@@ -30,7 +27,7 @@ export const useSidebar = () => {
       icon: 'i-material-symbols-media-link',
       to: '/dashboard/media',
       type: 'basic' as const,
-      requiredRoles: ['ROLE_USER', 'ROLE_ADMIN'] as Access[],
+      requiredPermission: PERMISSIONS.CONTENT_VIEW,
       name: 'dashboard-media',
       tree: [
         {
@@ -50,7 +47,7 @@ export const useSidebar = () => {
       icon: 'i-heroicons-chat-bubble-left-right-16-solid',
       to: '/dashboard/chat',
       type: 'basic' as const,
-      requiredRoles: ['ROLE_USER', 'ROLE_ADMIN'] as Access[],
+      requiredPermission: PERMISSIONS.MESSAGE_SEND,
       name: 'dashboard-chat',
       tree: [
         {
@@ -70,7 +67,7 @@ export const useSidebar = () => {
       icon: 'i-heroicons-user-group-solid',
       to: '/dashboard/users',
       type: 'settings' as const,
-      requiredRoles: ['ROLE_ADMIN'] as Access[],
+      requiredPermission: PERMISSIONS.USER_VIEW,
       name: 'dashboard-users',
       tree: [
         {
@@ -90,7 +87,7 @@ export const useSidebar = () => {
       icon: 'i-heroicons-user-plus-solid',
       to: '/dashboard/profile',
       type: 'settings' as const,
-      requiredRoles: ['ROLE_USER', 'ROLE_ADMIN'] as Access[],
+      requiredPermission: PERMISSIONS.PROFILE_VIEW,
       name: 'dashboard-profile',
       tree: [
         {
@@ -108,7 +105,7 @@ export const useSidebar = () => {
     // ... pozostałe linki
   ].filter(link => link && typeof link.to === 'string')
 
-  const sidebar = useState<ISidebar>('sidebar', () => ({
+  const sidebar = useState<Sidebar>('sidebar', () => ({
     isShow: true,
     isRail: false,
     isRightSide: false,

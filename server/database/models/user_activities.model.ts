@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { users } from '../database/schema'
+import { users } from '../schema'
 
 export const userActivities = sqliteTable('user_activities', {
     id: integer('id').primaryKey({ autoIncrement: true }),

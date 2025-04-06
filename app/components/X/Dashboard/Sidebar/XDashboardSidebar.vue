@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { ISidebarLink } from '@@/types/sidebar'
-
 const { sidebar } = useSidebar()
 const { session } = useUserSession()
-const { filterLinksByRoles } = useGuard()
+const { filterLinksByPermissions } = useGuard()
 
 function typeLinks(type: string) {
-  const links: ISidebarLink[] = []
-  // const filteredLinks = filterLinksByRoles(sidebar.value.links)
-  const filteredLinks = sidebar.value.links
+  const links: SidebarLink[] = []
+  // Używamy nowego filtrowania według uprawnień
+  const filteredLinks = filterLinksByPermissions(sidebar.value.links)
 
   filteredLinks.forEach((link) => {
     if (link?.type === type) {

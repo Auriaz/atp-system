@@ -20,13 +20,18 @@
   })
 
   async function onSubmitRegister(event: FormSubmitEvent<RegisterFormData>) {
-    await useAsyncData('login', async () => await $fetch('/api/auth/register', {
+    await useAsyncData('register', async () => await $fetch('/api/auth/register', {
       method: 'POST',
       body: event.data,
     })
       .then(res => {
         fetch()
         toast.add(res.message as Toast)
+        toast.add({
+          title: 'Loggin',
+          description: 'You are now logged in',
+          color: 'success'
+        })
       })
       .catch(error => {
         toast.add({
@@ -36,7 +41,8 @@
         })
       })
       .finally(() => {
-        navigateTo('/dashboard', { replace: true })
+        
+        navigateTo('/auth/login', { replace: true })
       })
     )
   }

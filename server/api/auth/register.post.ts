@@ -1,10 +1,10 @@
 import { useValidatedBody } from 'h3-valibot'
-import { users } from '~~/server/models/users.model'
+import { users } from '~~/server/database/schema'
 
 export default defineEventHandler(async (event) => {
   try {
     // Validate request body
-    const body = await useValidatedBody(event, registerSchema)
+    const body = await useValidatedBody(event, registerSchema) as RegisterFormData
 
     // Check if user already exists
     const existingUser = await useDatabase()
@@ -37,7 +37,9 @@ export default defineEventHandler(async (event) => {
         createdAt: new Date(),
         updatedAt: new Date()
       })
-      .returning()
+      .returning({
+        id: users.id,
+      })
       .execute()
 
     if (newUser.length !== 1) {
@@ -47,15 +49,12 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    await setUserSession(event, {
-      user: userResource(newUser[0]), // newUser is an array with one element
-      loggedInAt: Date.now(),
-      expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 godziny w milisekundach
-      rememberMe: false
-    })
 
-    // Dodaj logowanie aktywności użytkownika (opcjonalnie)
+
+    // Przypisanie domyślnej roli
+    await assignDefaultUserRole(newUser[0].id)
+
+    // Dodaj rejestracje użytkownika do aktywności użytkownika
     await useDatabase()
       .insert(tables.userActivities)
       .values({

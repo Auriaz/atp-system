@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { users } from '../database/schema'
+import { users } from '../schema'
 
 export const oAuthAccounts = sqliteTable('oauth_accounts', {
     id: integer('id').primaryKey({ autoIncrement: true }), // np. 'google', 'facebook'
