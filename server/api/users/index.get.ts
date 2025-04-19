@@ -1,5 +1,3 @@
-import { asc } from 'drizzle-orm'
-
 export default defineEventHandler(async (event) => {
   try {
     // Sprawdź sesję użytkownika (dodatkowe zabezpieczenie)
@@ -11,20 +9,26 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const query = getQuery(event)
-    const page = parseInt(query.page as string) || 1
-    const limit = parseInt(query.limit as string) || 10
-    const offset = (page - 1) * limit
+    // Pobierz parametry zapytania
+    const query = getQuery(event);
+    const page = parseInt(query.page as string) || 1;
+    const limit = parseInt(query.limit as string) || 10;
+    const search = query.search as string || '';
+    const role = query.role as string || 'all';
+    const status = query.status as string || 'all';
+    const sortBy = query.sortBy as string || 'id';
+    const sortOrder = (query.sortOrder as 'asc' | 'desc') || 'asc';
 
-    // TODO - Zastosuj filtrowanie i sortowanie na podstawie query oraz przenis do repozytorium
-    let users = await useDatabase()
-      .select()
-      .from(tables.users)
-      .orderBy(asc(tables.users.id))
-      .limit(limit)
-      .offset(offset)
-
-    const total = users.length
+    // Użyj repozytorium do pobrania użytkowników
+    const { users, total } = await getUsers({
+      page,
+      limit,
+      search,
+      role,
+      status,
+      sortBy,
+      sortOrder
+    });
 
     return createApiResponse({
       data: users,
@@ -35,7 +39,7 @@ export default defineEventHandler(async (event) => {
         totalPages: Math.ceil(total / limit)
       },
       loading: false
-    })
+    });
   } catch (error) {
     // Obsługa błędów, w tym błędów z middleware
     console.error('Error in users API:', error);
@@ -46,4 +50,4 @@ export default defineEventHandler(async (event) => {
       message: 'An unexpected error occurred'
     });
   }
-})
+});

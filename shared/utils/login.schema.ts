@@ -1,9 +1,19 @@
-import * as v from 'valibot'
+import { z } from 'zod';
 
-export const loginSchema = v.object({
-  email: v.pipe(v.string(), v.email('Invalid email')),
-  password: v.pipe(v.string(), v.minLength(8, 'Must be at least 8 characters')),
-  rememberMe: v.optional(v.boolean())
-})
+/**
+ * Schemat walidacji formularza logowania
+ */
+export const LoginFormSchema = z.object({
+  email: z.string()
+    .email({ message: 'Please enter a valid email address' }),
 
-export type LoginFormData = v.InferOutput<typeof loginSchema>
+  password: z.string()
+    .min(1, { message: 'Password is required' }),
+
+  rememberMe: z.boolean().optional().default(false),
+});
+
+/**
+ * Typ danych formularza logowania
+ */
+export type LoginForm = z.infer<typeof LoginFormSchema>;

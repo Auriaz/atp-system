@@ -16,6 +16,7 @@ const {
   // deleteUser 
 } = useUsersApi()
 
+
 const UBadge = resolveComponent('UBadge')
 const UAvatar = resolveComponent('UAvatar')
 const toast = useToast()
@@ -33,13 +34,15 @@ const statusOptions = [
   { value: 'suspended', label: 'Suspended' }
 ]
 
+// Uaktualnione opcje ról z wykorzystaniem stałych systemowych
 const roleOptions = [
   { value: 'all', label: 'All roles' },
-  { value: 'admin', label: 'Administrator' },
-  { value: 'coach', label: 'Coach' },
-  { value: 'athlete', label: 'Athlete' },
-  { value: 'manager', label: 'Manager' },
-  { value: 'parent', label: 'Parent' }
+  { value: USER_ROLES.ADMIN, label: ROLE_NAMES[USER_ROLES.ADMIN] },
+  { value: USER_ROLES.MANAGER, label: ROLE_NAMES[USER_ROLES.MANAGER] },
+  { value: USER_ROLES.COACH, label: ROLE_NAMES[USER_ROLES.COACH] },
+  { value: USER_ROLES.ATHLETE, label: ROLE_NAMES[USER_ROLES.ATHLETE] },
+  { value: USER_ROLES.EDITOR, label: ROLE_NAMES[USER_ROLES.EDITOR] },
+  { value: USER_ROLES.USER, label: ROLE_NAMES[USER_ROLES.USER] }
 ]
 
 // User view options
@@ -116,7 +119,7 @@ const toggleSort = (field: string) => {
 }
 
 // Definicja kolumn tabeli
-const columns: TableColumn<IUserResource>[] = [
+const columns: TableColumn<UserResource>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -155,33 +158,36 @@ const columns: TableColumn<IUserResource>[] = [
   },
   {
     accessorKey: 'role',
-    header: 'Role',
+    header: 'Roles',
     cell: ({ row }) => {
-      const role = row.getValue('role') as UserRole
-      const color = USER_ROLE_COLORS[role] || 'gray'
-      let icon = 'i-lucide-user'
+      // Pobierz tablicę ról użytkownika zamiast pojedynczej roli
+      const roles = row.getValue('roles') as RoleSlug[] || [row.getValue('role') as RoleSlug] || [];
       
-      switch(role) {
-        case 'admin':
-          icon = 'i-lucide-shield'
-          break
-        case 'coach':
-          icon = 'i-lucide-award'
-          break
-        case 'athlete':
-          icon = 'i-lucide-dumbbell'
-          break
-        case 'manager':
-          icon = 'i-lucide-briefcase'
-          break
+      // Jeśli brak ról, pokaż domyślną wartość
+      if (!roles.length) {
+        return h(UBadge, { 
+          class: 'capitalize', 
+          variant: 'subtle', 
+          color: 'gray', 
+          icon: 'i-lucide-user' 
+        }, () => 'No roles');
       }
-
-      return h(UBadge, { 
-        class: 'capitalize', 
-        variant: 'subtle', 
-        color, 
-        icon 
-      }, () => role)
+      
+      // Utwórz elementy dla każdej roli
+      return h('div', { class: 'flex flex-wrap gap-1' }, 
+        roles.map(role => {
+          const color = USER_ROLE_COLORS[role] || 'gray';
+          const icon = USER_ROLE_ICONS[role] || 'i-lucide-user';
+          
+          return h(UBadge, { 
+            key: role,
+            class: 'capitalize', 
+            variant: 'subtle', 
+            color, 
+            icon 
+          }, () => role);
+        })
+      );
     },
     enableSorting: true
   },
@@ -253,7 +259,7 @@ const columns: TableColumn<IUserResource>[] = [
 ]
 
 // Akcje dla menu kontekstowego
-function getDropdownActions(user: IUserResource): DropdownMenuItem[][] {
+function getDropdownActions(user: UserResource): DropdownMenuItem[][] {
   return [
     [
       {
@@ -319,15 +325,19 @@ const filteredRows = computed(() => {
     filtered = filtered.filter(user => user.status === selectedStatus.value)
   }
   
-  // Filtrowanie według roli
-  if (selectedRole.value !== 'all') {
-    filtered = filtered.filter(user => user.role === selectedRole.value)
-  }
+// Filtrowanie według roli
+if (selectedRole.value !== 'all') {
+  filtered = filtered.filter(user => {
+    // Obsługa zarówno tablicy ról jak i pojedynczej roli dla wstecznej kompatybilności
+    const userRoles = user.roles || [user.roles];
+    return userRoles.includes(selectedRole.value as RoleSlug);
+  });
+}
   
   // Sortowanie
   filtered.sort((a, b) => {
-    let valueA = a[sortBy.value as keyof IUserResource]
-    let valueB = b[sortBy.value as keyof IUserResource]
+    let valueA = a[sortBy.value as keyof UserResource]
+    let valueB = b[sortBy.value as keyof UserResource]
     
     // Obsługa sortowania dat
     if (sortBy.value.includes('At')) {
@@ -757,10 +767,12 @@ function openSettings() {
               <UInput placeholder="User's email" type="email" class="w-full" />
             </UFormField>
             
-            <UFormField label="Role" required>
-              <USelectMenu 
-                :options="roleOptions.filter(r => r.value !== 'all')" 
-                placeholder="Select role" 
+            <UFormField label="Roles" required>
+              <USelectMenu
+                multiple
+                :options="Object.entries(ROLE_NAMES).map(([value, label]) => ({ value, label }))"
+                placeholder="Select roles"
+                class="w-full"
               />
             </UFormField>
           </div>

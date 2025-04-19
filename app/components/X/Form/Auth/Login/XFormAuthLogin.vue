@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import * as v from 'valibot'
   import type { FormSubmitEvent } from '@nuxt/ui'
   import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
   
@@ -16,7 +15,8 @@
     loading: false,
   })
 
-  async function onSubmitLogin(event: FormSubmitEvent<LoginFormData>) {
+  async function onSubmitLogin(event: FormSubmitEvent<LoginForm>) {
+    loginForm.loading = true
     await useAsyncData('login', async () => $fetch('/api/auth/login', {
       method: 'POST',
       body: event.data
@@ -24,6 +24,7 @@
       .then(res => {
         fetch()
         toast.add(res.message as Toast)
+        navigateTo('/dashboard', { replace: true })
       })
       .catch(error => {
         toast.add({
@@ -33,16 +34,23 @@
         })
       })
       .finally(() => {
-        navigateTo('/dashboard', { replace: true })
+        loginForm.loading = false
+        resetFormLogin()
       })
     )
+  }
+
+  const resetFormLogin = () => {
+    loginForm.data.email = ''
+    loginForm.data.password = ''
+    loginForm.data.rememberMe = false
   }
 
   const previewPassword = ref(false)
 </script>
 
 <template>
-  <UForm :schema="v.safeParser(loginSchema)" :state="loginForm.data" class="w-full space-y-6 px-6" @submit="onSubmitLogin">
+  <UForm :schema="LoginFormSchema" :state="loginForm.data" class="w-full space-y-6 px-6" @submit.prevent="onSubmitLogin">
     <UFormField required label="Email" name="email" class="w-full">
       <UInput v-model="loginForm.data.email" class="w-full"/>
     </UFormField>

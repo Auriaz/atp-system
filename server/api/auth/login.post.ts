@@ -1,9 +1,9 @@
-import { useValidatedBody } from 'h3-valibot'
+import { useValidatedBody } from 'h3-zod'
 import { createError, defineEventHandler } from 'h3'
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await useValidatedBody(event, loginSchema) as LoginFormData
+    const body = await useValidatedBody(event, LoginFormSchema) as LoginForm
 
     // Ustawienie nagłówków bezpieczeństwa
     setHeaders(event, {

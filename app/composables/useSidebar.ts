@@ -102,6 +102,21 @@ export const useSidebar = () => {
         },
       ],
     },
+    {
+      label: 'Documentation',
+      icon: 'i-heroicons-book-open',
+      to: '/docs',
+      type: 'basic' as const,
+      requiredPermission: null, // Dostępne dla wszystkich zalogowanych użytkowników
+      name: 'docs',
+      tree: [
+        {
+          label: 'Documentation',
+          icon: 'i-heroicons-book-open',
+          to: '/docs',
+        },
+      ],
+    },
     // ... pozostałe linki
   ].filter(link => link && typeof link.to === 'string')
 

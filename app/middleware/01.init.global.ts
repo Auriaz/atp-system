@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     // 1. Inicjalizacja i weryfikacja sesji użytkownika
     const userSession = useState<UserSession | null>('user-session');
-    const { session: authSession } = useUserSession();
+    const { session: authSession, clear } = useUserSession();
 
     // Logowanie debug (tylko w trybie dev)
     if (import.meta.dev) {
@@ -27,6 +27,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
             // Tylko po stronie klienta pokazujemy powiadomienie
             if (import.meta.client && to.path !== '/auth/login') {
                 const toast = useToast();
+                clear()
                 toast.add({
                     title: 'Session expired',
                     description: 'Your session has expired. Please log in again.',

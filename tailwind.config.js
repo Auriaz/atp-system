@@ -31,7 +31,7 @@ export default {
         }
     },
     plugins: [
-        // Twoje pluginy
+        require('@tailwindcss/typography'),
     ],
     // Dodaj obsługę wariantów dla opacity
     safelist: [

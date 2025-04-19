@@ -101,7 +101,7 @@ const animateCounter = (target: HTMLElement, end: number, duration: number) => {
 
 // Funkcja do uruchomienia animacji liczników po dotarciu do sekcji
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     const observerOptions = {
       threshold: 0.5,
     }
@@ -186,7 +186,6 @@ const features = [
 
 <template>
   <NuxtLayout>
-
     <div class="homepage">
       <!-- Hero section -->
       <section class="hero-section relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900">
@@ -308,7 +307,8 @@ const features = [
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center p-6">
+            <div class="text-center p-6 relative">
+
               <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span class="text-2xl font-bold text-primary-600 dark:text-primary-400">1</span>
               </div>
@@ -317,7 +317,7 @@ const features = [
             </div>
             
             <div class="text-center p-6 relative">
-              <div class="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-primary-200 dark:bg-primary-800 -z-10"></div>
+        
               <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span class="text-2xl font-bold text-primary-600 dark:text-primary-400">2</span>
               </div>
@@ -325,10 +325,10 @@ const features = [
               <p class="text-gray-600 dark:text-gray-400">Dodaj zawodników, drużyny i rozpocznij wprowadzanie danych treningowych.</p>
             </div>
             
-            <div class="text-center p-6">
-              <div class="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-primary-200 dark:bg-primary-800 -z-10"></div>
+            <div class="text-center p-6 relative">
+ 
               <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-2xl font-bold text-primary-600 dark:text-primary-400">3</span>
+                <span class="text-2xl font-bold text-primary-600 dark:text-primary-400 z-10">3</span>
               </div>
               <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Analizuj i optymalizuj</h3>
               <p class="text-gray-600 dark:text-gray-400">Korzystaj z zaawansowanych analiz, aby optymalizować treningi i poprawiać wyniki.</p>

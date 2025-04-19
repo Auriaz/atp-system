@@ -1,10 +1,10 @@
-import { useValidatedBody } from 'h3-valibot'
+import { useValidatedBody } from 'h3-zod'
 import { users } from '~~/server/database/schema'
 
 export default defineEventHandler(async (event) => {
   try {
     // Validate request body
-    const body = await useValidatedBody(event, registerSchema) as RegisterFormData
+    const body = await useValidatedBody(event, RegisterFormSchema) as RegisterForm
 
     // Check if user already exists
     const existingUser = await useDatabase()

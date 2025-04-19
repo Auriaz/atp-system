@@ -15,3 +15,21 @@ export interface UserResource {
     lastName: string | null;
     isAgreedToTerms: number;
 }
+
+export interface UserFilters {
+    search?: string;
+    role?: string;
+    status?: string;
+}
+
+export interface SortOptions {
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
+export interface PaginationOptions {
+    page: number;
+    limit: number;
+}
+
+export type UserQueryOptions = UserFilters & SortOptions & PaginationOptions;

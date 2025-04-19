@@ -9,7 +9,7 @@
         <slot name="header" />
       </x-header>
 
-      <main class="w-full h-full py-8 box-border relative flex justify-center items-start duration-500">
+      <main class="w-full h-full py-16 box-border relative flex justify-center items-start duration-500">
         <slot name="main" />
       </main>
 

@@ -1,8 +1,110 @@
-import { eq } from 'drizzle-orm';
-import { users } from '../../database/schema';
+import { asc, desc, eq, like, and, or, SQL, sql } from 'drizzle-orm'
+import { users, roles, userRoles } from '../../database/schema'
 import { formatDistanceToNow } from 'date-fns'
 import { enGB } from 'date-fns/locale'
 import { User } from '#auth-utils'
+
+/**
+ * Funkcja pobierająca użytkowników z filtrowaniem
+ */
+export async function getUsersWithFilters(query) {
+    const { page = 1, limit = 10, search = '', role = 'all', status = 'all', sortBy = 'id', sortOrder = 'asc' } = query;
+
+    const db = useDatabase();
+    const offset = (page - 1) * limit;
+
+    // Budowanie warunków filtrowania
+    const conditions = [];
+
+    // Wyszukiwanie
+    if (search) {
+        conditions.push(
+            or(
+                like(users.firstName, `%${search}%`),
+                like(users.lastName, `%${search}%`),
+                like(users.email, `%${search}%`),
+                like(users.username, `%${search}%`)
+            )
+        );
+    }
+
+    // Filtr po statusie
+    if (status && status !== 'all') {
+        conditions.push(eq(users.status, status));
+    }
+
+    // Pobierz podstawowe dane użytkowników
+    query = db.select({
+        id: users.id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        email: users.email,
+        username: users.username,
+        avatarUrl: users.avatarUrl,
+        status: users.status,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
+    }).from(users);
+
+    // Zastosuj warunki filtrowania
+    const filteredQuery = conditions.length
+        ? query.where(and(...conditions))
+        : query;
+
+    // Sortowanie
+    const sortColumn = users[sortBy] || users.id;
+    const sortFunction = sortOrder === 'asc' ? asc : desc;
+
+    // Pobierz surowe dane użytkowników
+    const rawUsers = await filteredQuery
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sortFunction(sortColumn));
+
+    // Pobierz role dla każdego użytkownika
+    const usersWithRoles = await Promise.all(rawUsers.map(async (user) => {
+        // Pobierz role użytkownika 
+        const userRolesResult = await db
+            .select({
+                roleSlug: roles.slug
+            })
+            .from(userRoles)
+            .innerJoin(roles, eq(userRoles.roleId, roles.id))
+            .where(eq(userRoles.userId, user.id));
+
+        return {
+            ...user,
+            roles: userRolesResult.map(r => r.roleSlug)
+        };
+    }));
+
+    // Filtrowanie po roli - wykonywane po pobraniu ról
+    let filteredUsers = usersWithRoles;
+    if (role && role !== 'all') {
+        filteredUsers = usersWithRoles.filter(user =>
+            user.roles.includes(role)
+        );
+    }
+
+    // Pobierz całkowitą liczbę użytkowników (dla paginacji)
+    const countResult = await db
+        .select({ count: sql`count(*)` })
+        .from(users)
+        .where(conditions.length ? and(...conditions) : undefined);
+
+    const total = Number(countResult[0]?.count) || 0;
+
+    // Jeśli filtrujemy po roli, musimy zwrócić długość przefiltrowanej tablicy jako total
+    const finalTotal = role !== 'all' ? filteredUsers.length : total;
+
+    return {
+        users: filteredUsers,
+        total: finalTotal
+    };
+}
+
+
+
 /**
  * Pobiera szczegółowe dane użytkownika wraz z przypisanymi rolami
  * @param userId Identyfikator użytkownika

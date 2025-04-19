@@ -76,4 +76,86 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/permission.directive.ts',
   ],
+
+  content: {
+    renderer: {
+      // navigation: {
+      //   fields: ['title', 'description', 'category', 'navigation', 'icon', 'version', 'requiredRole'],
+      // },
+
+      // Konfiguracja dokumentów
+      // documentDriven: {
+      //   page: true,
+      //   navigation: true,
+      //   injectSeoMeta: true,
+      // },
+      // Konfiguracja wyszukiwania
+      // search: {
+      //   full: true,
+      //   fields: ['title', 'description', 'category', 'tags'],
+      // },
+      // Konfiguracja nagłówków
+      anchorLinks: {
+        h1: true, h2: true, h3: true, h4: true, h5: true, h6: true,
+      },
+    },
+    build: {
+
+
+
+
+      // Konfiguracja markdown
+      markdown: {
+        // Spis treści
+        toc: {
+          depth: 4,
+          searchDepth: 5,
+        },
+
+
+        // Podświetlanie składni
+        highlight: {
+          theme: {
+            default: 'github-light',
+            dark: 'github-dark',
+            sepia: 'monokai'
+          },
+        },
+
+        // Wtyczki Remark (dla Markdown)
+        // remarkPlugins: {
+        //   'remark-emoji': {
+        //     emoticon: true
+        //   },
+        //   'remark-squeeze-paragraphs': {},
+        //   'remark-gfm': {} // GitHub Flavored Markdown
+        // },
+
+        // // Wtyczki Rehype (dla HTML)
+        // rehypePlugins: {
+        //   'rehype-external-links': {
+        //     target: '_blank',
+        //     rel: 'noopener nofollow'
+        //   }
+        // },
+
+      },
+    },
+    // // Komponenty Markdown - POPRAWIONE
+    // components: {
+    //   tags: {
+    //     'info-box': 'InfoBox',
+    //     'warning': 'UAlert',
+    //     'tip': 'UTip'
+    //   }
+    // },
+    // Włączenie nawigacji automatycznej
+
+    // Konfiguracja eksperymentalna
+    // experimental: {
+    //   clientDB: true,
+    //   stripQueryParameters: false,
+    //   cacheContents: true,
+    // }
+  }
 })

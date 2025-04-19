@@ -1,13 +1,38 @@
-import * as v from 'valibot'
+import { z } from 'zod';
 
-export const registerSchema = v.object({
-  username: v.pipe(v.string(), v.minLength(3, 'Must be at least 3 characters')),
-  email: v.pipe(v.string(), v.email('Invalid email')),
-  password: v.pipe(v.string(), v.minLength(8, 'Must be at least 8 characters')),
-  firstName: v.optional(v.string()),
-  lastName: v.optional(v.string()),
-  isAgreedToTerms: v.pipe(v.boolean(), v.custom((value) => value === true, 'Must be true')),
-})
+/**
+ * Schemat walidacji formularza rejestracji
+ */
+export const RegisterFormSchema = z.object({
+  username: z.string()
+    .min(3, { message: 'Username must be at least 3 characters' })
+    .max(30, { message: 'Username must not exceed 30 characters' })
+    .regex(/^[a-zA-Z0-9._-]+$/, { message: 'Username can only contain letters, numbers, dots, underscores and dashes' }),
 
-// Typ wyprowadzony ze schematu
-export type RegisterFormData = v.InferOutput<typeof registerSchema>
+  email: z.string()
+    .email({ message: 'Please provide a valid email address' }),
+
+  password: z.string()
+    .min(8, { message: 'Password must be at least 8 characters' })
+    .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
+    .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
+    .regex(/[0-9]/, { message: 'Password must contain at least one number' })
+    .regex(/[^a-zA-Z0-9]/, { message: 'Password must contain at least one special character' }),
+
+  password_confirmation: z.string(),
+
+  firstName: z.string().min(1, { message: 'First name is required' }).max(50),
+  lastName: z.string().min(1, { message: 'Last name is required' }).max(50),
+
+  isAgreedToTerms: z.boolean().refine(val => val === true, {
+    message: 'You must agree to the terms and conditions'
+  }),
+}).refine(data => data.password === data.password_confirmation, {
+  message: 'Passwords do not match',
+  path: ['password_confirmation']
+});
+
+/**
+ * Typ danych formularza rejestracji
+ */
+export type RegisterForm = z.infer<typeof RegisterFormSchema>;
