@@ -3,16 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm rebuild better-sqlite3 && nuxt build",
+    "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "npx nuxthub preview",
     "deploy": "npx nuxthub deploy",
+    "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "db:generate": "drizzle-kit generate",
-    "clean-install": "pnpm store prune && pnpm install --force",
-    "rebuild:better-sqlite3": "pnpm rebuild better-sqlite3",
-    "postinstall": "nuxt prepare && pnpm rebuild better-sqlite3"
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@nuxt/content": "3.3.0",
