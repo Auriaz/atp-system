@@ -16,41 +16,41 @@ const footerLinks = [
   {
     title: 'System',
     links: [
-      { name: 'Funkcje', url: '/#features' },
-      { name: 'Cennik', url: '/pricing' },
+      // { name: 'Funkcje', url: '/#features' },
+      // { name: 'Cennik', url: '/pricing' },
       { name: 'FAQ', url: '/faq' },
-      { name: 'Przewodnik', url: '/guides' },
-      { name: 'Blog', url: '/blog' }
+      // { name: 'Przewodnik', url: '/guides' },
+      // { name: 'Blog', url: '/blog' }
     ]
   },
   {
     title: 'Firma',
     links: [
       { name: 'O nas', url: '/about' },
-      { name: 'Zespół', url: '/about#team' },
-      { name: 'Kariera', url: '/careers' },
-      { name: 'Partnerzy', url: '/partners' },
-      { name: 'Prasa', url: '/press' }
+      // { name: 'Zespół', url: '/about#team' },
+      // { name: 'Kariera', url: '/careers' },
+      // { name: 'Partnerzy', url: '/partners' },
+      // { name: 'Prasa', url: '/press' }
     ]
   },
   {
     title: 'Wsparcie',
     links: [
       { name: 'Kontakt', url: '/contact' },
-      { name: 'Pomoc', url: '/help' },
+      // { name: 'Pomoc', url: '/help' },
       { name: 'Dokumentacja', url: '/docs' },
-      { name: 'Status systemu', url: '/status' },
-      { name: 'Szkolenia', url: '/training' }
+      // { name: 'Status systemu', url: '/status' },
+      // { name: 'Szkolenia', url: '/training' }
     ]
   },
   {
     title: 'Prawne',
     links: [
-      { name: 'Regulamin', url: '/terms' },
-      { name: 'Prywatność', url: '/privacy' },
-      { name: 'Cookies', url: '/cookies' },
-      { name: 'Licencje', url: '/licenses' },
-      { name: 'RODO', url: '/gdpr' }
+      { name: 'Regulamin', url: '/legal/terms' },
+      { name: 'Prywatność', url: '/legal/privacy' },
+      { name: 'Cookies', url: '/legal/cookies' },
+      { name: 'Licencje', url: '/legal/licenses' },
+      { name: 'RODO', url: '/legal/gdpr' }
     ]
   }
 ]
@@ -79,10 +79,6 @@ const footerLinks = [
             >
               <UIcon :name="social.icon" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400" />
             </a>
-          </div>
-          <div class="flex items-center">
-            <img src="/images/app-store.webp" alt="App Store" class="h-10 mr-2 grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100">
-            <img src="/images/google-play.webp" alt="Google Play" class="h-10 grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100">
           </div>
         </div>
         

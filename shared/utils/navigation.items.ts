@@ -20,34 +20,35 @@ export const navigationItems: NavigationMenuItem[] = [
     children: [
       {
         label: 'Introduction',
-        to: '/docs/introduction',
+        to: '/docs/public/introduction',
         icon: 'i-heroicons-information-circle',
         description: 'Introduction to documentation and basic information about the project'
       },
       {
         label: 'Getting Started',
-        to: '/docs/getting-started',
+        to: '/docs/public/getting-started',
         icon: 'i-heroicons-play',
         description: 'How to start working with the project, installation and configuration'
       },
       {
         label: 'Guides',
+        to: '/docs/public/guides',
         icon: 'i-heroicons-map',
         description: 'Guides to various aspects of the project',
       },
-      {
-        label: 'API',
-        icon: 'i-heroicons-code-bracket',
-        description: 'API documentation, available endpoints and their description',
-      }
+      // {
+      //   label: 'API',
+      //   icon: 'i-heroicons-code-bracket',
+      //   description: 'API documentation, available endpoints and their description',
+      // }
     ]
   },
   // Blog section
-  {
-    label: 'Blog',
-    to: '/blog',
-    icon: 'i-heroicons-newspaper'
-  },
+  // {
+  //   label: 'Blog',
+  //   to: '/blog',
+  //   icon: 'i-heroicons-newspaper'
+  // },
   // FAQ
   {
     label: 'FAQ',

@@ -68,53 +68,70 @@ export default defineContentConfig({
                 nextSteps: z.array(z.string()).optional()
             }),
         }),
+
         faq: defineCollection({
-            source: 'docs/public/*.md', // Źródło dokumentów
-            type: 'page', // Typ kolekcji
+            source: 'faq/**/*.md',
+            type: 'page',
             schema: z.object({
-                question: z.string().min(1, 'Pytanie jest wymagane'),
-                answer: z.string().min(1, 'Odpowiedź jest wymagana'),
-                category: z.string().optional(),
-
-                // Czy pytanie jest często zadawane
-                isFeatured: z.boolean().default(false),
-
-                // Kontrola dostępu
-                requiredRole: z.union([
-                    z.string(),
-                    z.array(z.string())
-                ]).optional()
+                title: z.string().min(1, 'Tytuł jest wymagany'),
+                description: z.string().optional(),
+                language: z.string().default('en'),
+                category: z.string().default('general'),
+                order: z.number().default(0),
+                tags: z.array(z.string()).optional(),
+                featured: z.boolean().default(false),
+                icon: z.string().optional(),
+                lastUpdated: z.string().datetime().optional(),
             })
         }),
 
+        // Nowa kolekcja dla warunków korzystania
+        legal: defineCollection({
+            source: 'legal/**/*.md', // Źródło dokumentów - uwzględnia wersje językowe
+            type: 'page', // Typ kolekcji
+            schema: z.object({
+                // Podstawowe pola
+                title: z.string().min(1, 'Tytuł jest wymagany'),
+                description: z.string().optional(),
+
+                // Metadane
+                language: z.string().default('en'), // Język dokumentu (en, pl, itd.)
+                version: z.string().optional(), // Wersja warunków
+                effectiveDate: z.string().datetime().optional(), // Data wejścia w życie
+                lastUpdated: z.string().datetime().optional(), // Data ostatniej aktualizacji
+
+                // Sekcje dokumentu (opcjonalne - dla lepszej organizacji)
+                sections: z.array(z.object({
+                    title: z.string(),
+                    anchor: z.string().optional()
+                })).optional(),
+
+                // Powiązane dokumenty
+                relatedDocuments: z.array(z.object({
+                    title: z.string(),
+                    path: z.string()
+                })).optional(),
+
+                // Kontakt
+                contactEmail: z.string().email().optional()
+            })
+        }),
+
+        // // Można też dodać kolekcję dla polityki prywatności
+        // privacy: defineCollection({
+        //     source: 'privacy/**/*.md',
+        //     type: 'page',
+        //     schema: z.object({
+        //         title: z.string().min(1, 'Tytuł jest wymagany'),
+        //         description: z.string().optional(),
+        //         language: z.string().default('en'),
+        //         version: z.string().optional(),
+        //         effectiveDate: z.string().datetime().optional(),
+        //         lastUpdated: z.string().datetime().optional(),
+        //         dataController: z.string().optional(), // Nazwa administratora danych
+        //         contactEmail: z.string().email().optional()
+        //     })
+        // }),
+
     },
-    // // Konfiguracja parsera Markdown
-    // markdown: {
-    //   // Konfiguracja generowania spisu treści
-    //   toc: {
-    //     depth: 4,
-    //     searchDepth: 5
-    //   },
-    //   // Konfiguracja podświetlania składni
-    //   highlight: {
-    //     theme: {
-    //       default: 'github-light',
-    //       dark: 'github-dark',
-    //       sepia: 'monokai'
-    //     },
-    //     preload: ['typescript', 'vue', 'bash', 'markdown', 'json', 'css', 'html']
-    //   }
-    // },
-
-    // Konfiguracja wyszukiwania
-    // search: {
-    //   // Włącz wyszukiwanie pełnotekstowe
-    //   full: true
-    // },
-
-    // // Konfiguracja nawigacji
-    // navigation: {
-    //   // Pola używane do generowania nawigacji
-    //   fields: ['title', 'description', 'category', 'navigation', 'icon']
-    // }
 })

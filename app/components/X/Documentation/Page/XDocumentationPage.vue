@@ -29,7 +29,7 @@ interface SurroundingDocument {
 }
 
 const route = useRoute();
-const { data: pageDocument } = await useAsyncData<PageDocument>(route.path, () => {
+const { data: pageDocument } = await useAsyncData<PageDocument | null>(route.path, () => {
   return queryCollection('docs').path(route.path).first();
 });
 
@@ -37,7 +37,7 @@ const { data } = await useAsyncData<SurroundingDocument[]>('surround', () => {
   return queryCollectionItemSurroundings<keyof PageCollections>('docs', route.path, {
     before: 1,
     after: 1,
-    fields: ['category', 'description']
+    fields: [ 'description']
   });
 });
 
@@ -269,7 +269,7 @@ onMounted(() => {
       <!-- Mobilny TOC - widoczny tylko na małych ekranach -->
       <div 
         v-if="hasToc" 
-        class="md:hidden w-screen fixed top-20 left-0 backdrop-blur-lg z-30 border-b border-gray-200 dark:border-gray-800 shadow-sm"
+        class="md:hidden w-screen fixed top-20 left-0 backdrop-blur-lg z-30"
       >
         <div 
           class="flex items-center justify-between p-3 cursor-pointer" 
@@ -288,7 +288,7 @@ onMounted(() => {
         <!-- Rozwijana lista linków -->
         <div 
           class="mobile-toc-content overflow-hidden transition-all duration-300 bg-gray-50 dark:bg-gray-800/50"
-          :class="isMobileTocOpen ? 'max-h-[70vh] py-2 border-t border-gray-200 dark:border-gray-700' : 'max-h-0'"
+          :class="isMobileTocOpen ? 'max-h-[70vh] py-2' : 'max-h-0'"
         >
           <nav class="px-3 space-y-1 overflow-y-auto max-h-[calc(70vh-3rem)]">
             <div v-for="link in toc.links" :key="link.id" class="text-sm">
@@ -394,7 +394,7 @@ onMounted(() => {
         >
           <div 
             ref="fixedToc"
-            class="fixed-toc border-l border-primary-200/40 dark:border-primary-800/40 pl-4 pr-4 py-2"
+            class="fixed-toc pl-4 pr-4 py-2"
             style="position: fixed; top: 6rem; width: 16rem; max-height: calc(100vh - 8rem); overflow-y: auto;"
           >
             <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Na tej stronie</h3>
@@ -429,7 +429,7 @@ onMounted(() => {
                 <ul class="space-y-1">
                   <li>
                     <a 
-                      href="https://github.com/your-repo/atp-system" 
+                      href="https://github.com/Auriaz/atp-system" 
                       target="_blank"
                       rel="noopener noreferrer"
                       class="flex items-center px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
@@ -438,15 +438,7 @@ onMounted(() => {
                       GitHub
                     </a>
                   </li>
-                  <li>
-                    <NuxtLink 
-                      to="/materials" 
-                      class="flex items-center px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      <UIcon name="i-heroicons-book-open" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400" />
-                      Materiały szkoleniowe
-                    </NuxtLink>
-                  </li>
+
                   <li>
                     <NuxtLink 
                       to="/faq" 

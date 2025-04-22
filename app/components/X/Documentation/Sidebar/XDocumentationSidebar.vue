@@ -155,7 +155,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="documentation-sidebar" class=" fixed w-56 h-[calc(100hv-55px)] pt-6 pb-42 flex flex-col justify-between  border-r border-primary-200/40 dark:border-primary-800/40" >
+  <div id="documentation-sidebar" class=" fixed w-56 h-[calc(100hv-55px)] pt-6 pb-42 flex flex-col justify-between" >
     <!-- Główna sekcja dokumentacji -->
     <div class="mb-6">
       <h2 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 px-3">

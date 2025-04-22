@@ -6,8 +6,7 @@ export default {
         './pages/**/*.vue',
         './plugins/**/*.{js,ts}',
         './app.vue',
-        './assets/**/*.css',
-        './nuxt.config.{js,ts}'
+        './error.vue'
     ],
     theme: {
         extend: {
@@ -32,6 +31,36 @@ export default {
     },
     plugins: [
         require('@tailwindcss/typography'),
+        function ({ addUtilities, theme }) {
+            // Odtwarzamy klasy space-x i space-y, które zostały usunięte w Tailwind 4.x
+            const spaceXUtilities = {}
+            const spaceYUtilities = {}
+
+            const values = theme('spacing') || {}
+
+            Object.entries(values).forEach(([key, value]) => {
+                spaceXUtilities[`.space-x-${key} > * + *`] = {
+                    'margin-left': value
+                }
+
+                spaceYUtilities[`.space-y-${key} > * + *`] = {
+                    'margin-top': value
+                }
+            })
+
+            addUtilities(spaceXUtilities)
+            addUtilities(spaceYUtilities)
+
+            // Dodaj klasy gap, jeśli nie są standardowo dostępne
+            const gapUtilities = {}
+            Object.entries(values).forEach(([key, value]) => {
+                gapUtilities[`.gap-${key}`] = {
+                    'gap': value
+                }
+            })
+
+            addUtilities(gapUtilities)
+        },
     ],
     // Dodaj obsługę wariantów dla opacity
     safelist: [

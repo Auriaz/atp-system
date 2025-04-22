@@ -14,7 +14,8 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     // '@pinia/nuxt',
     // 'pinia-plugin-persistedstate/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxtjs/i18n'
   ],
 
   css: ['~/assets/css/main.css'],
@@ -70,7 +71,37 @@ export default defineNuxtConfig({
       tasks: true,
       // websocket: true,
     },
+    // Poprawa kompatybilności z Cloudflare
+    // esbuild: {
+    //   options: {
+    //     target: 'es2022',
+    //     tsconfigRaw: {
+    //       compilerOptions: {
+    //         experimentalDecorators: true,
+    //       }
+    //     }
+    //   }
+    // }
   },
+
+  // vite: {
+  //   build: {
+  //     sourcemap: true,
+  //     rollupOptions: {
+  //       treeshake: {
+  //         // Traktuj moduły Cloudflare jako mające efekty uboczne
+  //         moduleSideEffects: (id) => {
+  //           return id.includes('@cloudflare/unenv-preset') ||
+  //             id.includes('node:process') ||
+  //             id.includes('node:events');
+  //         }
+  //       }
+  //     }
+  //   },
+  //   css: {
+  //     devSourcemap: true
+  //   }
+  // },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
   plugins: [
