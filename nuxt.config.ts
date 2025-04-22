@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     // '@pinia/nuxt',
     // 'pinia-plugin-persistedstate/nuxt',
-    // '@vueuse/nuxt',
+    '@vueuse/nuxt',
     // '@nuxtjs/i18n'
   ],
 
