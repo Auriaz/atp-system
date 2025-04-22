@@ -85,24 +85,23 @@ export default defineNuxtConfig({
     // }
   },
 
-  // vite: {
-  //   build: {
-  //     sourcemap: true,
-  //     rollupOptions: {
-  //       treeshake: {
-  //         // Traktuj moduły Cloudflare jako mające efekty uboczne
-  //         moduleSideEffects: (id) => {
-  //           return id.includes('@cloudflare/unenv-preset') ||
-  //             id.includes('node:process') ||
-  //             id.includes('node:events');
-  //         }
-  //       }
-  //     }
-  //   },
-  //   css: {
-  //     devSourcemap: true
-  //   }
-  // },
+  vite: {
+    build: {
+      sourcemap: true,
+      rollupOptions: {
+        treeshake: {
+          moduleSideEffects: (id) => {
+            return id.includes('@cloudflare/unenv-preset') ||
+              id.includes('node:process') ||
+              id.includes('node:events');
+          }
+        }
+      }
+    },
+    css: {
+      devSourcemap: true
+    }
+  },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
   plugins: [
