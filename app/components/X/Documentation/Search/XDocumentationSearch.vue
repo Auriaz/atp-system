@@ -65,7 +65,7 @@ const fuseInstance = computed(() => {
   if (!props.files || props.files.length === 0) return null;
   
   return new Fuse(props.files, {
-    keys: ['title', 'description', 'body', '_path', 'category', 'tags'],
+    keys: ['title', 'description', 'body', 'path', 'category', 'tags'],
     threshold: 0.3,
     distance: 100,
     includeMatches: true,

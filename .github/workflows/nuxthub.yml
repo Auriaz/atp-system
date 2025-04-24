@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Rebuild better-sqlite3 bindings
-        run: pnpm rebuild better-sqlite3
-
       - name: Ensure NuxtHub module is installed
         run: pnpx nuxthub@latest ensure
 

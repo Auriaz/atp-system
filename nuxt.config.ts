@@ -12,52 +12,54 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     '@nuxt/ui',
     'nuxt-auth-utils',
-    // '@pinia/nuxt',
-    // 'pinia-plugin-persistedstate/nuxt',
     '@vueuse/nuxt',
-    // '@nuxtjs/i18n'
+    '@nuxtjs/i18n'
   ],
+  i18n: {
+    bundle: {
+      optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
+    },
+  },
 
-
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css'], // Ścieżka do głównego pliku CSS
 
   colorMode: {
-    preference: 'system', // domyślnie użyj systemowych preferencji
-    fallback: 'light',    // domyślny tryb, gdy preferencje systemowe są niedostępne
-    classSuffix: '',      // usuwa sufiks z klasy (używa 'dark' zamiast 'dark-mode')
+    preference: 'system', // Domyślnie użyj preferencji systemowych
+    fallback: 'light',    // Domyślny tryb, gdy preferencje systemowe są niedostępne
+    classSuffix: '',      // Usuń sufiks z klasy (używa 'dark' zamiast 'dark-mode')
   },
 
   // https://devtools.nuxt.com
-  devtools: { enabled: true },
+  devtools: { enabled: true }, // Włącz narzędzia deweloperskie
 
-  // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
+  // Zmienne środowiskowe - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
     oauth: {
       github: {
-        clientId: process.env.NUXT_OAUTH_GITHUB_CLIENT_ID,
-        clientSecret: process.env.NUXT_OAUTH_GITHUB_CLIENT_SECRET,
-        redirectUri: process.env.NUXT_OAUTH_GITHUB_REDIRECT_URI || 'http://localhost:3000/api/auth/github/callback',
-        scope: ['user:email']
+        clientId: process.env.NUXT_OAUTH_GITHUB_CLIENT_ID, // Identyfikator klienta GitHub
+        clientSecret: process.env.NUXT_OAUTH_GITHUB_CLIENT_SECRET, // Sekret klienta GitHub
+        redirectUri: process.env.NUXT_OAUTH_GITHUB_REDIRECT_URI || 'http://localhost:3000/api/auth/github/callback', // Adres przekierowania
+        scope: ['user:email'] // Zakres uprawnień
       },
     },
 
     session: {
-      name: 'nuxt-session',
-      password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6',
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      name: 'nuxt-session', // Nazwa sesji
+      password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6', // Hasło sesji
+      maxAge: 60 * 60 * 24 * 7, // 1 tydzień
     }
   },
 
   auth: {
     hash: {
       scrypt: {
-        keyLength: 80,
+        keyLength: 80, // Długość klucza
       }
     }
   },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
-  future: { compatibilityVersion: 4 },
-  compatibilityDate: '2025-03-01',
+  future: { compatibilityVersion: 4 }, // Wersja kompatybilności
+  compatibilityDate: '2025-03-01', // Data kompatybilności
 
   // https://hub.nuxt.com/docs/getting-started/installation#options
   hub: {
@@ -69,7 +71,7 @@ export default defineNuxtConfig({
 
   nitro: {
     experimental: {
-      tasks: true,
+      tasks: true, // Włącz eksperymentalne zadania
       // websocket: true,
     },
 
@@ -77,13 +79,13 @@ export default defineNuxtConfig({
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
   plugins: [
-    '~/plugins/permission.directive.ts',
+    '~/plugins/permission.directive.ts', // Wtyczka do zarządzania uprawnieniami
   ],
 
   content: {
     renderer: {
       anchorLinks: {
-        h1: true, h2: true, h3: true, h4: true, h5: true, h6: true,
+        h1: true, h2: true, h3: true, h4: true, h5: true, h6: true, // Włącz linki kotwic dla nagłówków
       },
     },
     build: {
@@ -91,21 +93,21 @@ export default defineNuxtConfig({
       markdown: {
         // Spis treści
         toc: {
-          depth: 4,
-          searchDepth: 5,
+          depth: 4, // Głębokość spisu treści
+          searchDepth: 5, // Głębokość wyszukiwania
         },
-
 
         // Podświetlanie składni
         highlight: {
           theme: {
-            default: 'github-light',
-            dark: 'github-dark',
-            sepia: 'monokai'
+            default: 'github-light', // Motyw domyślny
+            dark: 'github-dark',     // Motyw ciemny
+            sepia: 'monokai'         // Motyw sepia
           },
         },
 
       },
     },
-  }
+  },
+  // debug: true, // Włącz debugowanie
 })

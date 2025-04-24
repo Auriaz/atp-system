@@ -24,6 +24,13 @@ export default {
                     '600': 'var(--color-primary-600)',
                     '800': 'var(--color-primary-800)',
                     '900': 'var(--color-primary-900)',
+                },
+                gray: {
+                    '100': '#f5f5f5', // Adding fallback for gray.100
+                    '300': '#e0e0e0',
+                    '500': '#9e9e9e',
+                    '700': '#616161',
+                    '900': '#212121',
                 }
             },
             // Dodaj inne rozszerzenia, które mogą być potrzebne

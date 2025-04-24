@@ -1,7 +1,6 @@
 <!-- layouts/docs.vue -->
 <script setup>
 const route = useRoute();
-const { getDocument } = useDocumentation();
 const {navbarItems} = useNavbar()
 const { loggedIn, user } = useUserSession()
 
@@ -10,16 +9,6 @@ const { loggedIn, user } = useUserSession()
 const { data: document } = await useAsyncData(route.path, () => {
   return queryCollection('docs').path(route.path).first()
 })
-
-// Pobierz nawigację
-// const { data: navigation } = await useAsyncData('docsNavigation', async () => {
-//   const { getAccessibleNavigation } = useDocumentation();
-//   return await getAccessibleNavigation();
-// });
-
-// const { data: docs } = await useAsyncData('docs', () => {
-//   return queryCollection('docs').all()
-// })
 
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs',[
   'title', 'category', 'path', 'requiredRole', 'description', 'icon'

@@ -1,24 +1,7 @@
 <template>
-  <NuxtLink
-    :href="props.href"
-    :target="props.target"
-  >
-    <slot />
-  </NuxtLink>
+  <a :href="props.href" class="text-violet-700 hover:text-green-700 dark:text-violet-500 dark:hover:text-green-500 no-underline font-medium transition-colors duration-300 ease-in-out"><slot /></a>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue'
-
-const props = defineProps({
-  href: {
-    type: String,
-    default: ''
-  },
-  target: {
-    type: String as PropType<'_blank' | '_parent' | '_self' | '_top' | (string & object) | null | undefined>,
-    default: undefined,
-    required: false
-  }
-})
+const props = defineProps<{ href: string }>()
 </script>

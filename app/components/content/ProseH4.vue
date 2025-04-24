@@ -1,9 +1,11 @@
 <template>
-  <h4 :id="props.id">
+  <h4 :id="props.id" class="text-lg font-medium text-gray-800 dark:text-gray-200 my-2 group">
     <a
       v-if="props.id && generate"
       :href="`#${props.id}`"
+      class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-200 flex items-center"
     >
+      <span class="text-blue-500 group-hover:text-blue-700">#</span>
       <slot />
     </a>
     <slot v-else />

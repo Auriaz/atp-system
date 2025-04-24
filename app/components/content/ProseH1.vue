@@ -1,21 +1,10 @@
 <template>
-  <h1 :id="props.id">
-    <a
-      v-if="generate"
-      :href="`#${props.id}`"
-      class="text-2xl font-bold text-gray-900 dark:text-white no-underline hover:underline focus:underline mb-4"
-    >
-     <slot />
-    </a>
-    <slot v-else />
+  <h1 :id="props.id" class="text-3xl font-bold my-6 pb-2 text-gray-900 dark:text-gray-100 dark:border-blue-300">
+    <slot />
   </h1>
 </template>
 
 <script setup lang="ts">
-import { computed, useRuntimeConfig } from '#imports'
-
 const props = defineProps<{ id?: string }>()
-
-const { headings } = useRuntimeConfig().public.mdc
-const generate = computed(() => props.id && ((typeof headings?.anchorLinks === 'boolean' && headings?.anchorLinks === true) || (typeof headings?.anchorLinks === 'object' && headings?.anchorLinks?.h1)))
 </script>
+

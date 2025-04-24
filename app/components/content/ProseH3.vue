@@ -1,8 +1,9 @@
 <template>
-  <h3 :id="props.id">
+  <h3 :id="props.id" class="text-xl font-semibold text-gray-800 dark:text-gray-200 my-3">
     <a
       v-if="props.id && generate"
       :href="`#${props.id}`"
+      class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-200"
     >
       <slot />
     </a>

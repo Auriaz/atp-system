@@ -37,6 +37,7 @@ if (!hasAccess.value) {
   <div v-if="hasAccess">
     <slot />
   </div>
+  
   <div v-else class="flex items-center justify-center h-64">
     <UCard>
       <template #header>

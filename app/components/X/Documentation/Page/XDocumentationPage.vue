@@ -16,9 +16,7 @@ interface PageDocument {
   title: string;
   author?: string;
   createdAt?: string;
-  body?: {
-    toc?: Toc;
-  };
+  body?: any; // Using 'any' to accommodate MinimalTree structure
 }
 
 interface SurroundingDocument {
@@ -29,7 +27,7 @@ interface SurroundingDocument {
 }
 
 const route = useRoute();
-const { data: pageDocument } = await useAsyncData<PageDocument | null>(route.path, () => {
+const { data: pageDocument } = await useAsyncData(route.path, () => {
   return queryCollection('docs').path(route.path).first();
 });
 
@@ -43,7 +41,7 @@ const { data } = await useAsyncData<SurroundingDocument[]>('surround', () => {
 
 // Extract TOC information for "On this page" section
 const toc = computed<Toc>(() => {
-  return pageDocument.value?.body?.toc || { links: [] };
+  return (pageDocument.value?.body as any)?.toc || { links: [] };
 });
 
 const hasToc = computed<boolean>(() => toc.value.links?.length > 0);
