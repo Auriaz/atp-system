@@ -72,35 +72,7 @@ export default defineNuxtConfig({
       tasks: true,
       // websocket: true,
     },
-    // Poprawa kompatybilności z Cloudflare
-    // esbuild: {
-    //   options: {
-    //     target: 'es2022',
-    //     tsconfigRaw: {
-    //       compilerOptions: {
-    //         experimentalDecorators: true,
-    //       }
-    //     }
-    //   }
-    // }
-  },
 
-  vite: {
-    build: {
-      sourcemap: true,
-      rollupOptions: {
-        treeshake: {
-          moduleSideEffects: (id) => {
-            return id.includes('@cloudflare/unenv-preset') ||
-              id.includes('node:process') ||
-              id.includes('node:events');
-          }
-        }
-      }
-    },
-    css: {
-      devSourcemap: true
-    }
   },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
@@ -110,31 +82,11 @@ export default defineNuxtConfig({
 
   content: {
     renderer: {
-      // navigation: {
-      //   fields: ['title', 'description', 'category', 'navigation', 'icon', 'version', 'requiredRole'],
-      // },
-
-      // Konfiguracja dokumentów
-      // documentDriven: {
-      //   page: true,
-      //   navigation: true,
-      //   injectSeoMeta: true,
-      // },
-      // Konfiguracja wyszukiwania
-      // search: {
-      //   full: true,
-      //   fields: ['title', 'description', 'category', 'tags'],
-      // },
-      // Konfiguracja nagłówków
       anchorLinks: {
         h1: true, h2: true, h3: true, h4: true, h5: true, h6: true,
       },
     },
     build: {
-
-
-
-
       // Konfiguracja markdown
       markdown: {
         // Spis treści
@@ -153,40 +105,7 @@ export default defineNuxtConfig({
           },
         },
 
-        // Wtyczki Remark (dla Markdown)
-        // remarkPlugins: {
-        //   'remark-emoji': {
-        //     emoticon: true
-        //   },
-        //   'remark-squeeze-paragraphs': {},
-        //   'remark-gfm': {} // GitHub Flavored Markdown
-        // },
-
-        // // Wtyczki Rehype (dla HTML)
-        // rehypePlugins: {
-        //   'rehype-external-links': {
-        //     target: '_blank',
-        //     rel: 'noopener nofollow'
-        //   }
-        // },
-
       },
     },
-    // // Komponenty Markdown - POPRAWIONE
-    // components: {
-    //   tags: {
-    //     'info-box': 'InfoBox',
-    //     'warning': 'UAlert',
-    //     'tip': 'UTip'
-    //   }
-    // },
-    // Włączenie nawigacji automatycznej
-
-    // Konfiguracja eksperymentalna
-    // experimental: {
-    //   clientDB: true,
-    //   stripQueryParameters: false,
-    //   cacheContents: true,
-    // }
   }
 })
