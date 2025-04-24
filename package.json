@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "npx nuxthub preview",
     "deploy": "npx nuxthub deploy",
-    "postinstall": "nuxt prepare",
+    "postinstall": "npm rebuild better-sqlite3",
     "lint": "eslint .",
     "db:generate": "drizzle-kit generate"
   },
