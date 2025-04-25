@@ -11,7 +11,9 @@ const accessDeniedMessages = [
   "Potrzebujesz wyższych uprawnień, aby zobaczyć tę zawartość."
 ]
 
-const randomMessage = accessDeniedMessages[Math.floor(Math.random() * accessDeniedMessages.length)]
+const randomMessage = computed(() => {
+  return accessDeniedMessages[Math.floor(Math.random() * accessDeniedMessages.length)];
+});
 </script>
 
 <template>
