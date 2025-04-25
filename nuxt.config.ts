@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxthub/core',
     '@nuxt/eslint',
-    '@nuxt/content',
+    // '@nuxt/content',
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/image',
@@ -82,32 +82,32 @@ export default defineNuxtConfig({
     '~/plugins/permission.directive.ts', // Wtyczka do zarządzania uprawnieniami
   ],
 
-  content: {
-    renderer: {
-      anchorLinks: {
-        h1: true, h2: true, h3: true, h4: true, h5: true, h6: true, // Włącz linki kotwic dla nagłówków
-      },
-    },
-    build: {
-      // Konfiguracja markdown
-      markdown: {
-        // Spis treści
-        toc: {
-          depth: 4, // Głębokość spisu treści
-          searchDepth: 5, // Głębokość wyszukiwania
-        },
+  // content: {
+  //   renderer: {
+  //     anchorLinks: {
+  //       h1: true, h2: true, h3: true, h4: true, h5: true, h6: true, // Włącz linki kotwic dla nagłówków
+  //     },
+  //   },
+  //   build: {
+  //     // Konfiguracja markdown
+  //     markdown: {
+  //       // Spis treści
+  //       toc: {
+  //         depth: 4, // Głębokość spisu treści
+  //         searchDepth: 5, // Głębokość wyszukiwania
+  //       },
 
-        // Podświetlanie składni
-        highlight: {
-          theme: {
-            default: 'github-light', // Motyw domyślny
-            dark: 'github-dark',     // Motyw ciemny
-            sepia: 'monokai'         // Motyw sepia
-          },
-        },
+  //       // Podświetlanie składni
+  //       highlight: {
+  //         theme: {
+  //           default: 'github-light', // Motyw domyślny
+  //           dark: 'github-dark',     // Motyw ciemny
+  //           sepia: 'monokai'         // Motyw sepia
+  //         },
+  //       },
 
-      },
-    },
-  },
+  //     },
+  //   },
+  // },
   // debug: true, // Włącz debugowanie
 })

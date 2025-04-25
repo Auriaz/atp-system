@@ -1,59 +1,6 @@
 <script lang="ts" setup>
 // Aktualny rok do stopki
 const currentYear = new Date().getFullYear()
-
-// Linki do mediów społecznościowych
-const socialLinks = [
-  { name: 'Facebook', icon: 'i-lucide-facebook', url: '#' },
-  { name: 'Twitter', icon: 'i-lucide-twitter', url: '#' },
-  { name: 'LinkedIn', icon: 'i-lucide-linkedin', url: '#' },
-  { name: 'Instagram', icon: 'i-lucide-instagram', url: '#' },
-  { name: 'YouTube', icon: 'i-lucide-youtube', url: '#' }
-]
-
-// Sekcje linków w stopce
-const footerLinks = [
-  {
-    title: 'System',
-    links: [
-      // { name: 'Funkcje', url: '/#features' },
-      // { name: 'Cennik', url: '/pricing' },
-      { name: 'FAQ', url: '/faq' },
-      // { name: 'Przewodnik', url: '/guides' },
-      // { name: 'Blog', url: '/blog' }
-    ]
-  },
-  {
-    title: 'Firma',
-    links: [
-      { name: 'O nas', url: '/about' },
-      // { name: 'Zespół', url: '/about#team' },
-      // { name: 'Kariera', url: '/careers' },
-      // { name: 'Partnerzy', url: '/partners' },
-      // { name: 'Prasa', url: '/press' }
-    ]
-  },
-  {
-    title: 'Wsparcie',
-    links: [
-      { name: 'Kontakt', url: '/contact' },
-      // { name: 'Pomoc', url: '/help' },
-      { name: 'Dokumentacja', url: '/docs' },
-      // { name: 'Status systemu', url: '/status' },
-      // { name: 'Szkolenia', url: '/training' }
-    ]
-  },
-  {
-    title: 'Prawne',
-    links: [
-      { name: 'Regulamin', url: '/legal/terms' },
-      { name: 'Prywatność', url: '/legal/privacy' },
-      { name: 'Cookies', url: '/legal/cookies' },
-      { name: 'Licencje', url: '/legal/licenses' },
-      { name: 'RODO', url: '/legal/gdpr' }
-    ]
-  }
-]
 </script>
 
 <template>

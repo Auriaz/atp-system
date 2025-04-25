@@ -1,19 +1,23 @@
 <template>
-  <component
-    :is="ImageComponent"
-    :src="refinedSrc"
-    :alt="props.alt"
-    :width="props.width"
-    :height="props.height"
-    class="block max-w-full h-auto rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-  />
+  <!--
+    TODO - content
+    <component
+      :is="ImageComponent"
+      :src="refinedSrc"
+      :alt="props.alt"
+      :width="props.width"
+      :height="props.height"
+      class="block max-w-full h-auto rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+    />
+  -->
+  <div></div>
 </template>
 
 <script setup lang="ts">
 import { withTrailingSlash, withLeadingSlash, joinURL } from 'ufo'
 import { useRuntimeConfig, computed } from '#imports'
 
-import ImageComponent from '#build/mdc-image-component.mjs'
+//TODO - content import ImageComponent from '#build/mdc-image-component.mjs'
 
 const props = defineProps({
   src: {

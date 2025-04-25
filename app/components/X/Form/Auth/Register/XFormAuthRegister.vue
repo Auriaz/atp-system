@@ -69,11 +69,11 @@
     isOpenAgreementModel.value = false
   }
 
-  const {data: terms} = await useAsyncData(() => queryCollection('legal').path(`/legal/terms/${lang.value}`).first())
+  //TODO -content const {data: terms} = await useAsyncData(() => queryCollection('legal').path(`/legal/terms/${lang.value}`).first())
 
-  watch(() => lang.value, async () => {
-    terms.value = await queryCollection('legal').path(`/legal/terms/${lang.value}`).first()
-  })
+  // watch(() => lang.value, async () => {
+  //   terms.value = await queryCollection('legal').path(`/legal/terms/${lang.value}`).first()
+  // })
 </script>
 
 <template>
@@ -163,11 +163,9 @@
 
       <div  class="w-full overflow-y-auto h-80  p-4 bg-gray-100 dark:bg-gray-800 text-justify rounded">
         <!-- 
+          TODO - content <ContentRenderer v-if="terms" :value="terms" />
         -->
         
-        <ContentRenderer v-if="terms" :value="terms" />
-     
-
       </div>
 
       <div class="w-full mt-4 flex justify-between">
