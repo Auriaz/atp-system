@@ -13,13 +13,13 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     'nuxt-auth-utils',
     '@vueuse/nuxt',
-    '@nuxtjs/i18n'
+    // '@nuxtjs/i18n'
   ],
-  i18n: {
-    bundle: {
-      optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
-    },
-  },
+  // i18n: {
+  //   bundle: {
+  //     optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
+  //   },
+  // },
 
   css: ['~/assets/css/main.css'], // Ścieżka do głównego pliku CSS
 
