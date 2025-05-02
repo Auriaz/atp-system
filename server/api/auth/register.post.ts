@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
 
 
     // Przypisanie domyślnej roli
-    await assignDefaultUserRole(newUser[0].id)
+    // await assignDefaultUserRole(newUser[0].id)
 
     // Dodaj rejestracje użytkownika do aktywności użytkownika
     await useDatabase()

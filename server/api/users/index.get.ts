@@ -18,28 +18,29 @@ export default defineEventHandler(async (event) => {
     const status = query.status as string || 'all';
     const sortBy = query.sortBy as string || 'id';
     const sortOrder = (query.sortOrder as 'asc' | 'desc') || 'asc';
+    return {}
 
     // Użyj repozytorium do pobrania użytkowników
-    const { users, total } = await getUsers({
-      page,
-      limit,
-      search,
-      role,
-      status,
-      sortBy,
-      sortOrder
-    });
+    // const { users, total } = await getUsers({
+    //   page,
+    //   limit,
+    //   search,
+    //   role,
+    //   status,
+    //   sortBy,
+    //   sortOrder
+    // });
 
-    return createApiResponse({
-      data: users,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit)
-      },
-      loading: false
-    });
+    // return createApiResponse({
+    //   // data: users,
+    //   // pagination: {
+    //   //   page,
+    //   //   limit,
+    //   //   total,
+    //   //   totalPages: Math.ceil(total / limit)
+    //   // },
+    //   // loading: false
+    // });
   } catch (error) {
     // Obsługa błędów, w tym błędów z middleware
     console.error('Error in users API:', error);
