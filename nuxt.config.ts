@@ -69,13 +69,13 @@ export default defineNuxtConfig({
     // cache: true,
   },
 
-  nitro: {
-    experimental: {
-      tasks: true, // Włącz eksperymentalne zadania
-      // websocket: true,
-    },
+  // nitro: {
+  //   experimental: {
+  //     tasks: true, // Włącz eksperymentalne zadania
+  //     // websocket: true,
+  //   },
 
-  },
+  // },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
   plugins: [
