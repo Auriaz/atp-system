@@ -24,16 +24,16 @@ export function useUsersApi() {
 
         try {
             // Wykonaj zapytanie do API
-            const response = await $fetch('/api/users', {
-                method: 'GET',
-                params
-            })
+            // const response = await $fetch('/api/users', {
+            //     method: 'GET',
+            //     params
+            // })
 
-            // Aktualizuj stan lokalny
-            if (response.payload) {
-                users.value = response.payload.data || []
-                pagination.value = response.payload.pagination || {}
-            }
+            // // Aktualizuj stan lokalny
+            // if (response.payload) {
+            //     users.value = response.payload.data || []
+            //     pagination.value = response.payload.pagination || {}
+            // }
 
             return response
         } catch (err: any) {
