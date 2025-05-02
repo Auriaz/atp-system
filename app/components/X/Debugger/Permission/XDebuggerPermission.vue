@@ -19,9 +19,12 @@ function testCan() {
         <span>Role użytkownika:</span>
         <UBadge 
           v-for="role in userRoles" 
-          :key="role" 
-          :color="USER_ROLE_COLORS[role]"
-        >
+          :key="role"
+          color="primary" 
+          >
+          <!--  
+            TODO : Poprawić kolorystyke :color="USER_ROLE_COLORS[role]"
+          -->
           {{ role }}
         </UBadge>
       </div>

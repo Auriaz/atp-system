@@ -36,8 +36,8 @@ export default {
             // Dodaj inne rozszerzenia, które mogą być potrzebne
         }
     },
-    plugins: [
-        require('@tailwindcss/typography'),
+    // plugins: [
+    //     require('@tailwindcss/typography'),
 
-    ]
+    // ]
 }
