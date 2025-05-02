@@ -7,14 +7,47 @@ import { User } from '#auth-utils'
 /**
  * Funkcja pobierająca użytkowników z filtrowaniem
  */
-export async function getUsersWithFilters(query) {
+// Define interfaces for query parameters and return types
+
+interface UserFiltersQuery {
+    page?: number;
+    limit?: number;
+    search?: string;
+    role?: string;
+    status?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
+interface UserBase {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+    username: string;
+    avatarUrl: string | null;
+    status: string | null;
+    createdAt: Date;
+    updatedAt: Date | null;
+}
+
+interface UserWithRoles extends UserBase {
+    roles: string[];
+}
+
+interface UsersWithFiltersResult {
+    users: UserWithRoles[];
+    total: number;
+}
+
+export async function getUsersWithFilters(query: UserFiltersQuery): Promise<UsersWithFiltersResult> {
     const { page = 1, limit = 10, search = '', role = 'all', status = 'all', sortBy = 'id', sortOrder = 'asc' } = query;
 
     const db = useDatabase();
     const offset = (page - 1) * limit;
 
     // Budowanie warunków filtrowania
-    const conditions = [];
+    const conditions: any[] = [];
 
     // Wyszukiwanie
     if (search) {
@@ -27,14 +60,13 @@ export async function getUsersWithFilters(query) {
             )
         );
     }
-
     // Filtr po statusie
     if (status && status !== 'all') {
-        conditions.push(eq(users.status, status));
+        conditions.push(eq(users.status, status as UserStatus));
     }
 
     // Pobierz podstawowe dane użytkowników
-    query = db.select({
+    let userQuery = db.select({
         id: users.id,
         firstName: users.firstName,
         lastName: users.lastName,
@@ -48,21 +80,24 @@ export async function getUsersWithFilters(query) {
 
     // Zastosuj warunki filtrowania
     const filteredQuery = conditions.length
-        ? query.where(and(...conditions))
-        : query;
+        ? userQuery.where(and(...conditions))
+        : userQuery;
 
     // Sortowanie
-    const sortColumn = users[sortBy] || users.id;
+    // Ensure sortBy refers to a valid column that exists in the users table
+    const validSortColumns = ['id', 'firstName', 'lastName', 'email', 'username', 'status', 'createdAt', 'updatedAt'];
+    const sortByColumn = validSortColumns.includes(sortBy) ? sortBy : 'id';
+    const sortColumn = users[sortByColumn as keyof typeof users];
     const sortFunction = sortOrder === 'asc' ? asc : desc;
 
     // Pobierz surowe dane użytkowników
     const rawUsers = await filteredQuery
         .limit(limit)
         .offset(offset)
-        .orderBy(sortFunction(sortColumn));
+        .orderBy(sortFunction(sortColumn as any));
 
     // Pobierz role dla każdego użytkownika
-    const usersWithRoles = await Promise.all(rawUsers.map(async (user) => {
+    const usersWithRoles = await Promise.all(rawUsers.map(async (user: UserBase) => {
         // Pobierz role użytkownika 
         const userRolesResult = await db
             .select({

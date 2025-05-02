@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
   // Znajdź ścieżki dla uprawnienia
   if (permission) {
-    result.permissionPaths = findPathsForPermission(permission);
+    result.permissionPaths = findPathsForPermission(permission as Permission);
   }
 
   // // Sprawdź uprawnienia dla roli
