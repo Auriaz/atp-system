@@ -10,14 +10,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Pobierz parametry zapytania
-    const query = getQuery(event);
-    const page = parseInt(query.page as string) || 1;
-    const limit = parseInt(query.limit as string) || 10;
-    const search = query.search as string || '';
-    const role = query.role as string || 'all';
-    const status = query.status as string || 'all';
-    const sortBy = query.sortBy as string || 'id';
-    const sortOrder = (query.sortOrder as 'asc' | 'desc') || 'asc';
+    // const query = getQuery(event);
+    // const page = parseInt(query.page as string) || 1;
+    // const limit = parseInt(query.limit as string) || 10;
+    // const search = query.search as string || '';
+    // const role = query.role as string || 'all';
+    // const status = query.status as string || 'all';
+    // const sortBy = query.sortBy as string || 'id';
+    // const sortOrder = (query.sortOrder as 'asc' | 'desc') || 'asc';
     return {}
 
     // Użyj repozytorium do pobrania użytkowników
