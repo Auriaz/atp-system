@@ -31,7 +31,8 @@ export default defineOAuthGitHubEventHandler({
         expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         loggedInAt: Date.now(),
         rememberMe: false,
-        roles: await getUserRoleSlugs(existingUserOAoth.userId),
+        roles: [], // TODO: Get user roles from database
+        // roles: await getUserRoleSlugs(existingUserOAoth.userId),
       })
 
       return sendRedirect(event, '/dashboard')
@@ -68,7 +69,8 @@ export default defineOAuthGitHubEventHandler({
           avatarUrl: user.avatar_url,
           status: 'active',
         },
-        roles: await getUserRoleSlugs(existingUser.id),
+        roles: [],
+        // roles: await getUserRoleSlugs(existingUser.id),
         expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         loggedInAt: Date.now(),
         rememberMe: false,
@@ -121,7 +123,8 @@ export default defineOAuthGitHubEventHandler({
         avatarUrl: user.avatar_url,
         status: 'active',
       },
-      roles: await getUserRoleSlugs(newUser[0].id),
+      // roles: await getUserRoleSlugs(newUser[0].id),
+      roles: [],
       expiresAt: Date.now() + 24 * 60 * 60 * 1000,
       loggedInAt: Date.now(),
       rememberMe: false
