@@ -96,19 +96,29 @@ export function clearAllCachedPermissions(): void {
 // export const invalidateCache = clearCachedPermissions;
 // export const clearAllCache = clearAllCachedPermissions;
 
-// Automatyczne czyszczenie cache'a po stronie serwera
-if (import.meta.server) {
-  const cleanupInterval = 60 * 1000; // Co minutę
+// // Automatyczne czyszczenie cache'a po stronie serwera
+// if (import.meta.server) {
+//   const cleanupInterval = 60 * 1000; // Co minutę
 
-  setInterval(() => {
-    const now = Date.now();
+//   setInterval(() => {
+//     const now = Date.now();
 
-    for (const [userId, cachedData] of serverCache.entries()) {
-      if (now - cachedData.timestamp > cachedData.ttl) {
-        serverCache.delete(userId);
-      }
+//     for (const [userId, cachedData] of serverCache.entries()) {
+//       if (now - cachedData.timestamp > cachedData.ttl) {
+//         serverCache.delete(userId);
+//       }
+//     }
+//   }, cleanupInterval);
+// }
+
+export function cleanupServerCache(): void {
+  const now = Date.now();
+
+  for (const [userId, cachedData] of serverCache.entries()) {
+    if (now - cachedData.timestamp > cachedData.ttl) {
+      serverCache.delete(userId);
     }
-  }, cleanupInterval);
+  }
 }
 
 // Eksportujemy domyślny TTL, aby można go było użyć w innych miejscach

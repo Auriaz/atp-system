@@ -7,6 +7,9 @@ export default defineEventHandler(async (event) => {
     // clearCachedPermissions(session.user.id);
   }
 
+  // Wyczyść przeterminowane dane z cache'a
+  cleanupServerCache();
+
   // Usuń sesję
   // await clearUserSession(event);
 
