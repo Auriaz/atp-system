@@ -90,11 +90,11 @@ export function clearAllCachedPermissions(): void {
   }
 }
 
-/**
- * Dla zachowania kompatybilności z kodem serwerowym używającym starej nazwy
- */
-export const invalidateCache = clearCachedPermissions;
-export const clearAllCache = clearAllCachedPermissions;
+// /**
+//  * Dla zachowania kompatybilności z kodem serwerowym używającym starej nazwy
+//  */
+// export const invalidateCache = clearCachedPermissions;
+// export const clearAllCache = clearAllCachedPermissions;
 
 // Automatyczne czyszczenie cache'a po stronie serwera
 if (import.meta.server) {
