@@ -18,48 +18,48 @@ export function useUsersApi() {
      * Pobiera listę użytkowników z API
      * @param params Opcjonalne parametry zapytania (filtrowanie, sortowanie, paginacja)
      */
-    const fetchUsers = async (params: Record<string, any> = {}) => {
-        isLoading.value = true
-        error.value = null
+    // const fetchUsers = async (params: Record<string, any> = {}) => {
+    //     isLoading.value = true
+    //     error.value = null
 
-        try {
-            // Wykonaj zapytanie do API
-            // const response = await $fetch('/api/users', {
-            //     method: 'GET',
-            //     params
-            // })
+    //     try {
+    //         // Wykonaj zapytanie do API
+    //         // const response = await $fetch('/api/users', {
+    //         //     method: 'GET',
+    //         //     params
+    //         // })
 
-            // // Aktualizuj stan lokalny
-            // if (response.payload) {
-            //     users.value = response.payload.data || []
-            //     pagination.value = response.payload.pagination || {}
-            // }
+    //         // // Aktualizuj stan lokalny
+    //         // if (response.payload) {
+    //         //     users.value = response.payload.data || []
+    //         //     pagination.value = response.payload.pagination || {}
+    //         // }
 
-            return response
-        } catch (err: any) {
-            // Obsługa błędów
-            error.value = err
+    //         return response
+    //     } catch (err: any) {
+    //         // Obsługa błędów
+    //         error.value = err
 
-            // Wyświetl komunikat
-            toast.add({
-                title: 'Error',
-                description: err?.data?.message || err?.message || 'Failed to load users',
-                color: 'error'
-            })
+    //         // Wyświetl komunikat
+    //         toast.add({
+    //             title: 'Error',
+    //             description: err?.data?.message || err?.message || 'Failed to load users',
+    //             color: 'error'
+    //         })
 
-            // Przekieruj w przypadku błędu autoryzacji
-            if (err?.statusCode === 401) {
-                navigateTo('/auth/login')
-            } else if (err?.statusCode === 403) {
-                navigateTo('/auth/403')
-            }
+    //         // Przekieruj w przypadku błędu autoryzacji
+    //         if (err?.statusCode === 401) {
+    //             navigateTo('/auth/login')
+    //         } else if (err?.statusCode === 403) {
+    //             navigateTo('/auth/403')
+    //         }
 
-            return null
-        } finally {
-            // Zawsze aktualizuj stan ładowania
-            isLoading.value = false
-        }
-    }
+    //         return null
+    //     } finally {
+    //         // Zawsze aktualizuj stan ładowania
+    //         isLoading.value = false
+    //     }
+    // }
 
     // /**
     //  * Pobiera pojedynczego użytkownika po ID
@@ -250,7 +250,7 @@ export function useUsersApi() {
         error,
 
         // Funkcje
-        fetchUsers,
+        // fetchUsers,
         // fetchUserById,
         // createUser,
         // updateUser,

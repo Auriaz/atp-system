@@ -12,7 +12,7 @@ const {
   users, 
   isLoading, 
   error, 
-  fetchUsers, 
+  // fetchUsers, 
   // deleteUser 
 } = useUsersApi()
 
@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
 })
 
 // Pobierz użytkowników przy załadowaniu komponentu
-onMounted(async () => await fetchUsers())
+// onMounted(async () => await fetchUsers())
 
 function refreshData() {
   toast.add({
@@ -105,7 +105,7 @@ function refreshData() {
     icon: 'i-lucide-refresh-cw',
     color: 'info',
   })
-  fetchUsers()
+  // fetchUsers()
 }
 
 // Obsługa sortowania
