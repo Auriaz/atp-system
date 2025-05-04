@@ -30,21 +30,21 @@ export default defineEventHandler(async (event) => {
     })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
-    // await useDatabase()
-    //   .insert(tables.userActivities)
-    //   .values({
-    //     userId: user.id,
-    //     action: 'login',
-    //     ip: getClientIp(event),
-    //     userAgent: event.node.req.headers['user-agent'] || 'unknown',
-    //     details: JSON.stringify({
-    //       rememberMe: body.rememberMe || false,
-    //       platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
-    //     }),
-    //     createdAt: new Date()
-    //   })
-    //   .execute()
-    //   .catch(error => console.error('Failed to log user activity:', error))
+    await useDatabase()
+      .insert(tables.userActivities)
+      .values({
+        userId: user.id,
+        action: 'login',
+        ip: getClientIp(event),
+        userAgent: event.node.req.headers['user-agent'] || 'unknown',
+        details: JSON.stringify({
+          rememberMe: body.rememberMe || false,
+          platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
+        }),
+        createdAt: new Date()
+      })
+      .execute()
+      .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
       null,
