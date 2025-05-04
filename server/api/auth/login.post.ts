@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       'Pragma': 'no-cache'
     })
     // Sprawdź czy użytkownik istnieje
-    // const user = await authenticateUser(body)
+    const user = await authenticateUser(body)
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
@@ -21,13 +21,13 @@ export default defineEventHandler(async (event) => {
 
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    // await setUserSession(event, {
-    //   user,
-    //   roles: await getUserRoleSlugs(user.id),
-    //   loggedInAt: Date.now(),
-    //   expiresAt: Date.now() + sessionDuration,
-    //   rememberMe: body.rememberMe || false
-    // })
+    await setUserSession(event, {
+      user,
+      roles: await getUserRoleSlugs(user.id),
+      loggedInAt: Date.now(),
+      expiresAt: Date.now() + sessionDuration,
+      rememberMe: body.rememberMe || false
+    })
 
     // Dodaj logowanie aktywności użytkownika (opcjonalnie)
     // await useDatabase()
