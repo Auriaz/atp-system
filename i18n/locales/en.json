@@ -1,0 +1,12 @@
+{
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to the most frequently asked questions about the ATP platform",
+        "searchPlaceholder": "Search in FAQ...",
+        "allCategories": "All Categories",
+        "featuredQuestions": "Popular Questions",
+        "cantFindAnswer": "Can't find the answer to your question?",
+        "contactUs": "Contact us and our support team will assist you",
+        "contactSupport": "Contact Support"
+    }
+}

@@ -13,13 +13,21 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     'nuxt-auth-utils',
     '@vueuse/nuxt',
-    // '@nuxtjs/i18n'
+    '@nuxtjs/i18n'
   ],
-  // i18n: {
-  //   bundle: {
-  //     optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
-  //   },
-  // },
+
+  i18n: {
+    bundle: {
+      optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
+    },
+
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' }, // Angielski
+      { code: 'pl', name: 'Polski', iso: 'pl-PL', file: 'pl.json' }, // Polski
+    ],
+    lazy: true, // Włącz leniwe ładowanie tłumaczeń
+  },
 
   css: ['~/assets/css/main.css'], // Ścieżka do głównego pliku CSS
 

@@ -1,29 +1,29 @@
-// import type { Collections } from '@nuxt/content';
+import type { Collections } from '@nuxt/content';
 
 export function useDocumentation() {
-  // const { userRoles } = usePermissions();
+  const { userRoles } = usePermissions();
 
-  // /**
-  //  * Sprawdza, czy użytkownik ma dostęp do dokumentu na podstawie wymaganych ról
-  //  * @param document Dokument z opcjonalnymi wymaganiami dot. ról
-  //  * @returns Czy użytkownik ma dostęp do dokumentu
-  //  */
-  // const checkDocumentAccess = (document: { requiredRole?: string | string[] }) => {
-  //   if (!document) return false;
+  /**
+   * Sprawdza, czy użytkownik ma dostęp do dokumentu na podstawie wymaganych ról
+   * @param document Dokument z opcjonalnymi wymaganiami dot. ról
+   * @returns Czy użytkownik ma dostęp do dokumentu
+   */
+  const checkDocumentAccess = (document: { requiredRole?: string | string[] }) => {
+    if (!document) return false;
 
-  //   // Jeśli dokument nie ma wymagań dotyczących roli, jest publiczny
-  //   if (!document.requiredRole) return true;
+    // Jeśli dokument nie ma wymagań dotyczących roli, jest publiczny
+    if (!document.requiredRole) return true;
 
-  //   // Jeśli użytkownik ma rolę administratora, ma dostęp do wszystkiego
-  //   if (userRoles.value.includes('admin')) return true;
+    // Jeśli użytkownik ma rolę administratora, ma dostęp do wszystkiego
+    if (userRoles.value.includes('admin')) return true;
 
-  //   // Sprawdź, czy jakakolwiek rola użytkownika jest w wymaganych rolach dokumentu
-  //   const requiredRoles = Array.isArray(document.requiredRole)
-  //     ? document.requiredRole
-  //     : [document.requiredRole];
+    // Sprawdź, czy jakakolwiek rola użytkownika jest w wymaganych rolach dokumentu
+    const requiredRoles = Array.isArray(document.requiredRole)
+      ? document.requiredRole
+      : [document.requiredRole];
 
-  //   return userRoles.value.some((role: string) => requiredRoles.includes(role));
-  // };
+    return userRoles.value.some((role: string) => requiredRoles.includes(role));
+  };
 
   // /**
   //  * Pobiera dokumenty dostępne dla bieżącego użytkownika z określonej kolekcji
@@ -142,7 +142,7 @@ export function useDocumentation() {
   // };
 
   return {
-    // checkDocumentAccess,
+    checkDocumentAccess,
     // getAccessibleDocuments,
     // getDocumentsByCategory,
     // getAccessibleNavigation,

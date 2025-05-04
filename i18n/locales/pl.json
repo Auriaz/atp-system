@@ -1,0 +1,12 @@
+{
+    "faq": {
+        "title": "Często zadawane pytania",
+        "subtitle": "Znajdź odpowiedzi na najczęściej zadawane pytania dotyczące platformy ATP",
+        "searchPlaceholder": "Szukaj w FAQ...",
+        "allCategories": "Wszystkie kategorie",
+        "featuredQuestions": "Popularne pytania",
+        "cantFindAnswer": "Nie możesz znaleźć odpowiedzi na swoje pytanie?",
+        "contactUs": "Skontaktuj się z nami, a nasz zespół wsparcia Ci pomoże",
+        "contactSupport": "Skontaktuj się z pomocą techniczną"
+    }
+}
