@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Usuń sesję
-  await clearUserSession(event);
+  // await clearUserSession(event);
 
   return { success: true };
 });
