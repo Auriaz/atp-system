@@ -100,5 +100,5 @@ You are advised to review this Cookie Policy periodically for any changes. Chang
 
 If you have any questions about our Cookie Policy, please contact us:
 
-- By email: privacy@atp-system.com
+- By email: 
 - By visiting this page on our website: [Contact Us](/contact)

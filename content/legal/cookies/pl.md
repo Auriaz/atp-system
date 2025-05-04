@@ -100,5 +100,5 @@ Zalecamy regularne przeglądanie niniejszej Polityki Cookies w celu sprawdzenia 
 
 Jeśli mają Państwo jakiekolwiek pytania dotyczące naszej Polityki Cookies, prosimy o kontakt:
 
-- Pocztą elektroniczną: privacy@atp-system.com
+- Pocztą elektroniczną: 
 - Odwiedzając stronę kontaktową na naszej stronie internetowej: [Kontakt](/contact)

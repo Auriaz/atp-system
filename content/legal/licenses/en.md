@@ -136,4 +136,4 @@ ATP System may contain links to third-party websites or use their services. We a
 
 If you have questions about the licenses used in ATP System or would like to obtain additional information, please contact us:
 
-**Email**: legal@atp-system.com
+**Email**: 

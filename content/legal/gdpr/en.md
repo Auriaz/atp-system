@@ -40,13 +40,11 @@ The GDPR is a regulation in EU law on data protection and privacy for all indivi
 ATP System Ltd. is the controller of your personal data, responsible for determining the purposes and means of processing personal data. Our contact details are:
 
 **ATP System Ltd.**  
-123 Sport Street  
-Warsaw, 00-001  
-Poland
+
 
 **Data Protection Officer (DPO):**  
-Email: dpo@atp-system.com  
-Phone: +48 123 456 789
+Email:   
+Phone: 
 
 ## Data Protection Principles
 
@@ -142,8 +140,8 @@ We have implemented appropriate technical and organizational measures to ensure 
 If you have any questions about our GDPR compliance or wish to exercise your rights, please contact our Data Protection Officer:
 
 **DPO Contact:**  
-Email: dpo@atp-system.com  
-Phone: +48 123 456 789  
-Address: 123 Sport Street, Warsaw, 00-001, Poland
+Email:  
+Phone:  
+Address: 
 
 You also have the right to lodge a complaint with a supervisory authority. In Poland, this is the President of the Personal Data Protection Office (UODO).

@@ -40,13 +40,11 @@ RODO to rozporządzenie w prawie UE dotyczące ochrony danych i prywatności wsz
 ATP System sp. z o.o. jest administratorem Państwa danych osobowych, odpowiedzialnym za określanie celów i sposobów przetwarzania danych osobowych. Nasze dane kontaktowe to:
 
 **ATP System sp. z o.o.**  
-ul. Sportowa 123  
-00-001 Warszawa  
-Polska
+
 
 **Inspektor Ochrony Danych (IOD):**  
-Email: iod@atp-system.com  
-Telefon: +48 123 456 789
+Email:  
+Telefon: 
 
 ## Zasady ochrony danych
 
@@ -142,8 +140,8 @@ Wdrożyliśmy odpowiednie środki techniczne i organizacyjne, aby zapewnić pozi
 Jeśli mają Państwo pytania dotyczące naszej zgodności z RODO lub chcą skorzystać ze swoich praw, prosimy o kontakt z naszym Inspektorem Ochrony Danych:
 
 **Kontakt do IOD:**  
-Email: iod@atp-system.com  
-Telefon: +48 123 456 789  
-Adres: ul. Sportowa 123, 00-001 Warszawa, Polska
+Email:  
+Telefon:  
+Adres: 
 
 Mają Państwo również prawo do wniesienia skargi do organu nadzorczego. W Polsce jest to Prezes Urzędu Ochrony Danych Osobowych (UODO).
