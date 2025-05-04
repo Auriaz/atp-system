@@ -39,52 +39,52 @@ export default defineEventHandler(async (event) => {
   }
 
   // Pobierz wszystkie role użytkownika
-  // const userRoles: RoleSlugs = await getUserRoleSlugs(session.user.id);
+  const userRoles: RoleSlugs = await getUserRoleSlugs(session.user.id);
 
   // Jeśli użytkownik nie ma żadnych ról, traktuj go jako podstawowego użytkownika
-  // if (!userRoles?.length) {
-  //   userRoles.push(USER_ROLES.USER);
-  // }
+  if (!userRoles?.length) {
+    userRoles.push(USER_ROLES.USER);
+  }
 
   // Sprawdź, czy użytkownik ma wymagane uprawnienie w którejkolwiek z posiadanych ról
   // Sprawdź uprawnienie z użyciem cache'a
-  // const hasRequiredPermission = await checkPermissionByRoles(
-  //   session.user.id,
-  //   userRoles,
-  //   requiredPermission
-  // );
+  const hasRequiredPermission = await checkPermissionByRoles(
+    session.user.id,
+    userRoles,
+    requiredPermission
+  );
 
-  // if (!hasRequiredPermission) {
-  //   throw createError({
-  //     statusCode: 403,
-  //     message: 'Insufficient permissions'
-  //   });
-  // }
+  if (!hasRequiredPermission) {
+    throw createError({
+      statusCode: 403,
+      message: 'Insufficient permissions'
+    });
+  }
 });
 
 /**
  * Sprawdza czy użytkownik z dowolną z podanych ról ma określone uprawnienie
  * z wykorzystaniem cache'a
  */
-// async function checkPermissionByRoles(
-//   userId: number,
-//   roleSlugs: RoleSlug[],
-//   requiredPermission: Permission
-// ): Promise<boolean> {
-//   // Spróbuj pobrać uprawnienia z cache'a
-//   const cachedPermissions = getCachedPermissions(userId);
+async function checkPermissionByRoles(
+  userId: number,
+  roleSlugs: RoleSlug[],
+  requiredPermission: Permission
+): Promise<boolean> {
+  // Spróbuj pobrać uprawnienia z cache'a
+  const cachedPermissions = getCachedPermissions(userId);
 
-//   // Jeśli uprawnienia są w cache, użyj ich
-//   if (cachedPermissions) {
-//     return cachedPermissions.has(requiredPermission);
-//   }
+  // Jeśli uprawnienia są w cache, użyj ich
+  if (cachedPermissions) {
+    return cachedPermissions.has(requiredPermission);
+  }
 
-//   // Jeśli nie ma w cache, oblicz wszystkie uprawnienia
-//   const allPermissions = getAllPermissionsForRoles(roleSlugs);
+  // Jeśli nie ma w cache, oblicz wszystkie uprawnienia
+  const allPermissions = getAllPermissionsForRoles(roleSlugs);
 
-//   // Zapisz obliczone uprawnienia do cache'a
-//   setCachedPermissions(userId, allPermissions);
+  // Zapisz obliczone uprawnienia do cache'a
+  setCachedPermissions(userId, allPermissions);
 
-//   // Zwróć wynik sprawdzenia
-//   return allPermissions.includes(requiredPermission);
-// }
+  // Zwróć wynik sprawdzenia
+  return allPermissions.includes(requiredPermission);
+}
