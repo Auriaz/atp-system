@@ -35,7 +35,7 @@ relatedDocuments:
 
 ## Wprowadzenie
 
-Niniejszy regulamin określa zasady korzystania z platformy ATP System ("Platforma"), świadczonej przez ATP System sp. z o.o. z siedzibą w Warszawie, przy ul. Sportowej 123, 00-001 Warszawa ("Usługodawca"), a także prawa i obowiązki Użytkowników Platformy.
+<!-- Niniejszy regulamin określa zasady korzystania z platformy ATP System ("Platforma"), świadczonej przez ATP System sp. z o.o. z siedzibą w  ("Usługodawca"), a także prawa i obowiązki Użytkowników Platformy. -->
 
 Korzystanie z Platformy oznacza akceptację niniejszego Regulaminu. Prosimy o uważne zapoznanie się z jego treścią przed rozpoczęciem korzystania z naszych usług.
 
@@ -43,7 +43,7 @@ Korzystanie z Platformy oznacza akceptację niniejszego Regulaminu. Prosimy o uw
 
 Na potrzeby niniejszego Regulaminu przyjmuje się następujące definicje:
 
-- **Platforma** - system ATP (Advanced Training Platform) dostępny pod adresem [atp-system.com](https://atp-system.com) oraz poprzez aplikacje mobilne
+- **Platforma** - system ATP (Advanced Training Platform) dostępny pod adresem [atp-system.nuxt.dev](https://atp-system.nuxt.dev) oraz poprzez aplikacje mobilne
 - **Użytkownik** - osoba fizyczna, która korzysta z Platformy
 - **Konto** - indywidualny profil Użytkownika w ramach Platformy
 - **Trener** - Użytkownik posiadający specjalne uprawnienia do tworzenia i zarządzania programami treningowymi
@@ -126,7 +126,7 @@ Na potrzeby niniejszego Regulaminu przyjmuje się następujące definicje:
    - Wszelkie spory wynikające z korzystania z Platformy będą rozstrzygane przez sądy właściwe dla siedziby Usługodawcy.
 
 2. **Kontakt**
-   - W sprawach związanych z funkcjonowaniem Platformy można kontaktować się z Usługodawcą pod adresem e-mail: contact@atp-system.com.
+   - W sprawach związanych z funkcjonowaniem Platformy można kontaktować się z Usługodawcą pod adresem e-mail: 
 
 3. **Data wejścia w życie**
    - Niniejszy Regulamin wchodzi w życie z dniem 22.04.2025 r.

@@ -35,7 +35,7 @@ relatedDocuments:
 
 ## Introduction
 
-These Terms and Conditions govern the use of the ATP System platform ("Platform"), provided by ATP System Ltd., located at 123 Sport Street, Warsaw, 00-001, Poland ("Service Provider"), and establish the rights and obligations of the Platform Users.
+<!-- These Terms and Conditions govern the use of the ATP System platform ("Platform"), provided by ATP System ("Service Provider"), and establish the rights and obligations of the Platform Users. -->
 
 By using the Platform, you accept these Terms and Conditions. Please read them carefully before you start using our services.
 
@@ -43,7 +43,7 @@ By using the Platform, you accept these Terms and Conditions. Please read them c
 
 For the purposes of these Terms and Conditions, the following definitions apply:
 
-- **Platform** - the ATP (Advanced Training Platform) system available at [atp-system.com](https://atp-system.com) and through mobile applications
+- **Platform** - the ATP (Advanced Training Platform) system available at [atp-system.nuxt.dev](https://atp-system.nuxt.dev) and through mobile applications
 - **User** - a natural person who uses the Platform
 - **Account** - an individual User profile within the Platform
 - **Coach** - a User with special permissions to create and manage training programs
@@ -126,7 +126,7 @@ For the purposes of these Terms and Conditions, the following definitions apply:
    - Any disputes arising from the use of the Platform will be resolved by courts having jurisdiction over the Service Provider's registered office.
 
 2. **Contact**
-   - For matters related to the Platform's operation, you can contact the Service Provider at: contact@atp-system.com.
+   - For matters related to the Platform's operation, you can contact the Service Provider at: 
 
 3. **Effective Date**
    - These Terms and Conditions come into effect on April 22, 2025.
