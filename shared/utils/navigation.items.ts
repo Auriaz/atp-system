@@ -64,7 +64,7 @@ export const footerLinks = [
     links: [
       // { name: 'Funkcje', url: '/#features' },
       // { name: 'Cennik', url: '/pricing' },
-      // { name: 'FAQ', url: '/faq' },
+      { name: 'FAQ', url: '/faq' },
       // { name: 'Przewodnik', url: '/guides' },
       // { name: 'Blog', url: '/blog' }
     ]
@@ -84,7 +84,7 @@ export const footerLinks = [
     links: [
       { name: 'Kontakt', url: '/contact' },
       // { name: 'Pomoc', url: '/help' },
-      // { name: 'Dokumentacja', url: '/docs' },
+      { name: 'Dokumentacja', url: '/docs' },
       // { name: 'Status systemu', url: '/status' },
       // { name: 'Szkolenia', url: '/training' }
     ]
@@ -92,11 +92,11 @@ export const footerLinks = [
   {
     title: 'Prawne',
     links: [
-      // { name: 'Regulamin', url: '/legal/terms' },
-      // { name: 'Prywatność', url: '/legal/privacy' },
-      // { name: 'Cookies', url: '/legal/cookies' },
-      // { name: 'Licencje', url: '/legal/licenses' },
-      // { name: 'RODO', url: '/legal/gdpr' }
+      { name: 'Regulamin', url: '/legal/terms' },
+      { name: 'Prywatność', url: '/legal/privacy' },
+      { name: 'Cookies', url: '/legal/cookies' },
+      { name: 'Licencje', url: '/legal/licenses' },
+      { name: 'RODO', url: '/legal/gdpr' }
     ]
   }
 ]
