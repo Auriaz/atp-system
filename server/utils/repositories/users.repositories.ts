@@ -1,7 +1,5 @@
 import { asc, desc, eq, like, and, or, sql } from 'drizzle-orm'
 import { users, roles, userRoles } from '../../database/schema'
-import { formatDistanceToNow } from 'date-fns'
-import { enGB } from 'date-fns/locale'
 import { User } from '#auth-utils'
 
 /**
@@ -36,7 +34,7 @@ interface UserWithRoles extends UserBase {
 }
 
 interface UsersWithFiltersResult {
-    users: UserWithRoles[];
+    users: UserResource[];
     total: number;
 }
 
@@ -62,7 +60,7 @@ export async function getUsersWithFilters(query: UserFiltersQuery): Promise<User
     }
     // Filtr po statusie
     if (status && status !== 'all') {
-        conditions.push(eq(users.status, status as UserStatus));
+        conditions.push(eq(users.status, status as any));
     }
 
     // Pobierz podstawowe dane użytkowników
@@ -132,13 +130,14 @@ export async function getUsersWithFilters(query: UserFiltersQuery): Promise<User
     // Jeśli filtrujemy po roli, musimy zwrócić długość przefiltrowanej tablicy jako total
     const finalTotal = role !== 'all' ? filteredUsers.length : total;
 
+    // Konwersja na zasoby API
+    const userResources = toUserResourceCollection(filteredUsers);
+
     return {
-        users: filteredUsers,
+        users: userResources,
         total: finalTotal
     };
 }
-
-
 
 /**
  * Pobiera szczegółowe dane użytkownika wraz z przypisanymi rolami
@@ -146,7 +145,7 @@ export async function getUsersWithFilters(query: UserFiltersQuery): Promise<User
  * @returns Dane użytkownika wraz z rolami lub null jeśli użytkownik nie istnieje
  */
 export async function getUserById(userId: number) {
-    return await useDatabase().query.users.findFirst({
+    const userData = await useDatabase().query.users.findFirst({
         where: eq(users.id, userId),
         columns: {
             id: true,
@@ -169,9 +168,15 @@ export async function getUserById(userId: number) {
                 }
             },
         }
-    })
-}
+    });
 
+    if (!userData) return null;
+
+    return toUserResource(userData, {
+        includeRoles: true,
+        includePersonalData: true
+    });
+}
 
 /**
  * Uwierzytelnia użytkownika na podstawie adresu email i hasła.
@@ -203,37 +208,149 @@ export async function authenticateUser(body: { email: string, password: string }
             avatarUrl: true,
             status: true,
             createdAt: true,
+            updatedAt: true,
+            isAgreedToTerms: true,
+            isOAuthAccount: true,
+        },
+        with: {
+            roles: {
+                with: {
+                    role: true,
+                }
+            },
         }
-    })
+    });
 
     if (!user) {
         throw createError({
             status: 401,
             message: 'Invalid email'
-        })
+        });
     }
-
-    // Format the createdAt date after fetching the user
-    const { createdAt: _createdAt, ...userWithFormattedDate } = {
-        ...user,
-        createdAtAgo: formatDistanceToNow(user.createdAt, {
-            addSuffix: true, // dodaje "temu" na końcu
-            locale: enGB // używa polskich formatów i nazw
-        })
-    };
 
     // Sprawdź czy hasło jest poprawne
     if (!await verifyPassword(user.password, body.password)) {
-        // Zwróć użytkownika bez hasła
-
         throw createError({
             status: 401,
             message: 'Invalid password'
-        })
+        });
     }
 
-    // Zwróć użytkownika bez hasła
-    const { password: _password, ...userWithoutPassword } = userWithFormattedDate;
+    // Konwersja na zasób API, pomijając hasło
+    const userResource = toUserResource(user, {
+        includeRoles: true,
+        includePersonalData: true
+    });
 
-    return userWithoutPassword as User;
+    return userResource as User;
+}
+
+/**
+ * Znajduje użytkownika po emailu
+ * @param email Email użytkownika
+ * @returns Dane użytkownika lub null
+ */
+export async function findUserByEmail(email: string) {
+    const user = await useDatabase().query.users.findFirst({
+        where: eq(users.email, email),
+        columns: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            bio: true,
+            avatarUrl: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+            isAgreedToTerms: true,
+        },
+        with: {
+            roles: {
+                with: {
+                    role: true,
+                }
+            },
+        }
+    });
+
+    if (!user) return null;
+
+    return toUserResource(user);
+}
+
+/**
+ * Pobiera użytkownika po nazwie użytkownika
+ * @param username Nazwa użytkownika
+ * @returns Dane użytkownika lub null
+ */
+export async function findUserByUsername(username: string) {
+    const user = await useDatabase().query.users.findFirst({
+        where: eq(users.username, username),
+        columns: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            bio: true,
+            avatarUrl: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+            isAgreedToTerms: true,
+        },
+        with: {
+            roles: {
+                with: {
+                    role: true,
+                }
+            },
+        }
+    });
+
+    if (!user) return null;
+
+    return toUserResource(user);
+}
+
+/**
+ * Aktualizuje dane profilowe użytkownika
+ * @param userId Identyfikator użytkownika
+ * @param data Dane do aktualizacji
+ * @returns Zaktualizowane dane użytkownika
+ */
+export async function updateUserProfile(userId: number, data: Partial<ProfileForm>) {
+    // Usuwamy pola, które nie są kolumnami w tabeli users
+    const updateResult = await useDatabase()
+        .update(users)
+        .set({
+            ...data,
+            updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId))
+        .returning({
+            id: users.id,
+            username: users.username,
+            email: users.email,
+            firstName: users.firstName,
+            lastName: users.lastName,
+            bio: users.bio,
+            avatarUrl: users.avatarUrl,
+            status: users.status,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt,
+            isAgreedToTerms: users.isAgreedToTerms,
+        });
+
+    if (updateResult.length === 0) {
+        throw createError({
+            status: 404,
+            message: 'User not found'
+        });
+    }
+
+    // Pobieramy użytkownika z rolami
+    return updateResult[0];
 }

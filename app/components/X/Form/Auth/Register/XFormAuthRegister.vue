@@ -2,7 +2,7 @@
   import type { FormSubmitEvent } from '@nuxt/ui'
   import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
   const toast = useToast()
-
+  const { fetch } = useUserSession()
   const registerForm = reactive({
     data: {
       username: '',
@@ -24,13 +24,16 @@
       body: event.data,
     })
       .then(res => {
+        fetch()
         toast.add(res.message as Toast)
         toast.add({
-          title: 'Loggin',
-          description: 'You are now logged in',
+          title: 'Login successful',
+          description: 'You have been successfully logged in',
           color: 'success'
         })
-        navigateTo('/auth/login', { replace: true })
+        
+        navigateTo('/dashboard/profile', { replace: true })
+        resetFormRegister()
       })
       .catch(error => {
         toast.add({
@@ -41,7 +44,6 @@
       })
       .finally(() => {
         registerForm.loading = false
-        resetFormRegister()
       })
     )
   }

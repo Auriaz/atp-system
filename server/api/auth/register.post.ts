@@ -20,6 +20,20 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Check if username already exists
+    const existingUsername = await useDatabase()
+      .select()
+      .from(tables.users)
+      .where(eq(tables.users.username, body.username))
+      .get()
+
+    if (existingUsername) {
+      throw createError({
+        statusCode: 409,
+        message: 'User with this username already exists'
+      })
+    }
+
     // Hash the password
     const hashedPassword = await hashPassword(body.password)
 
@@ -39,6 +53,15 @@ export default defineEventHandler(async (event) => {
       })
       .returning({
         id: users.id,
+        password: users.password,
+        username: users.username,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        bio: users.bio,
+        avatarUrl: users.avatarUrl,
+        status: users.status,
+        createdAt: users.createdAt,
       })
       .execute()
 
@@ -49,10 +72,29 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const user = {
+      ...newUser[0],
+      status: newUser[0].status || 'active' // Provide a default value when status is null
+    }
 
 
     // Przypisanie domyślnej roli
-    await assignDefaultUserRole(newUser[0].id)
+    await assignDefaultUserRole(user.id)
+
+
+    // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
+    // Dla "zapamiętaj mnie" ustaw na 30 dni
+    const sessionDuration = 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
+
+
+    // Utwórz sesję z odpowiednim czasem wygaśnięcia
+    await setUserSession(event, {
+      user,
+      roles: await getUserRoleSlugs(user.id),
+      loggedInAt: Date.now(),
+      expiresAt: Date.now() + sessionDuration,
+      rememberMe: false
+    })
 
     // Dodaj rejestracje użytkownika do aktywności użytkownika
     await useDatabase()

@@ -1,24 +1,41 @@
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'authorization',
-  middleware: 'auth',
-})
+  const { fetchProfile, isLoading, profile } = useProfileApi()
+
+
+  onBeforeMount(async () => {
+    await fetchProfile()
+  })
+
+  definePageMeta({
+    layout: 'authorization',
+    middleware: "auth"
+  })
 </script>
 
 <template>
   <NuxtLayout>
-
-    <XDashboardPage :loading="false">
-      <template #header-panel>
-        <h1 class="text-2xl font-bold mb-4">Dashboard CMS</h1>
-      </template>
+    <XDashboardPage :loading="isLoading">
+      <template #header-left />
   
       <template #main>
-        <div class="p-6 space-y-6">
-          <!-- Szybkie akcje -->
-          <h1>Profile</h1>
+        <div v-if="profile" class="w-full p-6 flex flex-col space-y-8 box-border container mx-auto">
+          <div class="w-full p-6 bg-secondary-200/20 dark:bg-secondary-950/20 rounded-xl">
+            <XDashboardProfileUpdatePicture :profile="profile"/>
+          </div>
+  
+          <div class="w-full px-6 pt-6 bg-secondary-200/20 dark:bg-secondary-900/20 rounded-xl">
+              <XDashboardProfileUpdateInformation  :profile="profile" />
+          </div>
+  
+          <div class="w-full bg-secondary/20 dark:bg-secondary-dark/20 rounded-xl">
+            <!--
+              <XDashboardProfileUpdatePassword />
+            -->
+          </div>
         </div>
       </template>
+  
+      <template #sidebar />
     </XDashboardPage>
   </NuxtLayout>
 </template>

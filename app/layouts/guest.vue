@@ -222,8 +222,8 @@ const isForgotPasswordPage = computed(() => currentPath.value === '/forgot-passw
           &copy; {{ currentYear }} {{ appName }} | Wszystkie prawa zastrzeżone
         </div>
         <div class="flex gap-4 mt-2 sm:mt-0 footer-links">
-          <NuxtLink to="/terms" class="hover:text-white transition-colors footer-link">Regulamin</NuxtLink>
-          <NuxtLink to="/privacy" class="hover:text-white transition-colors footer-link">Polityka prywatności</NuxtLink>
+          <NuxtLink to="/legal/terms" class="hover:text-white transition-colors footer-link">Regulamin</NuxtLink>
+          <NuxtLink to="/legal/privacy" class="hover:text-white transition-colors footer-link">Polityka prywatności</NuxtLink>
           <NuxtLink to="/contact" class="hover:text-white transition-colors footer-link">Kontakt</NuxtLink>
         </div>
       </footer>

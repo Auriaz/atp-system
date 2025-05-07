@@ -56,9 +56,13 @@ function typeLinks(type: string) {
                   v-if="session?.user"
                   class="w-full flex justify-center items-center py-5"
                 >
-                  <UAvatar
-                    :src="session.user.avatarUrl"
-                    :size="sidebar.isRail ? 'md' : '3xl'"
+                  <XAvatar 
+                    v-if="session" 
+                    :src="session.user.avatarUrl" 
+                    :alt="session.user.firstName + ' ' + session.user.lastName"    
+                    :firstName="session.user.firstName" 
+                    :lastName="session.user.lastName" 
+                    :size="sidebar.isRail ? 36 : 64"
                     class="transition duration-500"
                   />
                 </div>

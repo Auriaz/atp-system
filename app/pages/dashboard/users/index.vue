@@ -766,11 +766,11 @@ function openSettings() {
             <UFormField label="Email" required>
               <UInput placeholder="User's email" type="email" class="w-full" />
             </UFormField>
-            
+
             <UFormField label="Roles" required>
               <USelectMenu
                 multiple
-                :options="Object.entries(ROLE_NAMES).map(([value, label]) => ({ value, label }))"
+                :items="Object.entries(ROLE_NAMES).map(([value, label]) => ({ value, label }))"
                 placeholder="Select roles"
                 class="w-full"
               />

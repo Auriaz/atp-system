@@ -1,5 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  imports: {
+    dirs: [
+      'composables/**'
+    ]
+  },
   // https://nuxt.com/modules
   modules: [
     '@nuxthub/core',

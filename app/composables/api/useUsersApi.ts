@@ -102,48 +102,48 @@ export function useUsersApi() {
     //     }
     // }
 
-    // /**
-    //  * Tworzy nowego użytkownika
-    //  * @param userData Dane nowego użytkownika
-    //  */
-    // const createUser = async (userData: Partial<IUserResource>) => {
-    //     isLoading.value = true
-    //     error.value = null
+    /**
+     * Tworzy nowego użytkownika
+     * @param userData Dane nowego użytkownika
+     */
+    const createUser = async (userData: Partial<UserResource>) => {
+        isLoading.value = true
+        error.value = null
 
-    //     try {
-    //         // Wykonaj zapytanie do API
-    //         const response = await $fetch('/api/users', {
-    //             method: 'POST',
-    //             body: userData
-    //         })
+        try {
+            // Wykonaj zapytanie do API
+            const response = await $fetch('/api/users', {
+                method: 'POST',
+                body: userData
+            })
 
-    //         // Wyświetl komunikat o sukcesie
-    //         toast.add({
-    //             title: 'Success',
-    //             description: 'User created successfully',
-    //             color: 'green'
-    //         })
+            // Wyświetl komunikat o sukcesie
+            toast.add({
+                title: 'Success',
+                description: 'User created successfully',
+                color: 'primary'
+            })
 
-    //         // Odśwież listę użytkowników
-    //         await fetchUsers()
+            // Odśwież listę użytkowników
+            await fetchUsers()
 
-    //         return response
-    //     } catch (err: any) {
-    //         // Obsługa błędów
-    //         error.value = err
+            return response
+        } catch (err: any) {
+            // Obsługa błędów
+            error.value = err
 
-    //         // Wyświetl komunikat o błędzie
-    //         toast.add({
-    //             title: 'Error',
-    //             description: err?.data?.message || err?.message || 'Failed to create user',
-    //             color: 'error'
-    //         })
+            // Wyświetl komunikat o błędzie
+            toast.add({
+                title: 'Error',
+                description: err?.data?.message || err?.message || 'Failed to create user',
+                color: 'error'
+            })
 
-    //         return null
-    //     } finally {
-    //         isLoading.value = false
-    //     }
-    // }
+            return null
+        } finally {
+            isLoading.value = false
+        }
+    }
 
     // /**
     //  * Aktualizuje istniejącego użytkownika
@@ -252,7 +252,7 @@ export function useUsersApi() {
         // Funkcje
         fetchUsers,
         // fetchUserById,
-        // createUser,
+        createUser,
         // updateUser,
         // deleteUser,
         resetState

@@ -52,12 +52,26 @@ const items = [
     class=""
   >
   <UButton   color="neutral" variant="link" >
-    <UAvatar :src="user.avatarUrl" />
+    <XAvatar 
+      v-if="user" 
+      :src="user.avatarUrl" 
+      :alt="user.firstName + ' ' + user.lastName"    
+      :firstName="user.firstName" 
+      :lastName="user.lastName" 
+      :size="32" 
+    />
   </UButton>
   
   <template #account="{ item }">
     <div class="flex items-center space-x-4">
-      <UAvatar :src="user.avatarUrl" />
+      <XAvatar 
+        v-if="user" 
+        :src="user.avatarUrl" 
+        :alt="user.firstName + ' ' + user.lastName"    
+        :firstName="user.firstName" 
+        :lastName="user.lastName" 
+        :size="64" 
+      />
       <div class="text-left">
             <p>
             Signed in as

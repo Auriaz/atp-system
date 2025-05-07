@@ -35,11 +35,11 @@ definePageMeta({
        
        <div class="text-center text-xs text-gray-500 dark:text-gray-400">
          Rejestrując się, akceptujesz 
-         <NuxtLink to="/terms" class="text-primary-600 dark:text-primary-400 hover:underline">
+         <NuxtLink to="/legal/terms" class="text-primary-600 dark:text-primary-400 hover:underline">
            Regulamin
          </NuxtLink>
          oraz
-         <NuxtLink to="/privacy" class="text-primary-600 dark:text-primary-400 hover:underline">
+         <NuxtLink to="/legal/privacy" class="text-primary-600 dark:text-primary-400 hover:underline">
            Politykę prywatności
          </NuxtLink>
        </div>

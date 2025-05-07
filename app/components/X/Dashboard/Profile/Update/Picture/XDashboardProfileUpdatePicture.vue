@@ -1,10 +1,17 @@
 <script lang="ts" setup>
-  import { CircleStencil, Cropper } from 'vue-advanced-cropper';
+  import { UButton } from '#components';
+import { CircleStencil, Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 
-  const {avatarUrlUpdate} = useProfileStore() as any
-  const {body} = storeToRefs(useProfileStore()) as any
+  const {avatarUrlUpdate } = useProfileApi() as any
 
+  const props= defineProps({
+    profile: {
+      type: Object as PropType<UserResource>,
+      default: () => ({})
+    }
+  })
+  const emit = defineEmits(['update:avatarUrl'])
 
   let file = ref(null) as any
   let cropper = ref(null) as any
@@ -52,11 +59,18 @@ import 'vue-advanced-cropper/dist/style.css';
       </template>
 
       <template #content>
-        <div v-if="!uploadedImage" class="h-full flex flex-col">
+        <div v-if="!uploadedImage" class="relative h-6 flex flex-col">
 
-          <div  class="h-full flex items-center justify-center lg:-mt-6">
+          <div  class="absolute w-full h-full flex items-center justify-center lg:-mt-6">
             <label for="image" class="relative cursor-pointer">
-              <XAvatar v-if="body.avatarUrl !== ''" :src="body.avatarUrl" alt="userName" size="3xl" />
+              <XAvatar 
+                v-if="profile" 
+                :src="profile.avatarUrl" 
+                :alt="profile.firstName + ' ' + profile.lastName"    
+                :firstName="profile.firstName" 
+                :lastName="profile.lastName" 
+                :size="96" 
+              />
 
               <div
                 class="absolute  w-6 h-6 flex justify-center items-center bottom-0 right-0  rounded-full bg-white  border  border-gray-300  shadow-xl shadow-black">
@@ -84,13 +98,13 @@ import 'vue-advanced-cropper/dist/style.css';
 
           <div class="flex items-center justify-end space-x-3">
 
-            <x-btn @click="uploadedImage = false" color="danger" rounded="full">
+            <UButton @click="uploadedImage = false" color="error" rounded="full">
               <span class="mx-4 font-medium text-[15px]">Close</span>
-            </x-btn>
+            </UButton >
 
-            <x-btn @click="cropAndUpdateImage()" color="primary" rounded="full">
+            <UButton  @click="cropAndUpdateImage()" color="primary" rounded="full">
               <span class="mx-4 font-medium text-[15px]">Apply</span>
-            </x-btn>
+            </UButton >
           </div>
         </div>
       </template>
