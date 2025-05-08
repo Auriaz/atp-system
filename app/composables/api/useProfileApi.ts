@@ -2,6 +2,7 @@ export default function useProfileApi() {
   // Współdzielony stan aplikacji - używamy useState, aby dane były dostępne między komponentami
   const profile = useState<UserResource | null>('profile', () => null)
   const isLoading = useState<boolean>('profile-loading', () => false)
+  const isPasswordChanging = useState<boolean>('password-changing', () => false)
   const error = useState<Error | null>('profile-error', () => null)
 
   // Dodatkowe composables
@@ -98,5 +99,80 @@ export default function useProfileApi() {
     }
   }
 
-  return { profile, isLoading, error, fetchProfile, avatarUrlUpdate, update }
+  /**
+   * Zmienia hasło użytkownika
+   * @param passwordData Obiekt zawierający aktualne hasło i nowe hasło
+   * @returns Obiekt odpowiedzi z API lub null w przypadku błędu
+   */
+  const changePassword = async (passwordData: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => {
+    isPasswordChanging.value = true;
+    error.value = null;
+
+    try {
+      // Wykonaj zapytanie do API
+      const response = await $fetch('/api/profile/password', {
+        method: 'PUT',
+        body: passwordData
+      });
+
+      // Wyświetl komunikat sukcesu
+      toast.add({
+        title: response.message?.title || 'Success',
+        description: response.message?.description || 'Password changed successfully',
+        color: response.message?.color || 'success'
+      });
+
+      return response;
+    } catch (err: any) {
+      // Obsługa błędów
+      error.value = err;
+
+      // Obsługa błędów walidacji
+      if (err?.data?.issues) {
+        const validationErrors = err.data.issues.map((issue: any) => issue.message).join(', ');
+
+        toast.add({
+          title: 'Validation Error',
+          description: validationErrors || 'Please check your input',
+          color: 'warning'
+        });
+
+        return { validationErrors: err.data.issues };
+      }
+
+      // Wyświetl komunikat błędu
+      toast.add({
+        title: 'Error',
+        description: err?.data?.message || err?.message || 'Failed to change password',
+        color: 'error'
+      });
+
+      // Przekieruj w przypadku błędu autoryzacji
+      if (err?.statusCode === 401) {
+        navigateTo('/auth/login');
+      } else if (err?.statusCode === 403) {
+        navigateTo('/auth/403');
+      }
+
+      return null;
+    } finally {
+      // Zawsze aktualizuj stan ładowania
+      isPasswordChanging.value = false;
+    }
+  };
+
+  return {
+    profile,
+    isLoading,
+    isPasswordChanging,
+    error,
+    fetchProfile,
+    avatarUrlUpdate,
+    update,
+    changePassword
+  }
 }

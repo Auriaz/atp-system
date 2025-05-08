@@ -28,9 +28,7 @@
           </div>
   
           <div class="w-full bg-secondary/20 dark:bg-secondary-dark/20 rounded-xl">
-            <!--
-              <XDashboardProfileUpdatePassword />
-            -->
+            <XDashboardProfileUpdatePassword />
           </div>
         </div>
       </template>
