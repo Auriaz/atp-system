@@ -1,9 +1,18 @@
 import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
 
-export function createApiMessage(title: string, description: string, color?: string) {
+
+// Generate standardized API response
+export function createApiMessage(
+  statusCode: HttpStatusCode,
+  customMessage?: string,
+): Partial<Toast> {
+  const defaultMessage = DEFAULT_STATUS_MESSAGES[statusCode]
+  const category = getResponseCategory(statusCode)
+  const color = getResponseColor(statusCode) as "success" | "primary" | "secondary" | "info" | "warning" | "error" | "neutral"
+
   return {
-    title,
-    description,
+    title: category.charAt(0).toUpperCase() + category.slice(1),
+    description: customMessage || defaultMessage,
     color
-  } as Toast
+  }
 }

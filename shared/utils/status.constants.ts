@@ -210,49 +210,6 @@ export function getResponseColor(statusCode: number): string {
   }
 }
 
-// Generate standardized API response
-export function createApiMessage(
-  statusCode: HttpStatusCode,
-  customMessage?: string,
-  details?: any
-) {
-  const defaultMessage = DEFAULT_STATUS_MESSAGES[statusCode]
-  const category = getResponseCategory(statusCode)
-  const color = getResponseColor(statusCode)
-
-  return {
-    title: category.charAt(0).toUpperCase() + category.slice(1),
-    description: customMessage || defaultMessage,
-    statusCode,
-    color,
-    details
-  }
-}
-
-// Function to standardize API responses across the application
-export function createApiResponse(
-  payload: Record<string, any> | null = null,
-  messageOptions: {
-    title?: string,
-    description?: string,
-    statusCode?: HttpStatusCode,
-    details?: any
-  } = {}
-) {
-  const statusCode = messageOptions.statusCode || HTTP_STATUS.OK
-
-  return {
-    success: statusCode >= 200 && statusCode < 300,
-    message: {
-      title: messageOptions.title || getResponseCategory(statusCode).charAt(0).toUpperCase() + getResponseCategory(statusCode).slice(1),
-      description: messageOptions.description || DEFAULT_STATUS_MESSAGES[statusCode],
-      color: getResponseColor(statusCode)
-    },
-    payload,
-    ...(messageOptions.details ? { details: messageOptions.details } : {})
-  }
-}
-
 export default {
   HTTP_STATUS,
   RESPONSE_CATEGORY,

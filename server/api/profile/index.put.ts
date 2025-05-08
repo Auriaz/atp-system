@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     return createApiResponse(
       { data: updatedProfile },
       {
-        title: 'Profile Updated',
+        statusCode: HTTP_STATUS.OK,
         description: API_SUCCESS_MESSAGES.USER.PROFILE_UPDATED,
       }
     )

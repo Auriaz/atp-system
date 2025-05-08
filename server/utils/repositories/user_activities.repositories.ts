@@ -2,24 +2,6 @@ import { H3Event } from 'h3'
 import { userActivities } from '../../database/schema'
 import { eq, desc, lt } from 'drizzle-orm'
 
-/**
- * Pobiera adres IP klienta z żądania H3
- * 
- * @param event - Obiekt wydarzenia H3
- * @returns Adres IP klienta lub null
- */
-export function getClientIp(event: H3Event): string | null {
-    // Próba pobrania z nagłówków przesyłanych przez load balancer/proxy
-    const forwardedFor = event.node.req.headers['x-forwarded-for']
-    if (forwardedFor) {
-        return Array.isArray(forwardedFor)
-            ? forwardedFor[0]?.split(',')[0]?.trim()
-            : forwardedFor.split(',')[0]?.trim()
-    }
-
-    // Próba pobrania z socket connection
-    return event.node.req.socket.remoteAddress || null
-}
 
 /**
  * Loguje aktywność użytkownika w systemie

@@ -8,17 +8,23 @@
  */
 export function createApiResponse<T = any>(
     payload?: T | null,
-    message: { title: string; description: string } | null = null,
-    statusCode: HttpStatusCode = HTTP_STATUS.OK,
-    status: ResponseStatus = 'success',
+    messageOptions: {
+        description: string,
+        statusCode?: HttpStatusCode,
+        details?: any
+    } | null = null,
 ): ResponseObject<T> {
     const body = {
+        status: getResponseCategory(messageOptions?.statusCode || HTTP_STATUS.OK) as ResponseStatus,
+        statusCode: messageOptions?.statusCode || HTTP_STATUS.OK,
         ...(payload !== undefined && payload !== null && { payload }),
-        message: message ?
-            createApiMessage(message.title as string, message.description as string, status) :
+        message: messageOptions ?
+            createApiMessage(
+                messageOptions.statusCode || HTTP_STATUS.OK,
+                messageOptions.description || DEFAULT_STATUS_MESSAGES[messageOptions.statusCode || HTTP_STATUS.OK],
+            ) :
             undefined,
-        statusCode,
-        status,
+        ...(messageOptions?.details ? { details: messageOptions.details } : {})
     };
 
     return body;

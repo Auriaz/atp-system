@@ -1,17 +1,22 @@
 import { H3Event } from 'h3';
 
 /**
- * Helper function to get the client's IP address from the request
- * @param event H3Event object containing request information
- * @returns Client IP address as string
+ * Pobiera adres IP klienta z żądania H3
+ * 
+ * @param event - Obiekt wydarzenia H3
+ * @returns Adres IP klienta lub null
  */
-export function getClientIp(event: H3Event) {
-  const forwarded = event.node.req.headers['x-forwarded-for']
-
-  if (forwarded) {
-    return (typeof forwarded === 'string' ? forwarded : forwarded[0]).split(',')[0]
+export function getClientIp(event: H3Event): string | null {
+  // Próba pobrania z nagłówków przesyłanych przez load balancer/proxy
+  const forwardedFor = event.node.req.headers['x-forwarded-for']
+  if (forwardedFor) {
+    return Array.isArray(forwardedFor)
+      ? forwardedFor[0]?.split(',')[0]?.trim()
+      : forwardedFor.split(',')[0]?.trim()
   }
-  return event.node.req.socket.remoteAddress || ''
+
+  // Próba pobrania z socket connection
+  return event.node.req.socket.remoteAddress || null
 }
 
 /**

@@ -22,11 +22,7 @@ export default defineEventHandler(async (event) => {
     });
   }
   // Pobierz dane użytkownika z bazy danych
-  const userData = await useDatabase()
-    .select()
-    .from(tables.users)
-    .where(eq(tables.users.id, user.id))
-    .get();
+  const userData = await getUserById(user.id)
 
   // Sprawdź, czy użytkownik istnieje
   if (!userData) {
