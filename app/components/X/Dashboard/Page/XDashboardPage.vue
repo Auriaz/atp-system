@@ -43,7 +43,7 @@ defineExpose({
 
 <template>
   <section
-    class="relative w-full h-full transition-all duration-500 box-border"
+    class="relative w-full h-full transition-all duration-500 box-border "
     :class="[
       sidebar.isShow ?
         sidebar.isRail ? 'lg:w-[calc(100%-110px)]' : 'lg:w-[calc(100%-280px)]'
@@ -86,7 +86,7 @@ defineExpose({
     </XDashboardPageHeader>
 
     <!-- Main Content -->
-    <div class="w-full px-4 lg:px-6 box-border transition-all duration-500" :class="sidebar.isShowHelperBar ? 'mt-4' : 'mt-0'">
+    <main class="w-full z-20 px-2 lg:px-2 box-border transition-all duration-500 " :class="sidebar.isShowHelperBar ? 'mt-6' : 'mt-0'">
       <transition
         enter-active-class="transition ease-out duration-600"
         enter-from-class="transform opacity-0"
@@ -95,13 +95,13 @@ defineExpose({
         leave-from-class="transform opacity-100"
         leave-to-class="transform opacity-0"
       >
-        <div v-if="!loading" class="pt-5">
+        <div v-if="!loading" class="">
           <slot name="main" />
         </div>
 
         <XLoadingPage v-else :loading="loading" />
       </transition>
-    </div>
+    </main>
 
     <!-- Settings Sidebar Overlay -->
     <div

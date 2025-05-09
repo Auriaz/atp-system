@@ -5,36 +5,30 @@ definePageMeta({
 })
 
 // Dostępne statusy
-type MediaStatus = 'active' | 'pending' | 'blocked' | 'reported'
-type MediaVisibility = 'public' | 'premium' | 'private'
 type PublishStatus = 'processing' | 'published' | 'draft'
 type ViewMode = 'grid' | 'table'
-
-// Media item type
-interface MediaItem {
-  id: number;
-  name: string;
-  title: string;
-  description: string;
-  pathUrl: string;
-  previewUrl: string;
-  mimeType: string;
-  visibility: MediaVisibility;
-  createdAt: Date;
-  fileSize: number;
-  statusInfo: {
-    status: MediaStatus;
-    label: string;
-    note: string;
-  }
-}
 
 // Stan widoku
 const viewMode = ref<ViewMode>('grid')
 
 const switchViewMode = (mode: ViewMode) => {
   viewMode.value = mode
-} 
+}
+
+let isShowPreviewImage = ref(false)
+const preview = ref<Media | null>(null)
+
+// Funkcja do wyświetlania podglądu
+const showPreview = (file: Media) => {
+  isShowPreviewImage.value = true
+  preview.value = file
+}
+
+// Funkcja do zamykania podglądu
+const closePreview = () => {
+  isShowPreviewImage.value = false
+  preview.value = null
+}
 
 // Mapowanie statusu publikacji na status mediów
 const mapPublishStatusToMediaStatus = (status: PublishStatus): MediaStatus => {
@@ -45,6 +39,7 @@ const mapPublishStatusToMediaStatus = (status: PublishStatus): MediaStatus => {
     default: return 'pending'
   }
 }
+
 
 // Mapowanie widoczności na etykietę
 const visibilityLabels = {
@@ -64,7 +59,7 @@ const sorting = ref({
 })
 
 // Przykładowe dane wideo
-const videoItems: MediaItem[] = new Array(10).fill(null).map((_, index) => {
+const videoItems: Media[] = new Array(10).fill(null).map((_, index) => {
   const publishStatus: PublishStatus = ['processing', 'published', 'draft'][Math.floor(Math.random() * 3)] as PublishStatus
   const visibility: MediaVisibility = ['public', 'premium', 'private'][Math.floor(Math.random() * 3)] as MediaVisibility
   const createdAt = new Date()
@@ -75,7 +70,7 @@ const videoItems: MediaItem[] = new Array(10).fill(null).map((_, index) => {
     name: `Video ${index + 1}`,
     title: `Video Title ${index + 1}`,
     description: `Description for video ${index + 1}`,
-    pathUrl: `video-${index + 1}`,
+    pathUrl: `video-${index + 1}`, // Ensuring pathUrl is always a string, not null
     previewUrl: `https://picsum.photos/500/400?random=${index}`,
     mimeType: Math.random() > 0.7 ? 'video/mp4' : 'image/jpeg',
     visibility: visibility,
@@ -88,8 +83,23 @@ const videoItems: MediaItem[] = new Array(10).fill(null).map((_, index) => {
         ? 'Video is being processed' 
         : publishStatus === 'draft' 
           ? 'Video is saved as draft' 
-          : `Video is published and visible to ${visibilityLabels[visibility]} users`
-    }
+          : `Video is published and visible to ${visibilityLabels[visibility]} users`,
+      class: publishStatus === 'published' ? 'success' : 'warning',
+      moderatedAt: new Date().toISOString(),
+      moderatedBy: null,
+      isBlocked: false
+    },
+    author: {
+      id: 1,
+      username: 'johndoe',
+      email: 'jo',
+      firstname: 'John',
+      lastname: 'Doe',
+      avatarUrl: 'https://picsum.photos/50/50?random=1'
+    },
+    movieUrl: `https://example.com/videos/video-${index + 1}.mp4`,
+    createdAtAgo: '3 days ago', // Mock value
+    updatedAtAgo: '1 day ago'    // Mock value
   }
 })
 
@@ -107,7 +117,7 @@ const columns = [
 ]
 
 // Funkcje zarządzania mediami
-const handleMediaSelect = (selected: boolean, file: MediaItem) => {
+const handleMediaSelect = (selected: boolean, file: Media) => {
   console.log('Select handler called with', selected, file.id)
   
   if (selected) {
@@ -123,7 +133,8 @@ const handleMediaSelect = (selected: boolean, file: MediaItem) => {
 }
 
 const toggleSelectAll = () => {
-  selectedAll.value = !selectedAll.value
+  console.log('Toggle select all', selectedAll.value)
+  selectedAll.value = true
   
   if (selectedAll.value) {
     selectedItems.value = videoItems.map(item => item.id)
@@ -136,7 +147,7 @@ const isSelected = (id: number) => {
   return selectedItems.value.includes(id)
 }
 
-const handleMediaModerate = (file: MediaItem) => {
+const handleMediaModerate = (file: Media) => {
   console.log('Moderate file:', file)
 }
 
@@ -179,6 +190,13 @@ const bulkActions = [
     onSelect() { console.log('Download selected items', selectedItems.value)} 
   }
 ]
+
+
+watch(selectedItems, (newVal) => {
+  selectedAll.value = newVal.length === videoItems.length
+})
+
+
 </script>
 
 <template>
@@ -228,7 +246,7 @@ const bulkActions = [
       </template>
       
       <template #main>
-        <div class="w-full  p-4 md:p-6">
+        <div class="w-full p-4 md:p-6">
           <!-- Selection controls       -->
           <div v-if="selectedItems.length > 0" class="mb-4 p-3 bg-primary-50 dark:bg-primary-950 rounded-lg border border-primary-200 dark:border-primary-800">
             <div class="flex items-center justify-between">
@@ -274,6 +292,7 @@ const bulkActions = [
               class="h-60 w-full bg-secondary-200/50 dark:bg-secondary-950/50"
               @select="(isSelected, mediaFile) => handleMediaSelect(isSelected, mediaFile)"
               @moderate="handleMediaModerate"
+              @click="showPreview(file)"
             >
               <template #action>
                 <UTooltip text="Share">
@@ -340,11 +359,13 @@ const bulkActions = [
               <template #thumbnail-cell="{ row }">
                 <div class="w-16 h-12 overflow-hidden rounded-md">
  
-                  <img 
+                  <NuxtImg 
                     :src="row.original.previewUrl" 
                     :alt="row.original.name" 
                     class="w-full h-full object-cover"
-                  >
+                    loading="lazy"
+                    @click="showPreview(row.original)"
+                  />
                 </div>
               </template>
               
@@ -394,7 +415,7 @@ const bulkActions = [
               
               <!-- Kolumna z datą utworzenia -->
               <template #createdAt-cell="{ row }">
-                {{ formatDate(row.original.createdAt) }}
+                {{ row.original.createdAtAgo }}
               </template>
               
               <!-- Kolumna z akcjami -->
@@ -470,6 +491,17 @@ const bulkActions = [
                 item: 'rounded-lg',
                 root: 'flex items-center gap-1' 
               }" 
+            />
+          </div>
+
+          <div v-if="videoItems">
+            <x-photo-preview
+              v-if="preview"
+              :isShowPreviewImage="isShowPreviewImage"
+              :photos="videoItems"
+              :preview="preview"
+              @close="isShowPreviewImage = $event"
+              @preview="preview = $event"
             />
           </div>
         </div>

@@ -1,29 +1,8 @@
 <script setup lang="ts">
-// Definicja typów dla statusu pliku
-type MediaStatus = 'active' | 'pending' | 'blocked' | 'reported'
-
-interface MediaStatusInfo {
-  status: MediaStatus
-  label: string
-  note?: string
-}
-
-interface MediaFile {
-  id: number
-  name: string
-  pathUrl: string
-  mimeType: string
-  previewUrl: string
-  visibility?: string
-  description?: string
-  fileSize?: number
-  createdAt?: Date
-  statusInfo?: MediaStatusInfo
-}
 
 // Właściwości komponentu
 const props = withDefaults(defineProps<{
-  file: MediaFile
+  file: Media
   isFieldSelected?: boolean
   selected?: boolean
 }>(), {

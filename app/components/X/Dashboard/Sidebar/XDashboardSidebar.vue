@@ -50,7 +50,7 @@ function typeLinks(type: string) {
           >
             <div class="w-full h-full flex flex-col justify-between">
               <div
-                class="w-full flex flex-col mt-10 bg-secondary-200 dark:bg-secondary-950 backdrop-blur shadow-xl shadow-black rounded-lg"
+                class="w-full flex flex-col mt-10 bg-secondary-50 dark:bg-secondary-950 backdrop-blur shadow-xl hover:shadow-black rounded-lg"
               >
                 <div
                   v-if="session?.user"
@@ -82,7 +82,7 @@ function typeLinks(type: string) {
               </div>
 
               <div class="w-full relative">
-                <div class="bg-secondary-200 dark:bg-secondary-950 backdrop-blur shadow-xl shadow-black rounded-lg">
+                <div class="bg-secondary-50 dark:bg-secondary-950 backdrop-blur shadow-xl hover:shadow-black rounded-lg">
                   <ul
                     class="list-none overflow-y-auto flex flex-col justify-center items-start py-2  box-border"
                     :class="[sidebar.isRail ? 'w-12 px-2' : 'w-full']"
@@ -111,7 +111,7 @@ function typeLinks(type: string) {
     >
       <div
         v-if="sidebar.isShowMenuBar"
-        class="fixed left-0 z-30 lg:z-40 top-24 lg:top-3 bg-secondary-200 dark:bg-secondary-950  p-2 rounded-r-lg transition-all duration-500"
+        class="fixed left-0 z-30 lg:z-40 top-24 lg:top-4 bg-white dark:bg-black hover:shadow-black shadow-lg  p-2 rounded-r-lg transition-all duration-500"
       >
         <div class="flex flex-row justify-start items-center space-x-2 ">
           <UTooltip

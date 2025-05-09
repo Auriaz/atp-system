@@ -175,13 +175,7 @@ const recentEvents = [
   }
 ]
 
-// Data i czas
-const currentDate = new Date().toLocaleDateString('pl-PL', {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-})
+
 
 // Powitanie zależne od pory dnia
 const hours = new Date().getHours()
@@ -256,13 +250,8 @@ const formatEventDate = (dateString: string) => {
 <template>
   <NuxtLayout>
     <XDashboardPage :loading="false">
-      <template #header-panel>
+      <template #header-right>
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ currentDate }}</p>
-          </div>
-
           <div class="flex items-center gap-3">
             <UButton 
               to="/dashboard/training/new" 

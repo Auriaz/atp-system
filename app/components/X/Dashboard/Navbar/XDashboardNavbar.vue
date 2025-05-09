@@ -11,9 +11,9 @@ onMounted(() => {
   <div
     id="main-nav-dashboard"
     :class="[
-      navbar.isScroll ? 'fixed top-0 left-0 backdrop-blur-lg' : 'fixed top-0 left-0',
+      navbar.isScroll ? 'fixed top-0 left-0 backdrop-blur-lg bg-secondary-50/50 dark:bg-secondary-950/50' : 'fixed top-0 left-0 bg-secondary-50 dark:bg-secondary-950',
     ]"
-    class="w-screen z-40 box-border h-20 transition-all duration-500  shadow-black shadow-lg "
+    class="w-screen z-40 box-border h-20 transition-all duration-500  hover:shadow-black shadow-lg  "
   >
     <div class="h-full flex items-center justify-center lg:justify-between">
       <div class="relative  hidden lg:flex">
@@ -24,13 +24,13 @@ onMounted(() => {
         <slot name="bar" />
       </div>
 
-      <div class="w-full hidden lg:block ">
-        <div class="relative w-full flex justify-around items-center">
+      <div class="w-full hidden lg:block">
+        <div class="relative w-full flex justify-around items-center ">
           <div class="flex w-full justify-center items-center space-x-10 ">
             <slot name="content" />
           </div>
 
-          <div class="w-70 flex justify-end items-center pr-6 space-x-3 box-border">
+          <div class="w-70 flex justify-end items-center pr-6 space-x-3 box-border bg-white dark:bg-black h-full rounded-lg shadow-xl hover:shadow-black transition-all duration-500">
             <div class="flex justify-center items-center space-x-3">
               <UTooltip :text="sidebar.isShowMenuBar ? 'Close side bar helper' : 'Open side bar helper'">
                 <UButton  @click="toggleShowMenuBar()" color="primary" variant="ghost" square :icon="sidebar.isShowMenuBar ? 'i-material-symbols-right-panel-close-sharp' : 'i-material-symbols-light-left-panel-open-rounded' "/>
