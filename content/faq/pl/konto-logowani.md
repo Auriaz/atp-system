@@ -14,7 +14,7 @@ lastUpdated: '2025-04-22'
 
 Utworzenie konta w systemie ATP jest szybkie i proste. Wykonaj następujące kroki:
 
-1. Przejdź na stronę główną [atp-system.com](https://atp-system.com)
+1. Przejdź na stronę główną [atp-system.nuxt.dev](https://atp-system.nuxt.dev)
 2. Kliknij przycisk "Rejestracja" w prawym górnym rogu strony
 3. Wypełnij formularz rejestracyjny podając:
    - Imię i nazwisko

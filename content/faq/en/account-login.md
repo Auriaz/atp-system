@@ -14,7 +14,7 @@ lastUpdated: '2025-04-22'
 
 Creating an account in the ATP system is quick and simple. Follow these steps:
 
-1. Go to the [atp-system.com](https://atp-system.com) homepage
+1. Go to the [atp-system.nuxt.dev](https://atp-system.nuxt.dev) homepage
 2. Click the "Register" button in the top right corner
 3. Fill out the registration form with:
    - Your full name
