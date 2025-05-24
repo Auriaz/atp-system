@@ -48,7 +48,8 @@ export const PERMISSIONS = {
 
   // ===== ZARZĄDZANIE SYSTEMEM =====
   SYSTEM_SETTINGS: 'system:settings',    // Zmiana ustawień systemu
-  SETTINGS_LOGO: 'settings:logo',        // Zmiana logo systemu
+  SETTINGS_LOGO: 'settings:logo',
+  SETTINGS_LOGO_UPDATE: 'settings:logo:update',       // Zmiana logo systemu
   SYSTEM_LOGS: 'system:logs',          // Przeglądanie logów systemu
   SYSTEM_BACKUP: 'system:backup',       // Tworzenie i przywracanie kopii zapasowych
 
@@ -138,6 +139,9 @@ export const ROLE_PERMISSIONS: Record<RoleSlug, Permissions> = {
     // Harmonogram
     PERMISSIONS.SCHEDULE_VIEW, PERMISSIONS.SCHEDULE_VIEW_ALL,
     PERMISSIONS.SCHEDULE_CREATE, PERMISSIONS.SCHEDULE_EDIT,
+
+    // Dodaj uprawnienie do aktualizacji logo
+    PERMISSIONS.SETTINGS_LOGO_UPDATE,
 
     // Komunikacja
     PERMISSIONS.MESSAGE_SEND, PERMISSIONS.MESSAGE_VIEW, PERMISSIONS.NOTIFICATION_SEND,
