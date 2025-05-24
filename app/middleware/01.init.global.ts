@@ -1,6 +1,11 @@
 import type { UserSession } from '#auth-utils';
 
 export default defineNuxtRouteMiddleware(async (to) => {
+    // Ignoruj ścieżki używane przez DevTools
+    if (to.path.includes('/.well-known/appspecific/')) {
+        return;
+    }
+
     // Pomiń inicjalizację po stronie serwera dla niektórych operacji
     if (import.meta.server && to.path.startsWith('/api/')) return;
 
@@ -8,13 +13,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const userSession = useState<UserSession | null>('user-session');
     const { session: authSession, clear } = useUserSession();
 
-    // Logowanie debug (tylko w trybie dev)
+    // // Logowanie debug (tylko w trybie dev)
     if (import.meta.dev) {
-        console.log('Init middleware: Session status', {
-            hasUserSession: !!userSession.value,
-            hasAuthSession: !!authSession.value,
-            path: to.path
-        });
+        // Filtrowanie ścieżek dla DevTools
+        if (!to.path.includes('/.well-known/appspecific/')) {
+            console.log('Init middleware: Session status', {
+                hasUserSession: !!userSession.value,
+                hasAuthSession: !!authSession.value,
+                path: to.path
+            });
+        }
     }
 
     // 2. Weryfikacja ważności sesji

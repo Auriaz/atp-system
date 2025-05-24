@@ -95,7 +95,9 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/permission.directive.ts', // Wtyczka do zarządzania uprawnieniami
   ],
-
+  routeRules: {
+    '/.well-known/**': { static: true }
+  },
   // content: {
   //   renderer: {
   //     anchorLinks: {
