@@ -14,7 +14,6 @@ export function toUserResource(
         locale?: 'en' | 'pl',
         includeRoles?: boolean,
         includePersonalData?: boolean,
-        avatarBaseUrl?: string
     } = {}
 ): UserResource {
     // Domyślne opcje
@@ -22,7 +21,6 @@ export function toUserResource(
         locale = 'pl',
         includeRoles = true,
         includePersonalData = true,
-        avatarBaseUrl = '/api/assets/avatars'
     } = options
 
     // Wybór lokalizacji dla formatowania daty
@@ -37,17 +35,13 @@ export function toUserResource(
         ? formatDistanceToNow(new Date(user.updatedAt), { addSuffix: true, locale: dateLocale })
         : null
 
-    // Formatowanie avatara
-    const avatarUrl = user.avatarUrl
-        ? (user.avatarUrl.startsWith('http') ? user.avatarUrl : `${avatarBaseUrl}/${user.avatarUrl}`)
-        : null
 
     // Mapowanie danych podstawowych
     const baseResource: Partial<UserResource> = {
         id: user.id,
         username: user.username,
         email: user.email,
-        avatarUrl,
+        avatarUrl: user.avatarUrl,
         status: user.status || 'active',
         createdAtAgo,
         updatedAtAgo,

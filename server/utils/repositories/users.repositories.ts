@@ -354,3 +354,55 @@ export async function updateUserProfile(userId: number, data: Partial<ProfileFor
     // Pobieramy użytkownika z rolami
     return updateResult[0];
 }
+
+/**
+ * Funkcja do zmiany avatara użytkownika
+ * @param user - Użytkownik, którego avatar ma być zmieniony
+ * @param file - Plik obrazu do zapisania jako avatar
+ * @returns Obiekt zawierający URL nowego avatara oraz wiadomość o powodzeniu
+ */
+export async function updateUserAvatarUrl(userId: number, avatarUrl: string) {
+    // Aktualizacja URL avatara w bazie danych
+    const db = useDatabase();
+    const updatedUser = await db
+        .update(users)
+        .set({
+            avatarUrl: avatarUrl,
+            updatedAt: new Date()
+        })
+        .where(eq(users.id, userId))
+        .returning({
+            id: users.id,
+            username: users.username,
+            email: users.email,
+            firstName: users.firstName,
+            lastName: users.lastName,
+            bio: users.bio,
+            avatarUrl: users.avatarUrl,
+            status: users.status,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt
+        });
+
+
+    if (!updatedUser.length) {
+        throw createError({
+            statusCode: 404,
+            message: 'User not found'
+        });
+    }
+
+    return toUserResource(updatedUser[0]);
+}
+
+export async function checkExistingAvatarUrl(userId: number) {
+    const db = useDatabase();
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+        columns: {
+            avatarUrl: true
+        }
+    });
+
+    return user?.avatarUrl || null;
+}

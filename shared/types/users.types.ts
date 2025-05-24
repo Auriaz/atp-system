@@ -3,7 +3,7 @@ export type DatabaseUser = typeof tables.users.$inferSelect;
 // Typy dla API i zasobów
 export interface UserResource {
     id: number;
-    avatarUrl: string | null;
+    avatarUrl: Blob | null;
     email: string;
     username: string;
     roles: RoleSlugs;

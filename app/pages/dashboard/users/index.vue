@@ -412,21 +412,9 @@ function openSettings() {
     <XDashboardPage 
       ref="dashboardPage"
       :loading="isLoading" 
-      title="User Management"
-      subtitle="Manage system users and their settings"
     >
       <template #header-left>
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <UIcon name="i-lucide-users" class="text-primary-600 dark:text-primary-400" />
-              User Management
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">
-              {{ filteredRows.length }} users{{ filteredRows.length !== users?.length ? ' (filtered)' : '' }}
-            </p>
-          </div>
-        </div>
+
       </template>
       
       <template #header-right>
@@ -463,7 +451,7 @@ function openSettings() {
       </template>
   
       <template #main>
-        <div class="relative p-6 space-y-6">
+        <div class="relative pt-10 pb-6 space-y-6">
           
           
           <div class="flex items-center gap-2">

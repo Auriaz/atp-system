@@ -2,7 +2,7 @@
 const props = defineProps({
   // URL do zdjęcia profilowego
   src: {
-    type: String as PropType<string | null>,
+    type: Blob,
     default: null
   },
   // Imię użytkownika (do inicjałów)
@@ -168,7 +168,7 @@ const statusClass = computed(() => {
     <!-- Wyświetlanie obrazka -->
     <img 
       v-if="!shouldShowInitials " 
-      :src="src || undefined" 
+      :src="`/images/${src}` || undefined" 
       :alt="alt || `${firstName} ${lastName}`"
       @error="handleImageError"
       class="w-full h-full object-cover"

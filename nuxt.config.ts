@@ -79,16 +79,17 @@ export default defineNuxtConfig({
     blob: true,
     kv: true,
     database: true,
-    // cache: true,
+    cache: true,
   },
 
-  // nitro: {
-  //   experimental: {
-  //     tasks: true, // Włącz eksperymentalne zadania
-  //     // websocket: true,
-  //   },
+  nitro: {
+    experimental: {
+      tasks: true, // Włącz eksperymentalne zadania
+      // websocket: true,
+      openAPI: true, // Włącz eksperymentalne OpenAPI
+    },
 
-  // },
+  },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
   plugins: [
@@ -123,4 +124,18 @@ export default defineNuxtConfig({
   //   },
   // },
   // debug: true, // Włącz debugowanie
+
+  image: {
+    inject: true, // Wstrzyknij komponent obrazu
+    format: ['webp'], // Format obrazu
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+      '2xl': 1536
+    },
+  }
 })

@@ -233,11 +233,10 @@ const features = [
             </div>
             
             <div class="relative hero-image">
-              <img 
-                src="/images/dashboard-preview.webp" 
-                alt="ATP System Dashboard Preview" 
-                class="w-full h-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+              <XEffectInteractiveCards
+                class=" w-full h-auto"  
               />
+
               <div class="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-lg p-3 shadow-lg">
                 <div class="flex items-center space-x-2">
                   <UIcon name="i-lucide-trending-up" class="text-green-500 text-xl" />

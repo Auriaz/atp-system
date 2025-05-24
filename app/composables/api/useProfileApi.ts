@@ -4,7 +4,7 @@ export default function useProfileApi() {
   const isLoading = useState<boolean>('profile-loading', () => false)
   const isPasswordChanging = useState<boolean>('password-changing', () => false)
   const error = useState<Error | null>('profile-error', () => null)
-
+  const { user, fetch } = useUserSession()
   // Dodatkowe composables
   const toast = useToast()
 
@@ -52,8 +52,24 @@ export default function useProfileApi() {
     }
   }
 
-  const avatarUrlUpdate = async (url: string) => {
+  const avatarUrlUpdate = async (formData: any) => {
+    // Wysłanie żądania do API
+    return await $fetch('/api/profile/avatar', {
+      method: 'POST',
+      body: formData
+    }).then((res) => {
+      toast.add(res.message)
+      profile.value = res.payload.data || null
 
+      fetch()
+    }).catch((error) => {
+      console.error('Wystąpił błąd podczas przesyłania:', error)
+      toast.add({
+        title: 'Błąd',
+        description: 'Nie udało się przesłać zdjęcia profilowego',
+        color: 'error'
+      })
+    })
   }
 
   const update = async (data: Partial<UserResource>) => {

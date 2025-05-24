@@ -1,7 +1,7 @@
 declare module '#auth-utils' {
   interface User {
     id: number
-    avatarUrl?: string | null
+    avatarUrl?: Blob | null
     email: string
     status: string
     username: string
