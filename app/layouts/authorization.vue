@@ -18,18 +18,13 @@ const currentDate = new Date().toLocaleDateString('pl-PL', {
     <template #header>
       <XDashboardNavbar>
         <template #bar>
-          <div
-              class="flex justify-start px-4 space-x-2"
-              :class="[sidebar.isRail ? '' : 'w-64']"
-          >
-        
-          </div>
+
         </template>
 
         <template #content>
           <div class="flex justify-center items-center">
             <div>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">{{ currentDate }}</p>
+              <p class="w-48 text-gray-600 dark:text-gray-400 mt-1">{{ currentDate }}</p>
             </div>
           </div>
         </template>

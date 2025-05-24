@@ -13,7 +13,8 @@ const items = [
       disabled: true
     }], [{
       label: 'Settings',
-      icon: 'i-heroicons-cog-8-tooth'
+      icon: 'i-heroicons-cog-8-tooth',
+      to: '/dashboard/settings'
     }], [{
       label: 'Dashboard',
       icon: 'i-heroicons-presentation-chart-line-20-solid',

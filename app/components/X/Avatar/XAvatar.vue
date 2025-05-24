@@ -2,7 +2,7 @@
 const props = defineProps({
   // URL do zdjęcia profilowego
   src: {
-    type: Blob,
+    type: String,
     default: null
   },
   // Imię użytkownika (do inicjałów)

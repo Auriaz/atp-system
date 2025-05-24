@@ -101,11 +101,11 @@ const { data: images, refresh } = await useFetch('/api/profile/avatar')
   <div class="relative w-full flex flex-col rounded-lg box-border">
     <x-card-action>
       <template #title>
-        Zdjęcie profilowe
+        Profile Picture
       </template>
 
       <template #description>
-        Twoje zdjęcie profilowe pomaga innym Cię rozpoznawać.
+        Your profile picture helps others recognize you.
       </template>
 
       <template #content>
@@ -158,11 +158,11 @@ const { data: images, refresh } = await useFetch('/api/profile/avatar')
 
           <div class="flex items-center justify-end space-x-3">
             <UButton @click="cancelUpload" color="neutral" variant="soft" rounded="full" :disabled="isUploading">
-              <span class="mx-4 font-medium text-[15px]">Anuluj</span>
+                <span class="mx-4 font-medium text-[15px]">Cancel</span>
             </UButton>
 
             <UButton @click="cropAndUpdateImage()" color="primary" rounded="full" :loading="isUploading" :disabled="isUploading">
-              <span class="mx-4 font-medium text-[15px]">Zastosuj</span>
+              <span class="mx-4 font-medium text-[15px]">Save</span>
             </UButton>
           </div>
         </div>

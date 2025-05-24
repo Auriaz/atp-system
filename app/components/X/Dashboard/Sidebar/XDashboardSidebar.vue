@@ -113,7 +113,7 @@ function typeLinks(type: string) {
         v-if="sidebar.isShowMenuBar"
         class="fixed left-0 z-30 lg:z-40 top-24 lg:top-4 bg-white dark:bg-black hover:shadow-black shadow-lg  p-2 rounded-r-lg transition-all duration-500"
       >
-        <div class="flex flex-row justify-start items-center space-x-2 ">
+      <div class="flex flex-row justify-start items-center space-x-2 ">
           <UTooltip
             :text="sidebar.isShow ? 'Close sidebar' : 'Open sidebar'"
             position="bottom"

@@ -126,8 +126,8 @@ export default defineNuxtConfig({
   // debug: true, // Włącz debugowanie
 
   image: {
-    inject: true, // Wstrzyknij komponent obrazu
-    format: ['webp'], // Format obrazu
+    // inject: true, // Wstrzyknij komponent obrazu
+    // format: ['webp'], // Format obrazu
     screens: {
       xs: 320,
       sm: 640,

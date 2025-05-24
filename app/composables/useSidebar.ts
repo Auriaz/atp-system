@@ -63,6 +63,26 @@ export const useSidebar = () => {
       ],
     },
     {
+      label: 'Page Settings',
+      icon: 'i-heroicons-adjustments-horizontal',
+      to: '/dashboard/settings',
+      type: 'settings' as const,
+      requiredPermission: PERMISSIONS.SETTINGS_VIEW,
+      name: 'dashboard-settings',
+      tree: [
+        {
+          label: 'Dashboard',
+          icon: 'i-heroicons-presentation-chart-line-20-solid',
+          to: '/dashboard',
+        },
+        {
+          label: 'Page Settings',
+          icon: 'i-heroicons-adjustments-horizontal',
+          to: '/dashboard/settings',
+        },
+      ],
+    },
+    {
       label: 'Users Management',
       icon: 'i-heroicons-user-group-solid',
       to: '/dashboard/users',
@@ -102,6 +122,7 @@ export const useSidebar = () => {
         },
       ],
     },
+
     {
       label: 'Documentation',
       icon: 'i-heroicons-book-open',

@@ -64,8 +64,10 @@ export const API_PERMISSION_MAP: Record<string, Permission> = {
 
   // Ustawienia
   '/api/settings': PERMISSIONS.SETTINGS_VIEW,     // Przeglądanie ustawień
-  '/api/settings/update': PERMISSIONS.SETTINGS_EDIT, // Aktualizacja ustawień
+  '/api/settings/updated': PERMISSIONS.SETTINGS_EDIT, // Aktualizacja ustawień
+  '/api/settings/updated/logo': PERMISSIONS.SETTINGS_LOGO, // Ustawienia logo
   '/api/settings/notifications': PERMISSIONS.SETTINGS_NOTIFICATIONS, // Ustawienia powiadomień
+
 
   // Wyszukiwanie
   '/api/search': PERMISSIONS.SEARCH,              // Wyszukiwanie

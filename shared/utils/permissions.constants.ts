@@ -48,6 +48,7 @@ export const PERMISSIONS = {
 
   // ===== ZARZĄDZANIE SYSTEMEM =====
   SYSTEM_SETTINGS: 'system:settings',    // Zmiana ustawień systemu
+  SETTINGS_LOGO: 'settings:logo',        // Zmiana logo systemu
   SYSTEM_LOGS: 'system:logs',          // Przeglądanie logów systemu
   SYSTEM_BACKUP: 'system:backup',       // Tworzenie i przywracanie kopii zapasowych
 

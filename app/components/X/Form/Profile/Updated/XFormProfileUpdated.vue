@@ -18,7 +18,13 @@ import type { FormSubmitEvent } from '@nuxt/ui'
     bio: props.profile.bio,
   })
 
-  async function handlerSubmit (event: FormSubmitEvent<ProfileForm>) {
+  async function handlerSubmit (event: FormSubmitEvent<{
+    username: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    bio: string | null;
+  }>) {
     const { session } = useUserSession()
     update(form)
   }
