@@ -1,0 +1,192 @@
+import { refreshTokens } from '../../database/schema'
+import { eq, and, lt } from 'drizzle-orm'
+import { useDatabase } from '../database'
+
+type RefreshToken = typeof refreshTokens.$inferSelect
+type NewRefreshToken = typeof refreshTokens.$inferInsert
+
+/**
+ * Generuje bezpieczny refresh token
+ */
+export function generateRefreshToken(): string {
+    const { randomBytes } = require('crypto')
+    return randomBytes(32).toString('hex')
+}
+
+/**
+ * Hash refresh token przed zapisem do bazy
+ */
+export async function hashRefreshToken(token: string): Promise<string> {
+    const { createHash } = require('crypto')
+    return createHash('sha256').update(token).digest('hex')
+}
+
+/**
+ * Tworzy nowy refresh token
+ */
+export async function createRefreshToken(
+    userId: number,
+    deviceId?: string,
+    userAgent?: string,
+    ipAddress?: string
+): Promise<{ token: string; hashedToken: string }> {
+    if (!userId) {
+        throw new Error('User ID is required')
+    }
+
+    const token = generateRefreshToken()
+    const hashedToken = await hashRefreshToken(token)
+
+    // Ustawienie czasu wygaśnięcia na 30 dni
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + 30)
+
+    const db = useDatabase()
+
+    await db.insert(refreshTokens).values({
+        userId,
+        token: hashedToken,
+        deviceId,
+        userAgent,
+        ipAddress,
+        expiresAt,
+        createdAt: new Date(),
+        lastUsedAt: new Date()
+    })
+
+    return { token, hashedToken }
+}
+
+/**
+ * Weryfikuje refresh token
+ */
+export async function verifyRefreshToken(token: string): Promise<any | null> {
+    if (!token) {
+        throw new Error('Token is required')
+    }
+
+    const hashedToken = await hashRefreshToken(token)
+    const db = useDatabase()
+
+    const refreshToken = await db.query.refreshTokens.findFirst({
+        where: and(
+            eq(refreshTokens.token, hashedToken),
+            eq(refreshTokens.isRevoked, false),
+            // Token nie wygasł
+            lt(refreshTokens.expiresAt, new Date())
+        ),
+        with: {
+            user: {
+                columns: {
+                    id: true,
+                    email: true,
+                    username: true
+                }
+            }
+        }
+    })
+
+    if (!refreshToken) {
+        return null
+    }
+
+    // Aktualizuj ostatnie użycie
+    await db
+        .update(refreshTokens)
+        .set({ lastUsedAt: new Date() })
+        .where(eq(refreshTokens.id, refreshToken.id))
+
+    return refreshToken
+}
+
+/**
+ * Unieważnia refresh token
+ */
+export async function revokeRefreshToken(token: string): Promise<void> {
+    if (!token) {
+        throw new Error('Token is required')
+    }
+
+    const hashedToken = await hashRefreshToken(token)
+    const db = useDatabase()
+
+    await db
+        .update(refreshTokens)
+        .set({
+            isRevoked: true,
+            lastUsedAt: new Date()
+        })
+        .where(eq(refreshTokens.token, hashedToken))
+}
+
+/**
+ * Unieważnia wszystkie refresh tokeny użytkownika
+ */
+export async function revokeAllUserRefreshTokens(userId: number): Promise<void> {
+    if (!userId) {
+        throw new Error('User ID is required')
+    }
+
+    const db = useDatabase()
+
+    await db
+        .update(refreshTokens)
+        .set({
+            isRevoked: true,
+            lastUsedAt: new Date()
+        })
+        .where(eq(refreshTokens.userId, userId))
+}
+
+/**
+ * Czyści wygasłe refresh tokeny
+ */
+export async function cleanupExpiredRefreshTokens(): Promise<void> {
+    const db = useDatabase()
+
+    await db
+        .delete(refreshTokens)
+        .where(lt(refreshTokens.expiresAt, new Date()))
+}
+
+/**
+ * Pobiera aktywne refresh tokeny użytkownika
+ */
+export async function getUserRefreshTokens(userId: number): Promise<RefreshToken[]> {
+    if (!userId) {
+        throw new Error('User ID is required')
+    }
+
+    const db = useDatabase()
+
+    return await db.query.refreshTokens.findMany({
+        where: and(
+            eq(refreshTokens.userId, userId),
+            eq(refreshTokens.isRevoked, false),
+            lt(refreshTokens.expiresAt, new Date())
+        ),
+        orderBy: (refreshTokens, { desc }) => [desc(refreshTokens.lastUsedAt)]
+    })
+}
+
+/**
+ * Unieważnia refresh token na konkretnym urządzeniu
+ */
+export async function revokeDeviceRefreshToken(userId: number, deviceId: string): Promise<void> {
+    if (!userId || !deviceId) {
+        throw new Error('User ID and Device ID are required')
+    }
+
+    const db = useDatabase()
+
+    await db
+        .update(refreshTokens)
+        .set({
+            isRevoked: true,
+            lastUsedAt: new Date()
+        })
+        .where(and(
+            eq(refreshTokens.userId, userId),
+            eq(refreshTokens.deviceId, deviceId)
+        ))
+}
