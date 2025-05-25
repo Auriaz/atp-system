@@ -1,5 +1,5 @@
 import { refreshTokens } from '../../database/schema'
-import { eq, and, lt } from 'drizzle-orm'
+import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
@@ -67,13 +67,12 @@ export async function verifyRefreshToken(token: string): Promise<any | null> {
 
     const hashedToken = await hashRefreshToken(token)
     const db = useDatabase()
-
     const refreshToken = await db.query.refreshTokens.findFirst({
         where: and(
             eq(refreshTokens.token, hashedToken),
             eq(refreshTokens.isRevoked, false),
-            // Token nie wygasł
-            lt(refreshTokens.expiresAt, new Date())
+            // Token nie wygasł - data wygaśnięcia jest większa od teraz
+            gt(refreshTokens.expiresAt, new Date())
         ),
         with: {
             user: {
@@ -163,7 +162,8 @@ export async function getUserRefreshTokens(userId: number): Promise<RefreshToken
         where: and(
             eq(refreshTokens.userId, userId),
             eq(refreshTokens.isRevoked, false),
-            lt(refreshTokens.expiresAt, new Date())
+            // Token nie wygasł - data wygaśnięcia jest większa od teraz
+            gt(refreshTokens.expiresAt, new Date())
         ),
         orderBy: (refreshTokens, { desc }) => [desc(refreshTokens.lastUsedAt)]
     })
