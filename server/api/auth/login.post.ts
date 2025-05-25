@@ -10,8 +10,27 @@ export default defineEventHandler(async (event) => {
       'Cache-Control': 'no-store, max-age=0, must-revalidate',
       'Pragma': 'no-cache'
     })
+
     // Sprawdź czy użytkownik istnieje
     const user = await authenticateUser(body)
+
+    // Pobierz informacje o urządzeniu
+    const userAgent = event.node.req.headers['user-agent'] || 'unknown'
+    const ipAddress = getClientIp(event) || undefined
+    const deviceId = generateDeviceId(userAgent, ipAddress)
+
+    // Pobierz role użytkownika
+    const userRoles = await getUserRoleSlugs(user.id)
+
+    // Generuj parę tokenów (access + refresh)
+    const tokenPair = await generateTokenPair(
+      user.id,
+      user.email,
+      userRoles,
+      deviceId,
+      userAgent,
+      ipAddress
+    )
 
     // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
     // Dla "zapamiętaj mnie" ustaw na 30 dni
@@ -19,11 +38,19 @@ export default defineEventHandler(async (event) => {
       ? 30 * 24 * 60 * 60 * 1000 // 30 dni w milisekundach
       : 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
 
+    // Ustaw refresh token w HTTPOnly cookie
+    setCookie(event, 'refresh-token', tokenPair.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: body.rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60, // 30 dni lub 1 dzień
+      path: '/'
+    })
 
     // Utwórz sesję z odpowiednim czasem wygaśnięcia
     await setUserSession(event, {
       user,
-      roles: await getUserRoleSlugs(user.id),
+      roles: userRoles,
       loggedInAt: Date.now(),
       expiresAt: Date.now() + sessionDuration,
       rememberMe: body.rememberMe || false
@@ -47,8 +74,13 @@ export default defineEventHandler(async (event) => {
       .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
-      null,
-      { title: 'Login successful', description: 'You have been successfully logged in' }
+      {
+        accessToken: tokenPair.accessToken,
+        expiresIn: 15 * 60 // 15 minut w sekundach
+      },
+      {
+        description: 'You have been successfully logged in'
+      }
     )
     // kod logowania
   } catch (error) {

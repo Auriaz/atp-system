@@ -1,5 +1,6 @@
 import { useValidatedBody } from 'h3-zod'
-import { users } from '~~/server/database/schema'
+import { eq } from 'drizzle-orm'
+
 
 export default defineEventHandler(async (event) => {
   try {
@@ -52,16 +53,16 @@ export default defineEventHandler(async (event) => {
         updatedAt: new Date()
       })
       .returning({
-        id: users.id,
-        password: users.password,
-        username: users.username,
-        email: users.email,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        bio: users.bio,
-        avatarUrl: users.avatarUrl,
-        status: users.status,
-        createdAt: users.createdAt,
+        id: tables.users.id,
+        password: tables.users.password,
+        username: tables.users.username,
+        email: tables.users.email,
+        firstName: tables.users.firstName,
+        lastName: tables.users.lastName,
+        bio: tables.users.bio,
+        avatarUrl: tables.users.avatarUrl,
+        status: tables.users.status,
+        createdAt: tables.users.createdAt,
       })
       .execute()
 
@@ -76,37 +77,44 @@ export default defineEventHandler(async (event) => {
       ...newUser[0],
       status: newUser[0].status || 'active' // Provide a default value when status is null
     }
-
-
-    // Przypisanie domyślnej roli
+    // Assign default user role
     await assignDefaultUserRole(user.id)
 
+    // Get user roles for JWT payload
+    const userRoles = await getUserRoleSlugs(user.id)    // Generate device ID for tracking
+    const userAgent = event.node.req.headers['user-agent'] || 'unknown'
+    const ipAddress = getClientIp(event) || undefined
+    const deviceId = generateDeviceId(userAgent, ipAddress)    // Generate JWT token pair
+    const { accessToken, refreshToken } = await generateTokenPair(
+      user.id,
+      user.email,
+      userRoles,
+      deviceId,
+      userAgent,
+      ipAddress)
 
-    // Oblicz czas wygaśnięcia sesji - standardowo 24 godziny
-    // Dla "zapamiętaj mnie" ustaw na 30 dni
-    const sessionDuration = 24 * 60 * 60 * 1000;     // 24 godziny w milisekundach
+    // Set refresh token as HTTPOnly cookie
+    setCookie(event, 'refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+      path: '/'
+    })    // Set security headers
+    setHeader(event, 'Cache-Control', 'no-cache, no-store, must-revalidate')
+    setHeader(event, 'Pragma', 'no-cache')
 
-
-    // Utwórz sesję z odpowiednim czasem wygaśnięcia
-    await setUserSession(event, {
-      user,
-      roles: await getUserRoleSlugs(user.id),
-      loggedInAt: Date.now(),
-      expiresAt: Date.now() + sessionDuration,
-      rememberMe: false
-    })
-
-    // Dodaj rejestracje użytkownika do aktywności użytkownika
+    // Log user registration activity
     await useDatabase()
       .insert(tables.userActivities)
       .values({
         userId: newUser[0].id,
         action: 'register',
-        ip: getClientIp(event),
-        userAgent: event.node.req.headers['user-agent'] || 'unknown',
+        ip: ipAddress,
+        userAgent,
         details: JSON.stringify({
-          rememberMe: false,
-          platform: getPlatformFromUserAgent(event.node.req.headers['user-agent'])
+          deviceId,
+          platform: getPlatformFromUserAgent(userAgent)
         }),
         createdAt: new Date()
       })
@@ -114,9 +122,22 @@ export default defineEventHandler(async (event) => {
       .catch(error => console.error('Failed to log user activity:', error))
 
     return createApiResponse(
-      null,
       {
-        title: 'Registration successful',
+        accessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          bio: user.bio,
+          avatarUrl: user.avatarUrl,
+          status: user.status,
+          createdAt: user.createdAt
+        },
+        roles: userRoles
+      },
+      {
         description: 'Your account has been created successfully.'
       }
     )

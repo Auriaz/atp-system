@@ -1,6 +1,7 @@
 import { refreshTokens } from '../../database/schema'
 import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
+import { randomBytes, createHash } from 'crypto'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
 type NewRefreshToken = typeof refreshTokens.$inferInsert
@@ -9,7 +10,6 @@ type NewRefreshToken = typeof refreshTokens.$inferInsert
  * Generuje bezpieczny refresh token
  */
 export function generateRefreshToken(): string {
-    const { randomBytes } = require('crypto')
     return randomBytes(32).toString('hex')
 }
 
@@ -17,7 +17,6 @@ export function generateRefreshToken(): string {
  * Hash refresh token przed zapisem do bazy
  */
 export async function hashRefreshToken(token: string): Promise<string> {
-    const { createHash } = require('crypto')
     return createHash('sha256').update(token).digest('hex')
 }
 

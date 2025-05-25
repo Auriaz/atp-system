@@ -4,6 +4,8 @@ import {
     revokeRefreshToken
 } from '../repositories/refresh_tokens.repository'
 import { getUserRoleSlugs } from '../repositories/user_roles.repositories'
+import { createHash } from 'crypto'
+import jwt from 'jsonwebtoken'
 
 /**
  * Service dla zarządzania JWT tokenami (access tokeny)
@@ -26,8 +28,6 @@ interface TokenPair {
  * Generuje access token (JWT)
  */
 export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
-    const jwt = require('jsonwebtoken')
-
     const secretKey = process.env.NUXT_JWT_SECRET || 'your-secret-key-change-in-production'
 
     // Access token wygasa po 15 minutach
@@ -43,7 +43,6 @@ export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): s
  */
 export function verifyAccessToken(token: string): JWTPayload | null {
     try {
-        const jwt = require('jsonwebtoken')
         const secretKey = process.env.NUXT_JWT_SECRET || 'your-secret-key-change-in-production'
 
         const decoded = jwt.verify(token, secretKey, {
@@ -149,7 +148,6 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
  * Generuje device ID na podstawie User-Agent i IP
  */
 export function generateDeviceId(userAgent?: string, ipAddress?: string): string {
-    const crypto = require('crypto')
     const data = `${userAgent || 'unknown'}-${ipAddress || 'unknown'}-${Date.now()}`
-    return crypto.createHash('md5').update(data).digest('hex')
+    return createHash('md5').update(data).digest('hex')
 }
