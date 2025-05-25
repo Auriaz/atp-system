@@ -5,8 +5,8 @@
 ⏳ Migracja bazy danych dla nowej tabeli
 ⏳ Aktualizacja endpointów /api/auth/login i /api/auth/register
 ⏳ Nowy endpoint /api/auth/refresh do odnawiania tokenów
-
 ⏳ Middleware do walidacji tokenów dostępu
+
 Frontend:
 
 ⏳ Automatyczne odświeżanie tokenów w composables
