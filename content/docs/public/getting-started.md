@@ -22,7 +22,7 @@ Przed rozpoczęciem korzystania z ATP System, upewnij się, że posiadasz:
 
 ## Rejestracja konta
 
-1. Odwiedź stronę [ATP System](https://atp-system.com) lub uruchom aplikację mobilną.
+1. Odwiedź stronę [ATP System](https://atp-system.nuxt.dev) lub uruchom aplikację mobilną.
 2. Kliknij przycisk **Zarejestruj się** w prawym górnym rogu ekranu.
 3. Wypełnij formularz rejestracyjny:
    - Imię i nazwisko

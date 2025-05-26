@@ -1,3 +1,11 @@
+---
+category: 'Development'
+version: '1.0.0'
+requiredRole: ['admin']
+icon: 'i-heroicons-cube'
+createdAt: '2025-05-26'
+---
+
 # 📋 Dokumentacja ATP System - Podsumowanie aktualizacji
 
 ## 🎯 Zakres aktualizacji dokumentacji

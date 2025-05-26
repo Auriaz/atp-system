@@ -17,6 +17,12 @@ const testFiles = [
     'test-final-validation.cjs'
 ];
 
+// Session management test files
+const sessionTestFiles = [
+    'session-management/test-migration.js',
+    'session-management/validate-session-management.cjs'
+];
+
 console.log('🧪 Running JWT Authentication Test Suite...\n');
 
 const testsDir = path.join(__dirname);
@@ -41,10 +47,57 @@ for (const testFile of testFiles) {
     }
 }
 
+// Running session management tests
+for (const testFile of sessionTestFiles) {
+    const testPath = path.join(testsDir, testFile);
+
+    try {
+        console.log(`\n${'='.repeat(60)}`);
+        console.log(`🔄 Running Session Management Test: ${testFile}`);
+        console.log(`${'='.repeat(60)}`);
+
+        execSync(`node "${testPath}"`, {
+            stdio: 'inherit',
+            cwd: path.join(__dirname, '..')
+        });
+
+        console.log(`\n✅ ${testFile} completed successfully`);
+
+    } catch (error) {
+        console.error(`\n❌ ${testFile} failed:`, error.message);
+    }
+}
+
 console.log(`\n${'='.repeat(60)}`);
-console.log('🎯 Test Suite Complete!');
+console.log('🔄 Running Session Management Tests...');
 console.log(`${'='.repeat(60)}`);
-console.log('\n📱 For browser testing, start the dev server and access:');
-console.log('   File: tests/test-auth.html');
-console.log('   Note: Serve this file through a local server');
-console.log('\n🚀 All JWT authentication tests executed!');
+
+// Run session management tests
+for (const testFile of sessionTestFiles) {
+    const testPath = path.join(testsDir, testFile);
+
+    try {
+        console.log(`\n${'='.repeat(40)}`);
+        console.log(`🔄 Running: ${testFile}`);
+        console.log(`${'='.repeat(40)}`);
+
+        execSync(`node "${testPath}"`, {
+            stdio: 'inherit',
+            cwd: path.join(__dirname, '..')
+        });
+
+        console.log(`\n✅ ${testFile} completed successfully`);
+
+    } catch (error) {
+        console.error(`\n❌ ${testFile} failed:`, error.message);
+    }
+}
+
+console.log(`\n${'='.repeat(60)}`);
+console.log('🎯 Complete Test Suite Finished!');
+console.log(`${'='.repeat(60)}`);
+console.log('\n📱 For browser testing, access:');
+console.log('   JWT Auth: tests/test-auth.html');
+console.log('   Session Management: tests/session-management/test-interface.html');
+console.log('   Live App: http://localhost:3002/dashboard/sessions');
+console.log('\n🚀 All authentication and session management tests executed!');

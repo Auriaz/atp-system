@@ -2,6 +2,7 @@ import { refreshTokens } from '../../database/schema'
 import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
 import { randomBytes, createHash } from 'crypto'
+import { sessionManagementService } from '../services/session-management.service'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
 type NewRefreshToken = typeof refreshTokens.$inferInsert
@@ -21,14 +22,14 @@ export async function hashRefreshToken(token: string): Promise<string> {
 }
 
 /**
- * Tworzy nowy refresh token
+ * Tworzy nowy refresh token z obsługą zarządzania sesjami
  */
 export async function createRefreshToken(
     userId: number,
     deviceId?: string,
     userAgent?: string,
     ipAddress?: string
-): Promise<{ token: string; hashedToken: string }> {
+): Promise<{ token: string; hashedToken: string; id: number }> {
     if (!userId) {
         throw new Error('User ID is required')
     }
@@ -36,24 +37,32 @@ export async function createRefreshToken(
     const token = generateRefreshToken()
     const hashedToken = await hashRefreshToken(token)
 
+    // Generuj device ID jeśli nie podano
+    const finalDeviceId = deviceId || sessionManagementService.generateDeviceId(userAgent || '', ipAddress || '')
+
+    // Parsuj nazwę urządzenia
+    const deviceName = sessionManagementService.parseDeviceName(userAgent || '')
+
     // Ustawienie czasu wygaśnięcia na 30 dni
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 30)
 
     const db = useDatabase()
 
-    await db.insert(refreshTokens).values({
+    const result = await db.insert(refreshTokens).values({
         userId,
         token: hashedToken,
-        deviceId,
+        deviceId: finalDeviceId,
+        deviceName,
         userAgent,
         ipAddress,
+        isCurrent: false, // Zostanie zaktualizowane przez session management service
         expiresAt,
         createdAt: new Date(),
         lastUsedAt: new Date()
-    })
+    }).returning({ id: refreshTokens.id })
 
-    return { token, hashedToken }
+    return { token, hashedToken, id: result[0].id }
 }
 
 /**

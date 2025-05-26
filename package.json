@@ -67,6 +67,7 @@
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.3.0",
     "tailwindcss": "^4.1.7",
+    "ua-parser-js": "^2.0.3",
     "ufo": "^1.6.1",
     "uuid": "^11.1.0",
     "valibot": "1.0.0-rc.4",

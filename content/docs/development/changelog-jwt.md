@@ -2,7 +2,7 @@
 title: 'Changelog JWT Authentication'
 description: 'Historia zmian systemu uwierzytelniania JWT w ATP System'
 category: 'Development'
-version: '2.0.0'
+version: '1.0.0'
 requiredRole: ['admin', 'manager']
 icon: 'i-heroicons-document-text'
 createdAt: '2025-05-26'

@@ -1,0 +1,802 @@
+---
+title: 'FAQ dla Użytkowników'
+description: 'Najczęściej zadawane pytania przez użytkowników systemu ATP - rejestracja, nawigacja, zarządzanie plikami, komunikacja i rozwiązywanie problemów'
+version: '1.0.0'
+lastUpdated: '2025-05-26'
+author: 'ATP System Team'
+category: 'user'
+tags: ['faq', 'user', 'pomoc', 'rejestracja', 'nawigacja', 'pliki', 'komunikacja', 'problemy']
+navigation:
+  title: 'FAQ'
+  icon: 'heroicons:question-mark-circle'
+  order: 2
+  badge: 'Pomoc'
+permissions:
+  view: ['user', 'athlete', 'coach', 'editor', 'manager', 'admin']
+  edit: ['admin']
+---
+
+# FAQ dla Użytkowników
+
+::alert{type="info"}
+💡 **Wskazówka**: Użyj Ctrl+F (Cmd+F na Mac) aby szybko znaleźć odpowiedź na konkretne pytanie.
+::
+
+## 🚀 Pierwsze Kroki
+
+### 1. Jak założyć konto w systemie ATP?
+
+::steps
+1. Przejdź na stronę **[atp-system.com](https://atp-system.com)**
+2. Kliknij przycisk **"Zarejestruj się"**
+3. Wypełnij formularz rejestracyjny:
+   - Imię i nazwisko
+   - Adres e-mail
+   - Hasło (min. 8 znaków)
+   - Typ konta (sportowiec, trener, itp.)
+4. Potwierdź zgodę na regulamin
+5. Kliknij **"Utwórz konto"**
+6. Sprawdź e-mail i **potwierdź adres**
+7. Uzupełnij swój **profil**
+::
+
+::alert{type="success"}
+✅ **Gratulacje!** Twoje konto zostało utworzone. Możesz teraz korzystać ze wszystkich funkcji systemu ATP.
+::
+
+### 2. Jak zresetować hasło?
+
+**Jeśli pamiętasz obecne hasło:**
+1. Zaloguj się do swojego konta
+2. Przejdź do **Ustawienia > Bezpieczeństwo**
+3. Kliknij **"Zmień hasło"**
+4. Wpisz obecne hasło i nowe hasło
+5. Potwierdź zmianę
+
+**Jeśli zapomniałeś hasła:**
+1. Na stronie logowania kliknij **"Zapomniałem hasła"**
+2. Wpisz swój adres e-mail
+3. Sprawdź e-mail i kliknij link resetujący
+4. Ustaw nowe hasło
+5. Zaloguj się używając nowego hasła
+
+### 3. Jak uzupełnić swój profil?
+
+**Podstawowe informacje:**
+- Zdjęcie profilowe
+- Data urodzenia
+- Płeć
+- Wzrost i waga
+- Lokalizacja
+
+**Cele treningowe:**
+- Cel główny (masa, redukcja, siła)
+- Poziom zaawansowania
+- Dostępny czas na trening
+- Preferencje treningowe
+
+**Informacje zdrowotne:**
+- Kontuzje i ograniczenia
+- Choroby przewlekłe
+- Przyjmowane leki
+- Alergie
+
+::alert{type="warning"}
+⚠️ **Prywatność**: Informacje zdrowotne są widoczne tylko dla Ciebie i przypisanego trenera.
+::
+
+### 4. Jak wybrać plan i dokonać płatności?
+
+::card-grid
+:::card{title="Plan Podstawowy" icon="heroicons:star"}
+- **Cena**: 49 zł/miesiąc
+- Podstawowe plany treningowe
+- Tracking postępów
+- Wsparcie e-mail
+:::
+
+:::card{title="Plan Premium" icon="heroicons:sparkles"}
+- **Cena**: 99 zł/miesiąc
+- Personalizowane treningi
+- Analiza zaawansowana
+- Konsultacje video
+:::
+
+:::card{title="Plan Pro" icon="heroicons:bolt"}
+- **Cena**: 199 zł/miesiąc
+- Dedykowany trener
+- Plan żywieniowy
+- Wsparcie 24/7
+:::
+::
+
+**Metody płatności:**
+- Karta kredytowa/debetowa
+- BLIK
+- Przelew bankowy
+- PayPal
+
+## 🧭 Nawigacja po Systemie
+
+### 5. Jak korzystać z głównego dashboard?
+
+**Sekcje dashboard:**
+
+::card-grid
+:::card{title="Przegląd" icon="heroicons:home"}
+- Podsumowanie aktywności
+- Najbliższe treningi
+- Postępy w celach
+- Powiadomienia
+:::
+
+:::card{title="Treningi" icon="heroicons:bolt"}
+- Plan treningowy
+- Historia treningów
+- Statystyki wydajności
+- Kalendarz sesji
+:::
+
+:::card{title="Dieta" icon="heroicons:heart"}
+- Plan żywieniowy
+- Tracking kalorii
+- Przepisy
+- Suplementacja
+:::
+
+:::card{title="Postępy" icon="heroicons:chart-bar"}
+- Pomiary ciała
+- Zdjęcia progress
+- Wykresy i statystyki
+- Raporty miesięczne
+:::
+::
+
+### 6. Jak personalizować interfejs?
+
+**Opcje personalizacji:**
+
+- **Motyw**: jasny, ciemny, automatyczny
+- **Język**: polski, angielski
+- **Jednostki**: metryczne, imperialne
+- **Powiadomienia**: e-mail, push, SMS
+- **Layout**: układ kafelków na dashboard
+- **Shortcuts**: skróty do ulubionych funkcji
+
+**Dostosowanie dashboard:**
+1. Kliknij ikonę **"Ustawienia"** w prawym górnym rogu
+2. Wybierz **"Personalizacja"**
+3. Przeciągnij kafelki aby zmienić układ
+4. Włącz/wyłącz sekcje według preferencji
+5. Zapisz zmiany
+
+### 7. Jak używać wyszukiwarki?
+
+**Funkcje wyszukiwania:**
+
+::alert{type="info"}
+🔍 **Wskazówki wyszukiwania**:
+- Używaj słów kluczowych: "trening klatki", "przepis białkowy"
+- Filtry: kategoria, data, autor
+- Sortowanie: najnowsze, najpopularniejsze, najlepiej oceniane
+- Zapisane wyszukiwania: ulubione zapytania
+::
+
+**Skróty klawiszowe:**
+- `Ctrl + K` - otwórz szybkie wyszukiwanie
+- `Ctrl + /` - focus na wyszukiwarkę
+- `Esc` - zamknij wyszukiwanie
+
+### 8. Jak zarządzać powiadomieniami?
+
+**Typy powiadomień:**
+
+- **Treningi**: przypomnienia o sesjach, nowe plany
+- **Dieta**: czas posiłków, tracking kalorii
+- **Postępy**: nowe pomiary, osiągnięcia
+- **Komunikacja**: wiadomości od trenera
+- **System**: aktualizacje, maintenance
+
+**Ustawienia powiadomień:**
+1. **Ustawienia > Powiadomienia**
+2. Wybierz kanały: e-mail, push, SMS
+3. Ustaw częstotliwość: natychmiast, dziennie, tygodniowo
+4. **Godziny ciszy**: kiedy nie otrzymywać powiadomień
+5. **Priorytety**: które powiadomienia są najważniejsze
+
+## 📱 Aplikacja Mobilna
+
+### 9. Jak pobrać i zainstalować aplikację?
+
+**iOS (iPhone/iPad):**
+1. Otwórz **App Store**
+2. Wyszukaj **"ATP System"**
+3. Kliknij **"Pobierz"**
+4. Zaloguj się swoimi danymi
+
+**Android:**
+1. Otwórz **Google Play Store**
+2. Wyszukaj **"ATP System"**
+3. Kliknij **"Zainstaluj"**
+4. Zaloguj się swoimi danymi
+
+**Wymagania systemowe:**
+- iOS 13.0+ lub Android 8.0+
+- 100MB wolnej przestrzeni
+- Połączenie internetowe
+
+### 10. Jak synchronizować dane między urządzeniami?
+
+**Automatyczna synchronizacja:**
+- Wszystkie dane są automatycznie synchronizowane
+- Zmiany widoczne natychmiast na wszystkich urządzeniach
+- Offline tracking z synchronizacją po połączeniu
+
+**Ręczna synchronizacja:**
+1. Pociągnij w dół na głównym ekranie
+2. Lub przejdź do **Ustawienia > Synchronizacja**
+3. Kliknij **"Synchronizuj teraz"**
+
+::alert{type="warning"}
+⚠️ **Uwaga**: Podczas pierwszego logowania synchronizacja może potrwać kilka minut.
+::
+
+### 11. Jak korzystać z aplikacji offline?
+
+**Funkcje offline:**
+- Przeglądanie planów treningowych
+- Zapisywanie wykonanych ćwiczeń
+- Tracking postępów
+- Przeglądanie historii
+
+**Dane synchronizowane po połączeniu:**
+- Nowe treningi
+- Wiadomości od trenera
+- Aktualizacje planów
+- Dane społeczności
+
+## 📁 Zarządzanie Plikami
+
+### 12. Jak dodawać zdjęcia i dokumenty?
+
+**Upload plików:**
+
+::steps
+1. Przejdź do sekcji **"Moje Pliki"**
+2. Kliknij **"Dodaj pliki"**
+3. Wybierz pliki z urządzenia lub przeciągnij je
+4. Uzupełnij opis i tagi
+5. Wybierz widoczność (prywatne/udostępnione)
+6. Kliknij **"Upload"**
+::
+
+**Obsługiwane formaty:**
+- **Zdjęcia**: JPG, PNG, HEIC (max 10MB)
+- **Dokumenty**: PDF, DOC, DOCX (max 5MB)
+- **Video**: MP4, MOV (max 50MB)
+- **Audio**: MP3, WAV (max 10MB)
+
+### 13. Jak organizować pliki?
+
+**System organizacji:**
+
+::card-grid
+:::card{title="Foldery" icon="heroicons:folder"}
+- Progress Photos
+- Medical Documents
+- Training Videos
+- Meal Prep
+:::
+
+:::card{title="Tagi" icon="heroicons:tag"}
+- #before-after
+- #meal-prep
+- #workout-form
+- #medical
+:::
+
+:::card{title="Kolekcje" icon="heroicons:rectangle-stack"}
+- Transformacja 2024
+- Przygotowania do zawodów
+- Rehabilitacja
+:::
+
+:::card{title="Udostępnianie" icon="heroicons:share"}
+- Z trenerem
+- Z dietetykiem
+- Publiczne
+- Prywatne
+:::
+::
+
+### 14. Jak edytować zdjęcia w systemie?
+
+**Podstawowe edycje:**
+
+- **Przycinanie**: crop do różnych proporcji
+- **Obroty**: 90°, 180°, 270°
+- **Filtry**: poprawienie kontrastu, jasności
+- **Adnotacje**: dodawanie tekstu i strzałek
+- **Porównania**: zestawienie zdjęć before/after
+
+**Advanced editing:**
+- **Background removal**: usuwanie tła
+- **Body measurements**: zaznaczanie części ciała
+- **Progress overlay**: nakładki z datami i wagą
+
+## 💬 Komunikacja
+
+### 15. Jak skontaktować się z trenerem?
+
+**Kanały komunikacji:**
+
+::card-grid
+:::card{title="Chat" icon="heroicons:chat-bubble-left-right"}
+- Natychmiastowe wiadomości
+- Udostępnianie plików
+- Voice messages
+- Video calls
+:::
+
+:::card{title="Email" icon="heroicons:envelope"}
+- Formalne komunikaty
+- Szczegółowe raporty
+- Dokumenty i załączniki
+:::
+
+:::card{title="Konsultacje" icon="heroicons:video-camera"}
+- Zaplanowane spotkania
+- Screen sharing
+- Nagrywanie sesji
+:::
+
+:::card{title="Forum" icon="heroicons:users"}
+- Pytania publiczne
+- Wymiana doświadczeń
+- Społeczność ATP
+:::
+::
+
+### 16. Jak planować konsultacje?
+
+**Rezerwacja konsultacji:**
+
+::steps
+1. Przejdź do **"Konsultacje"**
+2. Sprawdź dostępność trenera
+3. Wybierz **datę i godzinę**
+4. Określ **temat spotkania**
+5. Wybierz **typ**: video call, osobiste, telefoniczne
+6. Potwierdź rezerwację
+7. Otrzymasz przypomnienie 24h i 1h przed spotkaniem
+::
+
+**Przygotowanie do konsultacji:**
+- Lista pytań do trenera
+- Aktualne pomiary i zdjęcia
+- Historia treningów z ostatniego tygodnia
+- Notatki o samopoczuciu i problemach
+
+### 17. Jak dołączyć do grup i społeczności?
+
+**Typy grup:**
+
+- **Grupy celowe**: redukcja, masa, siła
+- **Grupy wiekowe**: 20-30, 30-40, 40+
+- **Grupy lokalne**: miasto, region
+- **Grupy specjalistyczne**: crossfit, bieganie, kulturystyka
+
+**Dołączanie do grup:**
+1. **Społeczność > Grupy**
+2. **Przeglądaj** dostępne grupy
+3. **Filtruj** według zainteresowań
+4. Kliknij **"Dołącz"**
+5. Niektóre grupy wymagają **zatwierdzenia**
+
+## 📊 Tracking i Progress
+
+### 18. Jak śledzić postępy treningowe?
+
+**Metryki treningowe:**
+
+::card-grid
+:::card{title="Objętość treningu" icon="heroicons:chart-bar"}
+- Liczba serii i powtórzeń
+- Całkowity tonnage
+- Czas treningu
+- Spalonych kalorii
+:::
+
+:::card{title="Siła" icon="heroicons:bolt"}
+- Maksymalne obciążenia (1RM)
+- Progresja w ciężarach
+- Względna siła (kg/waga ciała)
+- PRs (personal records)
+:::
+
+:::card{title="Wydolność" icon="heroicons:heart"}
+- Tętno podczas treningu
+- VO2 max
+- Czas regeneracji
+- HRV (Heart Rate Variability)
+:::
+
+:::card{title="Kompozycja ciała" icon="heroicons:scale"}
+- Waga ciała
+- Procent tkanki tłuszczowej
+- Masa mięśniowa
+- Obwody ciała
+:::
+::
+
+### 19. Jak robić pomiary ciała?
+
+**Standardowe pomiary:**
+
+::steps
+1. **Rano**, na czczo, po toalecie
+2. **Minimalna odzież** (bielizna)
+3. **Stopa równoległa**, ciężar rozłożony równomiernie
+4. **Taśma miernicza** równolegle do podłogi
+5. **Bez napinania** - lekki kontakt z ciałem
+6. **Zapis w aplikacji** natychmiast po pomiarze
+::
+
+**Kluczowe obwody:**
+- **Szyja**: najwęższe miejsce
+- **Klatka**: na wysokości brodawek
+- **Talia**: najwęższe miejsce
+- **Biodra**: najszersze miejsce
+- **Udo**: 10cm powyżej kolana
+- **Ramię**: najszersze miejsce bicepsa
+
+### 20. Jak interpretować wykresy postępów?
+
+**Typy wykresów:**
+
+- **Trend lines**: ogólny kierunek zmian
+- **Moving averages**: uśrednione wartości
+- **Progress photos overlay**: porównanie zdjęć w czasie
+- **Performance metrics**: relative strength, endurance
+
+**Interpretacja:**
+- **Krótkoterminowe fluktuacje** są normalne
+- **Trend długoterminowy** jest ważniejszy
+- **Plateaus** mogą oznaczać potrzebę zmiany planu
+- **Regresja** może wynikać ze stresu lub przemęczenia
+
+## 🍎 Żywienie i Dieta
+
+### 21. Jak tracking kalorii i makroskładników?
+
+**Dodawanie posiłków:**
+
+::steps
+1. Otwórz **"Dziennik żywieniowy"**
+2. Kliknij **"Dodaj posiłek"**
+3. Wyszukaj składniki w bazie danych
+4. Ustaw **porcje** i **gramaturę**
+5. Sprawdź **kalorie i makros**
+6. **Zapisz posiłek**
+::
+
+**Scanning produktów:**
+- **Skanuj kod kreskowy** produktu
+- **Automatyczne rozpoznawanie** składników
+- **Quick add** dla często używanych produktów
+- **Custom recipes** dla własnych przepisów
+
+### 22. Jak tworzyć plany żywieniowe?
+
+**Tworzenie planu:**
+
+1. **Cel kaloryczny** na podstawie BMR i aktywności
+2. **Rozkład makros**: białko, węglowodany, tłuszcze
+3. **Liczba posiłków**: 3-6 dziennie
+4. **Timing**: przed/po treningu
+5. **Preferencje**: alergie, diety specjalne
+6. **Budget**: koszt dziennych posiłków
+
+**Plan standardowy (2000 kcal):**
+- **Białko**: 150g (30%)
+- **Węglowodany**: 200g (40%)
+- **Tłuszcze**: 67g (30%)
+
+### 23. Jak meal prep i planowanie posiłków?
+
+**Meal prep strategy:**
+
+::card-grid
+:::card{title="Niedzielne Przygotowanie" icon="heroicons:calendar"}
+- Planning menu na tydzień
+- Zakupy groceries
+- Batch cooking
+- Portion containers
+:::
+
+:::card{title="Przygotowanie Składników" icon="heroicons:scissors"}
+- Mycie i krojenie warzyw
+- Gotowanie zbóż i kasz
+- Pieczenie/grillowanie mięs
+- Przygotowanie sosów
+:::
+
+:::card{title="Storage Solutions" icon="heroicons:archive-box"}
+- Glass containers
+- Freezer bags
+- Labeling system
+- Portion control
+:::
+
+:::card{title="Quick Assembly" icon="heroicons:bolt"}
+- 5-minute meals
+- Grab-and-go options
+- Healthy snacks
+- Emergency meals
+:::
+::
+
+## 🔧 Rozwiązywanie Problemów
+
+### 24. Co robić gdy aplikacja działa wolno?
+
+**Podstawowe rozwiązania:**
+
+::steps
+1. **Zamknij i otwórz** aplikację ponownie
+2. **Sprawdź połączenie** internetowe
+3. **Wyczyść cache** aplikacji
+4. **Zaktualizuj** do najnowszej wersji
+5. **Restartuj** urządzenie
+6. **Sprawdź dostępną pamięć** na urządzeniu
+::
+
+**Optymalizacja wydajności:**
+- **Usuń niepotrzebne pliki** z galerii
+- **Wyloguj się i zaloguj** ponownie
+- **Sprawdź ustawienia jakości** zdjęć/video
+- **Ogranicz działające aplikacje** w tle
+
+### 25. Jak odzyskać utracone dane?
+
+**Automatyczne backup:**
+- **Codzienne kopie zapasowe** wszystkich danych
+- **Synchronizacja w chmurze** w czasie rzeczywistym
+- **Wersjonowanie** - możliwość powrotu do starszych wersji
+- **Redundancja** - dane przechowywane w wielu lokalizacjach
+
+**Odzyskiwanie danych:**
+1. **Ustawienia > Backup & Restore**
+2. Wybierz **datę backup** do przywrócenia
+3. **Potwierdź operację** odzyskiwania
+4. **Restart aplikacji** po zakończeniu procesu
+
+### 26. Co robić przy problemach z płatnością?
+
+**Sprawdź status płatności:**
+
+1. **Konto > Billing**
+2. Sprawdź **status subskrypcji**
+3. Sprawdź **metody płatności**
+4. Sprawdź **historie transakcji**
+
+**Typowe problemy:**
+- **Karta wygasła**: zaktualizuj dane karty
+- **Niewystarczające środki**: doładuj konto
+- **Blokada banku**: skontaktuj się z bankiem
+- **Problem z PayPal**: sprawdź konto PayPal
+
+::alert{type="info"}
+💳 **Billing Support**: W przypadku problemów z płatnościami skontaktuj się z billing@atp-system.com
+::
+
+### 27. Jak rozwiązać problemy z logowaniem?
+
+**Problemy z logowaniem:**
+
+::card-grid
+:::card{title="Zapomniałem hasła" icon="heroicons:key"}
+1. Kliknij "Zapomniałem hasła"
+2. Wpisz adres e-mail
+3. Sprawdź inbox i spam
+4. Ustaw nowe hasło
+:::
+
+:::card{title="Błędny email/hasło" icon="heroicons:exclamation-triangle"}
+1. Sprawdź pisownię emaila
+2. Sprawdź caps lock
+3. Spróbuj copy-paste hasła
+4. Reset hasła jeśli potrzeba
+:::
+
+:::card{title="Konto zablokowane" icon="heroicons:lock-closed"}
+1. Sprawdź email o blokadzie
+2. Skontaktuj się z supportem
+3. Potwierdź tożsamość
+4. Czekaj na odblokowanie
+:::
+
+:::card{title="2FA nie działa" icon="heroicons:device-phone-mobile"}
+1. Sprawdź czas na urządzeniu
+2. Użyj backup codes
+3. Skontaktuj się z supportem
+4. Reset 2FA settings
+:::
+::
+
+## 🔐 Bezpieczeństwo
+
+### 28. Jak zabezpieczyć swoje konto?
+
+**Security checklist:**
+
+::steps
+1. **Silne hasło**: min. 12 znaków, mix liter/cyfr/symboli
+2. **Dwuskładnikowe uwierzytelnianie** (2FA)
+3. **Regularna zmiana hasła** co 6 miesięcy
+4. **Unikaj publicznych WiFi** dla logowania
+5. **Wylogowuj się** z urządzeń publicznych
+6. **Sprawdź aktywne sesje** regularnie
+::
+
+**Monitorowanie bezpieczeństwa:**
+- **Email alerts** o nowych logowaniach
+- **Lista aktywnych urządzeń** w ustawieniach
+- **Historia logowań** z lokalizacjami
+- **Suspicious activity alerts**
+
+### 29. Jak zarządzać prywatnością danych?
+
+**Ustawienia prywatności:**
+
+- **Profil publiczny**: co jest widoczne dla innych
+- **Historia treningów**: udostępnianie postępów
+- **Lokalizacja**: czy udostępniać lokalizację
+- **Kontakt**: kto może się z Tobą kontaktować
+- **Wyszukiwanie**: czy profil jest w wyszukiwarce
+
+**GDPR Rights:**
+- **Prawo dostępu**: pobierz kopię swoich danych
+- **Prawo do usunięcia**: usuń konto i dane
+- **Prawo sprostowania**: popraw błędne dane
+- **Przenośność danych**: eksport do innego systemu
+
+### 30. Co robić w przypadku naruszenia bezpieczeństwa?
+
+**Natychmiastowe działania:**
+
+::alert{type="danger"}
+🚨 **PODEJRZENIE WŁAMANIA**:
+1. Natychmiast zmień hasło
+2. Wyloguj wszystkie urządzenia
+3. Sprawdź aktywność konta
+4. Skontaktuj się z supportem
+5. Sprawdź inne konta (email, bank)
+::
+
+**Zgłaszanie incydentów:**
+- **Email**: security@atp-system.com
+- **Telefon**: +48 123 456 789 (24/7)
+- **Formularz**: Security Incident Report
+- **Opis**: szczegółowy opis sytuacji
+
+## 📞 Kontakt i Wsparcie
+
+### 31. Jak skontaktować się z supportem?
+
+**Kanały wsparcia:**
+
+::card-grid
+:::card{title="Live Chat" icon="heroicons:chat-bubble-left-right"}
+- **Dostępność**: 8:00-20:00
+- **Czas odpowiedzi**: < 5 minut
+- **Język**: Polski, Angielski
+:::
+
+:::card{title="Email Support" icon="heroicons:envelope"}
+- **Email**: support@atp-system.com
+- **Czas odpowiedzi**: < 4 godziny
+- **24/7 przyjmowanie zgłoszeń**
+:::
+
+:::card{title="Telefon" icon="heroicons:phone"}
+- **Numer**: +48 123 456 789
+- **Godziny**: 9:00-17:00
+- **Emergency**: 24/7
+:::
+
+:::card{title="Knowledge Base" icon="heroicons:book-open"}
+- **Self-service**: artykuły pomocy
+- **Video tutorials**
+- **Community forum**
+:::
+::
+
+### 32. Jakie informacje załączyć przy zgłoszeniu?
+
+**Checklist zgłoszenia:**
+
+- **Opis problemu**: co się stało
+- **Kroki reprodukcji**: jak powtórzyć problem
+- **Expected vs actual result**: czego oczekiwałeś
+- **Screenshots/video**: dowody wizualne
+- **Device info**: urządzenie, OS, wersja aplikacji
+- **Account info**: email, user ID
+- **Error messages**: dokładne komunikaty błędów
+
+### 33. Jak sprawdzić status zgłoszenia?
+
+**Śledzenie ticket:**
+
+1. **Email confirmation**: otrzymasz numer ticket
+2. **Support portal**: zaloguj się na portal.atp-system.com
+3. **Status updates**: automatyczne powiadomienia
+4. **Follow-up**: możliwość dodania informacji
+
+**Status codes:**
+- **Open**: nowe zgłoszenie
+- **In Progress**: w trakcie rozwiązywania
+- **Pending**: czeka na informacje od Ciebie
+- **Resolved**: problem rozwiązany
+- **Closed**: zgłoszenie zamknięte
+
+---
+
+## 🎯 Quick Tips
+
+### Często używane skróty klawiszowe
+
+**Nawigacja:**
+- `Alt + H` - Home/Dashboard
+- `Alt + T` - Treningi
+- `Alt + D` - Dieta
+- `Alt + P` - Profil
+- `Alt + S` - Ustawienia
+
+**Akcje:**
+- `Ctrl + S` - Zapisz
+- `Ctrl + Z` - Cofnij
+- `Ctrl + K` - Wyszukiwanie
+- `Esc` - Zamknij modal/popup
+
+### Performance Tips
+
+**Szybsze działanie aplikacji:**
+- **Zamykaj** nieużywane karty
+- **Wyczyść cache** raz w tygodniu
+- **Aktualizuj** regularnie aplikację
+- **Restartuj** aplikację codziennie
+- **Sprawdź** dostępną pamięć
+
+### Najlepsze praktyki
+
+**Daily routine:**
+- [ ] Sprawdź plan treningowy
+- [ ] Zaloguj posiłki
+- [ ] Zapisz trening
+- [ ] Sprawdź wiadomości
+- [ ] Przejrzyj postępy
+
+**Weekly routine:**
+- [ ] Przegląd tygodniowy
+- [ ] Pomiary ciała
+- [ ] Planning na kolejny tydzień
+- [ ] Backup zdjęć
+- [ ] Update goals
+
+---
+
+::alert{type="warning"}
+⚠️ **Nie znalazłeś odpowiedzi?** Skontaktuj się z naszym zespołem wsparcia przez live chat lub sprawdź szczegółową [dokumentację dla użytkowników](/docs/user/).
+::
+
+::alert{type="info"}
+📚 **Przydatne linki**:
+- [Dashboard](/dashboard)
+- [Mój Profil](/profile)
+- [Treningi](/workouts)
+- [Dieta](/nutrition)
+- [Postępy](/progress)
+- [Ustawienia](/settings)
+- [Pomoc](/help)
+::

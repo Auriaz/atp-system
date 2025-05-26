@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { colorPicker } from '#build/ui'
+
 definePageMeta({
   layout: 'authorization',
   middleware: ['auth'],
@@ -92,7 +94,8 @@ const tasks = [
     id: 1, 
     title: 'Przygotowanie planu treningowego na czerwiec', 
     dueDate: '2025-05-28', 
-    priority: 'high', 
+    priority: 'high',
+ 
     status: 'in-progress' 
   },
   { 
@@ -100,20 +103,22 @@ const tasks = [
     title: 'Analiza wyników testów wydajnościowych', 
     dueDate: '2025-05-26', 
     priority: 'medium', 
+
     status: 'pending' 
   },
   { 
     id: 3, 
     title: 'Spotkanie z lekarzem drużyny', 
     dueDate: '2025-05-30', 
-    priority: 'medium', 
+    priority: 'medium',
+
     status: 'pending' 
   },
   { 
     id: 4, 
     title: 'Aktualizacja danych zawodników', 
     dueDate: '2025-05-27', 
-    priority: 'low', 
+    priority: 'low',
     status: 'completed' 
   }
 ]
@@ -206,10 +211,10 @@ const toggleTaskStatus = (taskId: number) => {
 // Priorytet zadania na kolor
 const priorityColor = (priority: string) => {
   switch (priority) {
-    case 'high': return 'danger'
+    case 'high': return 'error'
     case 'medium': return 'warning'
     case 'low': return 'success'
-    default: return 'gray'
+    default: return 'neutral'
   }
 }
 
@@ -217,9 +222,9 @@ const priorityColor = (priority: string) => {
 const athleteStatusColor = (status: string) => {
   switch (status) {
     case 'active': return 'success'
-    case 'injured': return 'danger'
+    case 'injured': return 'error'
     case 'resting': return 'warning'
-    default: return 'gray'
+    default: return 'neutral'
   }
 }
 
@@ -449,10 +454,10 @@ const formatEventDate = (dateString: string) => {
                   <div class="flex items-center">
                     <UAvatar 
                       :text="athlete.name.split(' ').map(n => n[0]).join('')"
-                      :ui="{ background: 'bg-primary-100 dark:bg-primary-800', text: 'text-primary-700 dark:text-primary-300' }"
                       size="sm"
-                      class="mr-3"
+                      class="mr-3 bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-primary-300"
                     />
+
                     <div>
                       <p class="text-sm font-medium text-gray-900 dark:text-white">{{ athlete.name }}</p>
                       <p class="text-xs text-gray-500 dark:text-gray-400">{{ athlete.position }}</p>

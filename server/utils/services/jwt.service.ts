@@ -4,6 +4,7 @@ import {
     revokeRefreshToken
 } from '../repositories/refresh_tokens.repository'
 import { getUserRoleSlugs } from '../repositories/user_roles.repositories'
+import { sessionManagementService } from './session-management.service'
 import { createHash } from 'crypto'
 import jwt from 'jsonwebtoken'
 
@@ -22,6 +23,7 @@ interface JWTPayload {
 interface TokenPair {
     accessToken: string
     refreshToken: string
+    sessionId?: number
 }
 
 /**
@@ -58,7 +60,7 @@ export function verifyAccessToken(token: string): JWTPayload | null {
 }
 
 /**
- * Generuje parę tokenów (access + refresh)
+ * Generuje parę tokenów (access + refresh) z obsługą zarządzania sesjami
  */
 export async function generateTokenPair(
     userId: number,
@@ -67,7 +69,13 @@ export async function generateTokenPair(
     deviceId?: string,
     userAgent?: string,
     ipAddress?: string
-): Promise<TokenPair> {
+): Promise<TokenPair & { sessionId: number }> {
+    // Generuj device ID jeśli nie podano
+    const finalDeviceId = deviceId || sessionManagementService.generateDeviceId(userAgent || '', ipAddress || '')
+
+    // Sprawdź czy już istnieje sesja dla tego urządzenia
+    const existingSessionId = await sessionManagementService.findExistingSession(userId, finalDeviceId)
+
     // Generuj access token
     const accessToken = generateAccessToken({
         userId,
@@ -76,16 +84,30 @@ export async function generateTokenPair(
     })
 
     // Generuj refresh token
-    const { token: refreshToken } = await createRefreshToken(
+    const { token: refreshToken, id: sessionId } = await createRefreshToken(
         userId,
-        deviceId,
+        finalDeviceId,
         userAgent,
         ipAddress
     )
 
+    // Jeśli istnieje sesja, zaktualizuj informacje o urządzeniu
+    if (existingSessionId) {
+        await sessionManagementService.updateDeviceInfo(existingSessionId, {
+            deviceId: finalDeviceId,
+            deviceName: sessionManagementService.parseDeviceName(userAgent || ''),
+            userAgent: userAgent || '',
+            ipAddress: ipAddress || ''
+        })
+    }
+
+    // Oznacz tę sesję jako aktualną
+    await sessionManagementService.markSessionAsCurrent(userId, sessionId)
+
     return {
         accessToken,
-        refreshToken
+        refreshToken,
+        sessionId
     }
 }
 

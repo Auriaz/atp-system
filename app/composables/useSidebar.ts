@@ -101,8 +101,7 @@ export const useSidebar = () => {
           to: '/dashboard/users',
         },
       ],
-    },
-    {
+    }, {
       label: 'Profile',
       icon: 'i-heroicons-user-plus-solid',
       to: '/dashboard/profile',
@@ -119,6 +118,26 @@ export const useSidebar = () => {
           label: 'Profile',
           icon: 'i-heroicons-user-plus-solid',
           to: '/dashboard/profile',
+        },
+      ],
+    },
+    {
+      label: 'Session Management',
+      icon: 'i-heroicons-device-phone-mobile',
+      to: '/dashboard/sessions',
+      type: 'settings' as const,
+      requiredPermission: null, // Available for all authenticated users
+      name: 'dashboard-sessions',
+      tree: [
+        {
+          label: 'Dashboard',
+          icon: 'i-heroicons-presentation-chart-line-20-solid',
+          to: '/dashboard',
+        },
+        {
+          label: 'Sessions',
+          icon: 'i-heroicons-device-phone-mobile',
+          to: '/dashboard/sessions',
         },
       ],
     },

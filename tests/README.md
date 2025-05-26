@@ -38,6 +38,16 @@ This directory contains all test files for the JWT Authentication System.
   - Token refresh testing
   - **Automatic logout simulation**
 
+### Session Management Tests
+- **`session-management/`** - Complete test suite for multi-device session management
+  - **`test-migration.js`** - Database migration validation
+  - **`test-db-schema.js`** - Database schema verification using Drizzle ORM
+  - **`validate-session-management.js`** - Comprehensive implementation validation
+  - **`test-interface.html`** - Interactive browser testing interface
+  - **`README.md`** - Session management test documentation
+
+#### Test Runner & Server
+
 ## 🚀 How to Run Tests
 
 ### Backend Tests
@@ -49,6 +59,11 @@ node tests/test-final-validation.cjs
 
 # Run all JWT tests
 node tests/run-all-tests.cjs
+
+# Run session management tests
+cd tests/session-management
+node test-migration.js
+node validate-session-management.js
 ```
 
 ### Frontend Tests
@@ -67,6 +82,30 @@ node tests/run-all-tests.cjs
    http://localhost:3001/test-auth.html
    ```
 
+4. Test session management interface:
+   ```
+   # Open session management test interface
+   tests/session-management/test-interface.html
+   
+   # Or via development server
+   http://localhost:3002/dashboard/sessions
+   ```
+
+### Session Management Tests
+1. Ensure the development server is running.
+
+2. Run the session management tests:
+   ```bash
+   node session-management/test-migration.js
+   node session-management/test-db-schema.js
+   node session-management/validate-session-management.js
+   ```
+
+3. Open the interactive session management test interface:
+   ```
+   http://localhost:3000/session-management/test-interface.html
+   ```
+
 ## 📋 Test Categories
 
 ### ✅ Completed & Validated
@@ -75,10 +114,12 @@ node tests/run-all-tests.cjs
 - Protected endpoint authentication
 - Token refresh functionality
 - **Automatic logout on refresh token errors**
+- **Multi-device session management system**
 - Error handling and user notifications
 
 ### 🧪 Test Coverage
 - **Authentication Flow**: Registration → Login → Access → Refresh → Logout
+- **Session Management**: Multi-device session monitoring, revocation, security
 - **Error Scenarios**: Invalid tokens, expired refresh tokens, network errors
 - **Security**: Token validation, refresh token rotation, automatic logout
 - **User Experience**: Toast notifications, redirects, session management

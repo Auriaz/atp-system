@@ -1,34 +1,188 @@
 ---
 title: 'Dokumentacja deweloperska'
-description: 'ATP System to zaawansowana aplikacja pełnostackowa zbudowana na Nuxt.js 3 z systemem uwierzytelniania JWT i automatycznym wylogowaniem.'
+description: 'Kompletna dokumentacja techniczna systemu ATP - architektura, implementacja i przewodniki deweloperskie'
 category: 'Development'
-version: '2.0.0'
-requiredRole: ['admin']
-icon: 'i-heroicons-cube'
-createdAt: '2025-04-18'
-updatedAt: '2025-05-26'
+version: '3.0.0'
+lastUpdated: '2025-12-28'
+requiredRole: ['admin', 'developer']
+icon: 'i-heroicons-code-bracket'
+author: 'Zespół deweloperski ATP'
+tags: ['development', 'architektura', 'api', 'dokumentacja-techniczna']
+navigation:
+  title: 'Dokumentacja deweloperska'
+  icon: 'i-heroicons-code-bracket'
 ---
 
 # Dokumentacja deweloperska ATP System
 
-Kompleksowa dokumentacja techniczna systemu ATP z najnowszymi implementacjami uwierzytelniania JWT.
+::alert{type="info"}
+**ATP System** to zaawansowana aplikacja pełnostackowa zbudowana na **Nuxt.js 3** z systemem uwierzytelniania JWT, zarządzaniem wielourządzeniowymi sesjami i automatycznym wylogowaniem.
+::
+
+## 🏗️ Przegląd techniczny
+
+### Stack technologiczny
+::list{type="success"}
+- **Frontend**: Vue.js 3 + Nuxt.js 3 + TypeScript
+- **Backend**: Nitro Server (zintegrowany z Nuxt.js)
+- **Baza danych**: SQLite z Drizzle ORM
+- **Uwierzytelnianie**: JWT z refresh tokens
+- **Stylowanie**: Tailwind CSS + Nuxt UI
+- **Zarządzanie treścią**: Nuxt Content v2
+- **Deployment**: Cloudflare Pages + D1 Database
+::
 
 ## 📋 Spis treści
 
-### Podstawy systemu
-- [🏗️ Architektura systemu](/docs/development/architektura) - Ogólna architektura i komponenty
-- [⚙️ Konfiguracja środowiska](/docs/development/konfiguracja) - Setup i deployment
-- [👥 Zarządzanie użytkownikami](/docs/development/użytkownicy) - System użytkowników i ról
+### 🔧 Podstawy systemu
+::card-grid
+#default
+  ::card{icon="i-heroicons-cube" title="Architektura systemu" to="/docs/development/architektura"}
+  Ogólna architektura, komponenty i wzorce projektowe używane w systemie.
+  ::
 
-### System uwierzytelniania
-- [🔐 Uwierzytelnianie JWT](/docs/development/uwierzytelnianie-jwt) - **NOWE!** Kompletny przewodnik JWT z automatycznym wylogowaniem
-- [📝 Changelog JWT](/docs/development/changelog-jwt) - Historia zmian systemu JWT
-- [🔑 API Reference](/docs/development/api) - Endpointy i autoryzacja
+  ::card{icon="i-heroicons-cog-6-tooth" title="Konfiguracja środowiska" to="/docs/development/konfiguracja"}
+  Instrukcje instalacji, konfiguracji i uruchomienia projektu w środowisku deweloperskim.
+  ::
 
-### Raporty i podsumowania
-- [🎯 Implementacja automatycznego wylogowania](/docs/development/automatic-logout-implementation) - Szczegółowy raport implementacji
-- [📊 Podsumowanie systemu JWT](/docs/development/jwt-system-summary) - Kompletny status projektu  
-- [📋 Aktualizacja dokumentacji](/docs/development/dokumentacja-aktualizacja-summary) - Podsumowanie zmian w dokumentacji
+  ::card{icon="i-heroicons-users" title="Zarządzanie użytkownikami" to="/docs/development/użytkownicy"}
+  System użytkowników, ról, uprawnień i zarządzania kontami.
+  ::
+::
+
+### 🔐 System uwierzytelniania
+::card-grid
+#default
+  ::card{icon="i-heroicons-key" title="Uwierzytelnianie JWT" to="/docs/development/uwierzytelnianie-jwt"}
+  **AKTUALNY** - Kompletny przewodnik po systemie JWT z automatycznym wylogowaniem.
+  ::
+
+  ::card{icon="i-heroicons-device-phone-mobile" title="Zarządzanie sesjami" to="/docs/development/session-management"}
+  **NOWE** - System zarządzania wielourządzeniowymi sesjami użytkowników.
+  ::
+
+  ::card{icon="i-heroicons-shield-check" title="API Reference" to="/docs/development/api"}
+  Dokumentacja endpointów API, autoryzacji i przykładów użycia.
+  ::
+::
+
+### 📊 Raporty i historia zmian
+::card-grid
+#default
+  ::card{icon="i-heroicons-clock" title="Changelog JWT" to="/docs/development/changelog-jwt"}
+  Historia zmian i aktualizacji systemu uwierzytelniania JWT.
+  ::
+
+  ::card{icon="i-heroicons-document-text" title="Implementacja automatycznego wylogowania" to="/docs/development/automatic-logout-implementation"}
+  Szczegółowy raport implementacji funkcji automatycznego wylogowania.
+  ::
+
+  ::card{icon="i-heroicons-chart-bar" title="Podsumowanie systemu JWT" to="/docs/development/jwt-system-summary"}
+  Kompletny status projektu i przegląd funkcjonalności JWT.
+  ::
+::
+
+## 🚀 Szybki start dla deweloperów
+
+### Wymagania systemowe
+- Node.js 18+ 
+- npm/yarn/pnpm
+- Git
+
+### Instalacja
+```bash
+# Klonowanie repozytorium
+git clone [repository-url] atp-system
+cd atp-system
+
+# Instalacja zależności
+npm install
+
+# Konfiguracja środowiska
+cp .env.example .env
+# Uzupełnij zmienne środowiskowe
+
+# Uruchomienie w trybie deweloperskim
+npm run dev
+```
+
+### Struktura projektu
+```
+atp-system/
+├── app/                    # Aplikacja Nuxt.js
+│   ├── components/         # Komponenty Vue
+│   ├── composables/        # Composables i logika biznesowa
+│   ├── middleware/         # Middleware routingu
+│   ├── pages/             # Strony aplikacji
+│   └── plugins/           # Pluginy Nuxt
+├── server/                # Backend Nitro
+│   ├── api/               # Endpointy API
+│   ├── database/          # Migracje i schema bazy danych
+│   ├── middleware/        # Middleware serwerowy
+│   └── utils/             # Narzędzia i serwisy
+├── content/               # Dokumentacja Nuxt Content
+├── tests/                 # Testy automatyczne
+└── docs/                  # Dodatkowa dokumentacja
+```
+
+## 🔥 Najnowsze funkcjonalności
+
+### ✅ System zarządzania sesjami (v2.1.0)
+- Monitoring aktywnych sesji na różnych urządzeniach
+- Możliwość zdalnego wylogowania z wybranych urządzeń
+- Detekcja podejrzanej aktywności
+- Historia logowań z lokalizacją i informacjami o urządzeniu
+
+### ✅ Ulepszone uwierzytelnianie JWT (v2.0.0)
+- Automatyczne odświeżanie tokenów
+- Graceful logout przy wygaśnięciu sesji
+- Zwiększone bezpieczeństwo z rotacją refresh tokenów
+- Middleware do ochrony tras
+
+## 🛠️ Narzędzia deweloperskie
+
+### Dostępne komendy
+```bash
+npm run dev          # Uruchomienie serwera deweloperskiego
+npm run build        # Budowanie aplikacji produkcyjnej
+npm run preview      # Podgląd wersji produkcyjnej
+npm run test         # Uruchomienie testów
+npm run lint         # Sprawdzanie jakości kodu
+npm run generate     # Generowanie statycznej wersji
+```
+
+### Debugowanie
+- **Vue DevTools** - do debugowania komponentów Vue
+- **Nuxt DevTools** - zaawansowane narzędzia deweloperskie Nuxt
+- **Network Monitor** - do analizy zapytań API
+- **Database Browser** - do przeglądarnia bazy danych SQLite
+
+## 📝 Konwencje kodowania
+
+- **TypeScript** - obowiązkowe typowanie
+- **ESLint + Prettier** - formatowanie i linting
+- **Conventional Commits** - standardowe commity
+- **Component naming** - PascalCase dla komponentów
+- **File naming** - kebab-case dla plików
+
+## 🔍 Testowanie
+
+System posiada kompleksowe testy:
+- **Testy jednostkowe** - komponenty i funkcje
+- **Testy integracyjne** - API endpoints
+- **Testy E2E** - scenariusze użytkownika
+- **Testy bezpieczeństwa** - uwierzytelnianie i autoryzacja
+
+## 📞 Wsparcie deweloperskie
+
+- **[Issues GitHub](github-issues-link)** - zgłaszanie błędów
+- **[Discussions](github-discussions-link)** - dyskusje techniczne
+- **[Wiki](github-wiki-link)** - dodatkowa dokumentacja
+- **[API Docs](api-docs-link)** - interaktywna dokumentacja API
+
+---
+
+*Dokumentacja aktualizowana: 28 grudnia 2025 | Wersja systemu: v2.1.0*
 
 ## 🚀 Najnowsze aktualizacje
 
