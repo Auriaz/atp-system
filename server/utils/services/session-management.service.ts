@@ -243,6 +243,29 @@ export class SessionManagementService {
             )
 
         return result.changes
+    }    /**
+     * Tworzy nową sesję dla użytkownika
+     */
+    async createSession(userId: number, deviceInfo: DeviceInfo, token: string, expiresAt: Date): Promise<number> {
+        const result = await this.db
+            .insert(refreshTokens)
+            .values({
+                userId: userId,
+                token: token,
+                deviceId: deviceInfo.deviceId,
+                deviceName: deviceInfo.deviceName,
+                userAgent: deviceInfo.userAgent,
+                ipAddress: deviceInfo.ipAddress,
+                location: deviceInfo.location,
+                isCurrent: true,
+                expiresAt: expiresAt,
+                createdAt: new Date(),
+                lastUsedAt: new Date(),
+                isRevoked: false
+            })
+            .returning({ id: refreshTokens.id })
+
+        return result[0].id
     }
 
     /**

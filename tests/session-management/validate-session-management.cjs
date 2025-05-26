@@ -97,7 +97,7 @@ async function validateImplementation() {
   const frontendFiles = [
     'app/components/SessionManagement.vue',
     'app/composables/useSessionManagement.ts',
-    'app/pages/dashboard/sessions.vue'
+    'app/pages/dashboard/sessions/index.vue'
   ];
 
   frontendFiles.forEach(file => {

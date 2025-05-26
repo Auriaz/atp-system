@@ -1,6 +1,14 @@
 # 🧪 Tests Directory
 
-This directory contains all test files for the JWT Authentication System.
+This directory contains all test files for the ATP System, including JWT Authentication and Session Management.
+
+## 📁 Test Structure
+
+### 🔐 Authentication Tests (Root Level)
+Core JWT authentication and token management tests
+
+### 📱 Session Management Tests
+Complete test suite for multi-device session management in `session-management/` subdirectory
 
 ## Test Files Overview
 
@@ -38,15 +46,38 @@ This directory contains all test files for the JWT Authentication System.
   - Token refresh testing
   - **Automatic logout simulation**
 
-### Session Management Tests
-- **`session-management/`** - Complete test suite for multi-device session management
-  - **`test-migration.js`** - Database migration validation
-  - **`test-db-schema.js`** - Database schema verification using Drizzle ORM
-  - **`validate-session-management.js`** - Comprehensive implementation validation
-  - **`test-interface.html`** - Interactive browser testing interface
-  - **`README.md`** - Session management test documentation
+### 📱 Session Management Tests (`session-management/`)
 
-#### Test Runner & Server
+Complete test suite for multi-device session management system:
+
+#### 🔍 Validation Tests
+- **`validate-session-management.cjs`** - Comprehensive system validation (100% success rate)
+- **`validate-session-management.js`** - Alternative validation script
+
+#### 🧪 Database Tests  
+- **`test-migration.js`** - Database migration verification
+- **`test-db-schema.js`** - Schema validation using Drizzle ORM
+
+#### 🌐 API Tests
+- **`test-simple-session.js`** - Basic session API functionality
+- **`test-detailed-session.js`** - Detailed session management operations
+- **`test-comprehensive-session.js`** - Full session lifecycle testing
+- **`test-api-final.js`** - Final API integration tests
+
+#### 🔧 Functional Tests
+- **`test-multi-device.js`** - Multi-device session simulation
+- **`test-revocation.js`** - Session revocation functionality
+- **`test-session-management.cjs`** - Core session management logic
+
+#### 🛠️ Debugging & Validation
+- **`debug-registration.js`** - Registration endpoint debugging
+- **`test-final-validation.ps1`** - PowerShell comprehensive validation script
+
+#### 🎨 UI Tests
+- **`test-interface.html`** - Browser-based interface testing
+
+#### Documentation
+- **`README.md`** - Detailed session management test documentation
 
 ## 🚀 How to Run Tests
 

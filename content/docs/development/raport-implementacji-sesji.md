@@ -14,8 +14,6 @@ requirements:
   - 'Rola: Admin lub Developer'
   - 'System: ATP System v3.0+'
 category: 'Development'
-  title: 'Raport implementacji sesji'
-  icon: 'i-heroicons-document-text'
 ---
 
 # 🎉 Raport implementacji zarządzania wielourządzeniowymi sesjami
