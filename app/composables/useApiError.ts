@@ -3,7 +3,7 @@
  */
 export function useApiError() {
   const toast = useToast();
-  const { loggedIn } = useUserSession();
+  const { isAuthenticated } = useAuth();
 
   // Helper function for general API error handling
   const handleApiError = (error: any) => {

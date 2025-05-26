@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const { sidebar } = useSidebar()
-const { user, loggedIn} = useUserSession()
+const { user, isAuthenticated } = useAuth()
 
 let query = ref('')
 
@@ -28,10 +28,9 @@ const currentDate = new Date().toLocaleDateString('pl-PL', {
             </div>
           </div>
         </template>
-        
-        <template #action>
+          <template #action>
           <!-- Manage Account -->
-          <XDropdownManageAccount v-if="loggedIn && user" :user="user" />
+          <XDropdownManageAccount v-if="isAuthenticated && user" :user="user" />
         </template>
       </XDashboardNavbar>
     </template>

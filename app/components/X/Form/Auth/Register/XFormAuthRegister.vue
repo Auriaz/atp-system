@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from '@nuxt/ui'
-  import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
-  const toast = useToast()
-  const { fetch } = useUserSession()
+  
+  const { register } = useAuth()
+  
   const registerForm = reactive({
     data: {
       username: '',
@@ -13,39 +13,22 @@
       lastName: '',
       isAgreedToTerms: false
     },
-
     loading: false,
   })
 
   async function onSubmitRegister(event: FormSubmitEvent<RegisterForm>) {
     registerForm.loading = true
-    await useAsyncData('register', async () => await $fetch('/api/auth/register', {
-      method: 'POST',
-      body: event.data,
-    })
-      .then(res => {
-        fetch()
-        toast.add(res.message as Toast)
-        toast.add({
-          title: 'Login successful',
-          description: 'You have been successfully logged in',
-          color: 'success'
-        })
-        
-        navigateTo('/dashboard/profile', { replace: true })
-        resetFormRegister()
-      })
-      .catch(error => {
-        toast.add({
-          title: 'Error',
-          description: error.data?.message || 'Registration failed',
-          color: 'error'
-        })
-      })
-      .finally(() => {
-        registerForm.loading = false
-      })
-    )
+    
+    try {
+      await register(event.data)
+      navigateTo('/dashboard/profile', { replace: true })
+      resetFormRegister()
+    } catch (error) {
+      // Error handling is done by the auth composable
+      console.error('Registration failed:', error)
+    } finally {
+      registerForm.loading = false
+    }
   }
 
   const canSeeThePassword = ref(false)

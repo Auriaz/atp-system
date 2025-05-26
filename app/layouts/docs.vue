@@ -2,7 +2,7 @@
 <script setup>
 const route = useRoute();
 const {navbarItems} = useNavbar()
-const { loggedIn, user } = useUserSession()
+const { isAuthenticated, user } = useAuth()
 
 // Pobierz aktualny dokument
 
@@ -43,7 +43,7 @@ const searchTerm = ref('')
           <template #action>
 
             <AuthState>
-              <div v-if="!loggedIn" class="flex items-center space-x-4">
+              <div v-if="!isAuthenticated" class="flex items-center space-x-4">
                 <UTooltip text="Login">
                   <UButton
                     to="/auth/login"
@@ -65,7 +65,7 @@ const searchTerm = ref('')
                 </UTooltip>
               </div>
 
-              <XDropdownManageAccount v-if="loggedIn && user" :user="user" />
+              <XDropdownManageAccount v-if="isAuthenticated && user" :user="user" />
             </AuthState>
           </template>
 

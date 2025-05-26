@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
         path.startsWith('/_nuxt/') ||
         path.startsWith('/favicon.ico') ||
         path.startsWith('/__nuxt_devtools__/')
+        || path.startsWith('/api/_hub/') // Add any other public paths here
     ) {
         console.log('JWT Middleware: Skipping public path:', path);
         return;

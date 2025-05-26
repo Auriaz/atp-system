@@ -1,5 +1,5 @@
 export const useGuard = () => {
-  const { session } = useUserSession()
+  const { session } = useAuth()
   const { can } = usePermissions()
 
   const getUserRoles = (): string[] => {

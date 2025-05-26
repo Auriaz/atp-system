@@ -91,16 +91,14 @@ export default defineEventHandler(async (event) => {
       userRoles,
       deviceId,
       userAgent,
-      ipAddress)
-
-    // Set refresh token as HTTPOnly cookie
-    setCookie(event, 'refreshToken', refreshToken, {
+      ipAddress)    // Set refresh token as HTTPOnly cookie
+    setCookie(event, 'refresh-token', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
       path: '/'
-    })    // Set security headers
+    })// Set security headers
     setHeader(event, 'Cache-Control', 'no-cache, no-store, must-revalidate')
     setHeader(event, 'Pragma', 'no-cache')
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { loggedIn, user } = useUserSession()
+const { isAuthenticated, user } = useAuth()
 const {navbarItems} = useNavbar()
 </script>
 
@@ -21,11 +21,9 @@ const {navbarItems} = useNavbar()
         <x-navbar container :links="navbarItems">
           <template #logo>
             <XLogo />
-          </template>
-
-          <template #action>
+          </template>          <template #action>
             <AuthState>
-              <div v-if="!loggedIn" class="flex items-center space-x-4">
+              <div v-if="!isAuthenticated" class="flex items-center space-x-4">
                 <UTooltip text="Login">
                   <UButton
                     to="/auth/login"
@@ -47,7 +45,7 @@ const {navbarItems} = useNavbar()
                 </UTooltip>
               </div>
 
-              <XDropdownManageAccount v-if="loggedIn && user" :user="user" />
+              <XDropdownManageAccount v-if="isAuthenticated && user" :user="user" />
             </AuthState>
           </template>
 

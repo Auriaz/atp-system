@@ -5,7 +5,7 @@
  */
 export default defineNuxtRouteMiddleware((to) => {
     // Podstawowe hooki i stany
-    const { loggedIn, session } = useUserSession()
+    const { isAuthenticated, session } = useAuth()
     const { can } = usePermissions() // Używamy zaktualizowanego composable
     const toast = useToast()
 
@@ -27,10 +27,8 @@ export default defineNuxtRouteMiddleware((to) => {
     // 1. Sprawdzenie publicznych ścieżek - szybkie wyjście
     if (publicPaths.includes(to.path)) {
         return
-    }
-
-    // 2. Weryfikacja logowania
-    if (!loggedIn.value) {
+    }    // 2. Weryfikacja logowania
+    if (!isAuthenticated.value) {
         // Zapisz ścieżkę, do której użytkownik próbował się dostać (tylko po stronie klienta)
         if (import.meta.client && to.path !== '/auth/login') {
             localStorage.setItem('returnPath', to.fullPath)

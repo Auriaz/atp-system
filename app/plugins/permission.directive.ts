@@ -1,17 +1,14 @@
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.directive('can', {
     mounted(el, binding) {
-      try {
-        // Bezpieczne pobranie sesji użytkownika
-        const { userSession } = useUserSession();
-
-        // Dodanie mechanizmu reaktywnego, żeby reagować na zmiany w sesji
+      try {        // Bezpieczne pobranie sesji użytkownika
+        const { session: userSession } = useAuth();        // Dodanie mechanizmu reaktywnego, żeby reagować na zmiany w sesji
         watch(() => userSession.value, (session) => {
-          // Bezpieczne sprawdzenie wartości
-          const userRole = session?.user?.role || 'observer';
+          // Bezpieczne sprawdzenie wartości - teraz sprawdzamy roles zamiast role
+          const userRoles = session?.roles || ['observer'];
 
           // Sprawdź, czy użytkownik ma uprawnienie
-          const hasAccess = hasPermission(userRole, binding.value as Permission);
+          const hasAccess = hasPermission(userRoles, binding.value as Permission);
 
           // Jeśli nie ma dostępu, usuń element z DOM
           if (!hasAccess) {
@@ -23,8 +20,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
         // Początkowe sprawdzenie (jeśli sesja już istnieje)
         if (userSession.value) {
-          const userRole = userSession.value?.user?.role || 'observer';
-          const hasAccess = hasPermission(userRole, binding.value as Permission);
+          const userRoles = userSession.value?.roles || ['observer'];
+          const hasAccess = hasPermission(userRoles, binding.value as Permission);
 
           if (!hasAccess && el.parentNode) {
             el.parentNode.removeChild(el);

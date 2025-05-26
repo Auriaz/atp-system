@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Authentication Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+
+        .info {
+            color: #17a2b8;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JWT Authentication Flow Test</h1>
+
+    <div class="test-section">
+        <h2>🔐 User Registration & Login Test</h2>
+        <p>This page will test the JWT authentication flow with automatic token refresh.</p>
+
+        <div>
+            <h3>Test User Credentials</h3>
+            <input type="email" id="email" placeholder="Email" value="test@example.com">
+            <input type="text" id="username" placeholder="Username" value="testuser">
+            <input type="text" id="firstName" placeholder="First Name" value="Test">
+            <input type="text" id="lastName" placeholder="Last Name" value="User">
+            <input type="password" id="password" placeholder="Password" value="TestPassword123!">
+        </div>
+
+        <div>
+            <button onclick="testRegistration()">📝 Register User</button>
+            <button onclick="testLogin()">🔑 Login</button>
+            <button onclick="testProtectedEndpoint()">🔒 Test Protected Endpoint</button> <button
+                onclick="testTokenRefresh()">🔄 Test Token Refresh</button>
+            <button onclick="testAutoLogout()">🚪 Test Auto Logout</button>
+            <button onclick="testLogout()">🚪 Logout</button>
+            <button onclick="clearLog()">🧹 Clear Log</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 Test Results</h3>
+        <div id="log" class="log">Ready to test JWT authentication...\n</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔑 Current Tokens</h3>
+        <div>
+            <strong>Access Token:</strong> <span id="accessTokenDisplay">None</span><br>
+            <strong>Token Expires At:</strong> <span id="tokenExpiresDisplay">None</span>
+        </div>
+    </div>
+
+    <script>
+        let currentAccessToken = null;
+        let currentTokenExpiry = null;
+
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            logElement.innerHTML += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateTokenDisplay() {
+            document.getElementById('accessTokenDisplay').textContent =
+                currentAccessToken ? `${currentAccessToken.substring(0, 50)}...` : 'None';
+            document.getElementById('tokenExpiresDisplay').textContent =
+                currentTokenExpiry ? new Date(currentTokenExpiry).toLocaleString() : 'None';
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = 'Log cleared...\n';
+        }
+
+        async function testRegistration() {
+            log('🔄 Starting user registration test...', 'info');
+
+            const userData = {
+                username: document.getElementById('username').value + '_' + Date.now(),
+                email: document.getElementById('email').value.replace('@', `_${Date.now()}@`),
+                password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                isAgreedToTerms: true
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    log('✅ Registration successful!', 'success');
+                    log(`📋 User ID: ${data.payload.user?.id}`, 'info');
+                    log(`📧 Email: ${data.payload.user?.email}`, 'info');
+                    log(`👤 Username: ${data.payload.user?.username}`, 'info');
+
+                    if (data.payload.accessToken) {
+                        currentAccessToken = data.payload.accessToken;
+                        currentTokenExpiry = Date.now() + (15 * 60 * 1000); // 15 minutes
+                        updateTokenDisplay();
+                        log('🔑 Access token received automatically after registration', 'success');
+                    }
+
+                    // Update form with registered credentials for login test
+                    document.getElementById('email').value = userData.email;
+                    document.getElementById('username').value = userData.username;
+                } else {
+                    log(`❌ Registration failed: ${data.message || 'Unknown error'}`, 'error');
+                    if (data.data) {
+                        log(`📋 Details: ${JSON.stringify(data.data, null, 2)}`, 'error');
+                    }
+                }
+            } catch (error) {
+                log(`💥 Registration error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            log('🔄 Starting login test...', 'info');
+
+            const credentials = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                rememberMe: false
+            };
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(credentials),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    log('✅ Login successful!', 'success');
+                    log(`👤 User ID: ${data.payload.user?.id}`, 'info');
+                    log(`⏱️  Token expires in: ${data.payload.expiresIn} seconds`, 'info');
+
+                    currentAccessToken = data.payload.accessToken;
+                    currentTokenExpiry = Date.now() + (data.payload.expiresIn * 1000);
+                    updateTokenDisplay();
+
+                    log('🔑 Access token stored for further tests', 'success');
+                } else {
+                    log(`❌ Login failed: ${data.message || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                log(`💥 Login error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testProtectedEndpoint() {
+            if (!currentAccessToken) {
+                log('⚠️  No access token available. Please login first.', 'error');
+                return;
+            }
+
+            log('🔄 Testing protected endpoint access...', 'info');
+
+            try {
+                const response = await fetch('/api/test-jwt', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${currentAccessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    log('✅ Protected endpoint access successful!', 'success');
+                    log(`🔐 Auth method: ${data.payload.authMethod}`, 'info');
+                    log(`👤 User: ${data.payload.user?.email}`, 'info');
+
+                    if (data.payload.jwtInfo) {
+                        log(`⏰ Token issued at: ${data.payload.jwtInfo.issuedAt}`, 'info');
+                        log(`⏰ Token expires at: ${data.payload.jwtInfo.expiresAt}`, 'info');
+                        log(`⏱️  Time until expiry: ${data.payload.jwtInfo.timeUntilExpiry}s`, 'info');
+                    }
+                } else {
+                    log(`❌ Protected endpoint access failed: ${data.message || 'Unknown error'}`, 'error');
+                    if (response.status === 401) {
+                        log('🔑 Token may be expired. Try refreshing the token.', 'info');
+                    }
+                }
+            } catch (error) {
+                log(`💥 Protected endpoint error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testTokenRefresh() {
+            log('🔄 Testing token refresh...', 'info');
+
+            try {
+                const response = await fetch('/api/auth/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    log('✅ Token refresh successful!', 'success');
+                    log(`⏱️  New token expires in: ${data.payload.expiresIn} seconds`, 'info');
+
+                    currentAccessToken = data.payload.accessToken;
+                    currentTokenExpiry = Date.now() + (data.payload.expiresIn * 1000);
+                    updateTokenDisplay();
+
+                    log('🔑 New access token stored', 'success');
+                } else {
+                    log(`❌ Token refresh failed: ${data.message || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                log(`💥 Token refresh error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAutoLogout() {
+            log('🔄 Testing automatic logout on refresh token failure...', 'info');
+
+            try {
+                // First, simulate a refresh token failure by clearing the refresh token cookie
+                log('🍪 Simulating refresh token failure...', 'info');
+
+                // Clear cookies to simulate expired/invalid refresh token
+                document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; httponly';
+
+                // Try to refresh token - this should fail
+                const response = await fetch('/api/auth/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || data.status !== 'success') {
+                    log('✅ Refresh token failed as expected (simulating auto-logout scenario)', 'success');
+                    log(`📋 Error: ${data.message || 'Refresh token invalid/expired'}`, 'info');
+
+                    // Simulate what the frontend composables would do
+                    log('🚪 Frontend would automatically logout user now', 'info');
+                    log('🧹 Clearing local tokens...', 'info');
+
+                    // Clear tokens
+                    currentAccessToken = null;
+                    currentTokenExpiry = null;
+                    updateTokenDisplay();
+
+                    log('✅ Auto-logout simulation complete!', 'success');
+                    log('💡 In the real app, user would be redirected to login page', 'info');
+                } else {
+                    log('⚠️  Refresh unexpectedly succeeded - this test needs modification', 'error');
+                }
+            } catch (error) {
+                log(`✅ Network error during refresh (expected): ${error.message}`, 'success');
+                log('🚪 This would trigger automatic logout in the frontend', 'info');
+
+                // Clear tokens
+                currentAccessToken = null;
+                currentTokenExpiry = null;
+                updateTokenDisplay();
+            }
+        }
+
+        async function testLogout() {
+            log('🔄 Testing logout...', 'info');
+
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    log('✅ Logout successful!', 'success');
+
+                    // Clear tokens
+                    currentAccessToken = null;
+                    currentTokenExpiry = null;
+                    updateTokenDisplay();
+
+                    log('🧹 Access tokens cleared', 'info');
+                } else {
+                    log(`❌ Logout failed: ${data.message || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                log(`💥 Logout error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize
+        updateTokenDisplay();
+        log('🚀 JWT Authentication Test Page Ready', 'success');
+        log('📋 You can test the complete authentication flow:', 'info');
+        log('   1. Register a new user', 'info');
+        log('   2. Login with credentials', 'info');
+        log('   3. Test protected endpoint access', 'info');
+        log('   4. Test token refresh', 'info');
+        log('   5. Test logout', 'info');
+    </script>
+</body>
+
+</html>

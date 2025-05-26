@@ -5,17 +5,18 @@
  */
 export default defineEventHandler(async (event) => {
   const path = getRequestURL(event).pathname;
-  
+
   // Debug logging
   console.log('JWT Middleware: Processing path:', path);
 
   // Skip JWT validation for public routes and auth endpoints
   if (
-    path.startsWith('/api/auth/') || 
+    path.startsWith('/api/auth/') ||
     path === '/api/health' ||
     path.startsWith('/_nuxt/') ||
     path.startsWith('/favicon.ico') ||
     path.startsWith('/__nuxt_devtools__/')
+    || path.startsWith('/api/_hub/')
   ) {
     console.log('JWT Middleware: Skipping public path:', path);
     return;
@@ -77,7 +78,7 @@ export default defineEventHandler(async (event) => {
   console.log('JWT Middleware: Verifying access token');
   // Verify the JWT access token
   const payload = verifyAccessToken(accessToken);
-  
+
   if (!payload) {
     console.log('JWT Middleware: Invalid access token');
     throw createError({
@@ -103,7 +104,8 @@ export default defineEventHandler(async (event) => {
       // Get full user data from database
       const user = await getUserById(payload.userId);
       if (user) {
-        await setUserSession(event, {          user: {
+        await setUserSession(event, {
+          user: {
             id: user.id,
             email: user.email,
             username: user.username,

@@ -4,7 +4,7 @@ export default function useProfileApi() {
   const isLoading = useState<boolean>('profile-loading', () => false)
   const isPasswordChanging = useState<boolean>('password-changing', () => false)
   const error = useState<Error | null>('profile-error', () => null)
-  const { user, fetch } = useUserSession()
+  const { user, fetchSession } = useAuth()
   // Dodatkowe composables
   const toast = useToast()
 
@@ -61,7 +61,7 @@ export default function useProfileApi() {
       toast.add(res.message)
       profile.value = res.payload.data || null
 
-      fetch()
+      fetchSession()
     }).catch((error) => {
       console.error('Wystąpił błąd podczas przesyłania:', error)
       toast.add({

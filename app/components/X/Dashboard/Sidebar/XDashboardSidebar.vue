@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { sidebar } = useSidebar()
-const { session } = useUserSession()
+const { session } = useAuth()
 const { filterLinksByPermissions } = useGuard()
 
 function typeLinks(type: string) {

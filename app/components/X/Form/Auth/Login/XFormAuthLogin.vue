@@ -1,9 +1,8 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from '@nuxt/ui'
-  import type { Toast } from '@nuxt/ui/runtime/composables/useToast.js'
   
-  const { fetch } = useUserSession()
-  const toast = useToast()
+  // Use the new integrated auth composable
+  const auth = useAuth()
 
   const loginForm = reactive({
     data: {
@@ -17,27 +16,18 @@
 
   async function onSubmitLogin(event: FormSubmitEvent<LoginForm>) {
     loginForm.loading = true
-    await useAsyncData('login', async () => $fetch('/api/auth/login', {
-      method: 'POST',
-      body: event.data
-    })
-      .then(res => {
-        fetch()
-        toast.add(res.message as Toast)
-        navigateTo('/dashboard', { replace: true })
-      })
-      .catch(error => {
-        toast.add({
-          title: 'Error',
-          description: error.data?.message || 'Login failed',
-          color: 'error'
-        })
-      })
-      .finally(() => {
-        loginForm.loading = false
+    
+    try {
+      const success = await auth.login(event.data)
+      
+      if (success) {
+        // Navigate to dashboard on successful login
+        await navigateTo('/dashboard', { replace: true })
         resetFormLogin()
-      })
-    )
+      }
+    } finally {
+      loginForm.loading = false
+    }
   }
 
   const resetFormLogin = () => {

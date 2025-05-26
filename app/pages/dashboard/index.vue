@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { user } = useUserSession()
+const { user } = useAuth()
 
 // Przykładowe dane dla dashboardu
 const stats = [
@@ -342,11 +342,11 @@ const formatEventDate = (dateString: string) => {
                     <div class="relative w-full flex justify-center">
                       <div 
                         class="w-4/5 bg-primary-500/50 dark:bg-primary-400/50 rounded-t"
-                        :style="{ height: `${activityData.datasets[0].data[i] * 5}px` }"
+                        :style="{ height: `${(activityData.datasets[0]?.data?.[i] || 0) * 5}px` }"
                       ></div>
                       <div 
                         class="w-4/5 absolute bottom-0 bg-primary-500 dark:bg-primary-400 rounded-t"
-                        :style="{ height: `${activityData.datasets[1].data[i] * 5}px` }"
+                        :style="{ height: `${(activityData.datasets[1]?.data?.[i] || 0) * 5}px` }"
                       ></div>
                     </div>
                     <span class="text-xs text-gray-500 dark:text-gray-400">{{ day }}</span>

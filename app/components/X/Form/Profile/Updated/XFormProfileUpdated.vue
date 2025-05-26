@@ -25,7 +25,7 @@ import type { FormSubmitEvent } from '@nuxt/ui'
     lastName: string | null;
     bio: string | null;
   }>) {
-    const { session } = useUserSession()
+    const { session } = useAuth()
     update(form)
   }
 </script>

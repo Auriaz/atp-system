@@ -7,7 +7,7 @@ const props = defineProps({
   }
 });
 
-const { session } = useUserSession();
+const { session } = useAuth();
 
 const hasAccess = computed(() => {
   if (!session.value.roles ) return false;
