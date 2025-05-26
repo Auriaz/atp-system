@@ -24,6 +24,20 @@ Dokumentacja systemu ATP została kompleksowo zaktualizowana w celu odzwierciedl
 - Statystyki implementacji i pokrycie testami
 - Planowane ulepszenia na przyszłość
 
+#### 3. **Implementacja automatycznego wylogowania** (`content/docs/development/automatic-logout-implementation.md`)
+- Szczegółowy raport implementacji automatycznego wylogowania
+- Techniczne detale przepływu błędów
+- Rezultaty testów i walidacji
+- Instrukcje testowania funkcjonalności
+
+#### 4. **Podsumowanie systemu JWT** (`content/docs/development/jwt-system-summary.md`)
+- Kompletny status projektu JWT
+- Wyniki końcowe testów (7/7 passing)
+- Potwierdzenie gotowości produkcyjnej
+
+#### 5. **Aktualizacja dokumentacji** (`content/docs/development/dokumentacja-aktualizacja-summary.md`)
+- Ten plik - podsumowanie wszystkich zmian dokumentacyjnych
+
 ### 🔄 Zaktualizowane pliki
 
 #### 1. **Architektura systemu** (`content/docs/development/architektura.md`)

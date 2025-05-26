@@ -25,6 +25,11 @@ Kompleksowa dokumentacja techniczna systemu ATP z najnowszymi implementacjami uw
 - [📝 Changelog JWT](/docs/development/changelog-jwt) - Historia zmian systemu JWT
 - [🔑 API Reference](/docs/development/api) - Endpointy i autoryzacja
 
+### Raporty i podsumowania
+- [🎯 Implementacja automatycznego wylogowania](/docs/development/automatic-logout-implementation) - Szczegółowy raport implementacji
+- [📊 Podsumowanie systemu JWT](/docs/development/jwt-system-summary) - Kompletny status projektu  
+- [📋 Aktualizacja dokumentacji](/docs/development/dokumentacja-aktualizacja-summary) - Podsumowanie zmian w dokumentacji
+
 ## 🚀 Najnowsze aktualizacje
 
 ### ✨ System JWT 2.0 - Automatyczne wylogowanie
