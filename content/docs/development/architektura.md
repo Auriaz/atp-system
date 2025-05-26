@@ -61,13 +61,18 @@ Nuxt.js zapewnia strukturę aplikacji, routing, middleware i integrację serwera
 
 ::card{icon="i-heroicons-shield-check"}
 #title
-System uwierzytelniania i autoryzacji
+System uwierzytelniania JWT z automatycznym wylogowaniem
 #description
-System wykorzystuje mechanizm JWT (JSON Web Tokens) do uwierzytelniania i przechowywania sesji użytkownika:
+Zaawansowany system uwierzytelniania oparty na tokenach JWT z automatycznym odnawianiem i wylogowaniem:
 
-- **Middleware autoryzacji** (`app/middleware/auth.ts`) - sprawdza uprawnienia użytkownika
-- **Middleware inicjalizacyjne** (`app/middleware/01.init.global.ts`) - inicjalizuje sesję użytkownika
-- **Middleware API** (`server/middleware/check-permission.ts`) - kontroluje dostęp do endpointów API
+- **JWT Access Tokeny** - krótkotrwałe tokeny (15 min) do autoryzacji API
+- **JWT Refresh Tokeny** - długotrwałe tokeny (30 dni) w HTTPOnly cookies
+- **Automatyczne odnawianie** - tokeny odnawiane 2 min przed wygaśnięciem
+- **Automatyczne wylogowanie** - przy błędach refresh tokena (401 responses)
+- **Middleware autoryzacji** (`app/middleware/auth.ts`) - sprawdza uprawnienia użytkownika  
+- **Middleware JWT** (`server/middleware/01.jwt-auth.ts`) - weryfikuje tokeny JWT
+- **Composables** (`useJWTAuth`, `useAuth`) - zarządzanie tokenami i sesjami
+- **Bezpieczne przechowywanie** - HTTPOnly cookies + session storage
 ::
 
 ::card{icon="i-heroicons-user-group"}
@@ -131,13 +136,28 @@ Interfejs użytkownika jest zbudowany przy użyciu Tailwind CSS i zorganizowany 
    - Dane są pobierane za pomocą composables
    - Strona jest zwracana do klienta
 
-#tab{name="Przepływ autoryzacji" icon="i-heroicons-key"}
-1. Użytkownik loguje się, przekazując poświadczenia
-2. Serwer weryfikuje poświadczenia i generuje tokeny JWT
-3. Tokeny są przechowywane w cookie lub localStorage
-4. Middleware auth sprawdza tokeny dla każdego żądania
-5. System uprawnień weryfikuje, czy użytkownik ma dostęp do zasobu
-6. Przyznanie lub odmowa dostępu
+#tab{name="Przepływ uwierzytelniania JWT" icon="i-heroicons-key"}
+1. Użytkownik loguje się, przekazując poświadczenia (`email` + `password`)
+2. Serwer weryfikuje poświadczenia i generuje parę tokenów JWT:
+   - **Access token** (15 min) - do autoryzacji API calls
+   - **Refresh token** (30 dni) - w HTTPOnly cookie
+3. Frontend automatycznie zarządza tokenami:
+   - Access token w session storage
+   - Automatyczne odnawianie 2 min przed wygaśnięciem
+4. Middleware JWT weryfikuje access tokeny dla każdego API request
+5. System uprawnień sprawdza czy użytkownik ma dostęp do zasobu
+6. **Automatyczne wylogowanie** przy błędach refresh tokena (401)
+
+#tab{name="Automatyczne wylogowanie" icon="i-heroicons-arrow-right-on-rectangle"}
+1. Access token wygasa po 15 minutach
+2. System automatycznie próbuje odnowić token za pomocą refresh tokena
+3. Jeśli refresh token jest nieprawidłowy (401 response):
+   - Callback `onRefreshError` jest wywołany
+   - Wszystkie tokeny są czyszczone z session storage
+   - Sesja użytkownika jest usuwana
+   - Powiadomienie "Session Expired" jest wyświetlane
+   - Przekierowanie na stronę logowania
+4. Proces jest całkowicie automatyczny i bezobsługowy
 ::
 
 ## Komunikacja między komponentami

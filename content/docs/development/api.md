@@ -26,36 +26,108 @@ https://api.atp-system.com/v1
 Zalecamy korzystanie z najnowszej wersji API. Starsze wersje mogą być stopniowo wycofywane.
 ::
 
-### Autentykacja
+### Uwierzytelnianie JWT
 
-API ATP System wykorzystuje tokeny JWT (JSON Web Tokens) do autentykacji zapytań. Aby uzyskać token:
+ATP System wykorzystuje zaawansowany system tokenów JWT (JSON Web Tokens) z automatycznym odnawianiem i wylogowaniem.
 
-1. Zarejestruj aplikację w [Portalu Dewelopera](https://developers.atp-system.com)
-2. Otrzymasz `client_id` i `client_secret`
-3. Wykonaj zapytanie POST do endpointu autentykacji:
+#### Rejestracja nowego użytkownika
 
 ```bash
-curl -X POST https://api.atp-system.com/v1/auth/token \
+curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"client_id": "YOUR_CLIENT_ID", "client_secret": "YOUR_CLIENT_SECRET"}'
+  -d '{
+    "username": "jan_kowalski",
+    "email": "jan@example.com", 
+    "password": "haslo123",
+    "firstName": "Jan",
+    "lastName": "Kowalski"
+  }'
 ```
 
-4. W odpowiedzi otrzymasz token JWT:
-
+Odpowiedź:
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "Bearer",
-  "expires_in": 3600
+  "status": "success",
+  "statusCode": 200,
+  "payload": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": 1,
+      "email": "jan@example.com",
+      "username": "jan_kowalski",
+      "firstName": "Jan",
+      "lastName": "Kowalski",
+      "roles": ["user"]
+    },
+    "expiresIn": 900
+  }
 }
 ```
 
-5. Dołącz token do każdego zapytania w nagłówku `Authorization`:
+#### Logowanie użytkownika
 
 ```bash
-curl -X GET https://api.atp-system.com/v1/athletes \
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jan@example.com",
+    "password": "haslo123",
+    "rememberMe": true
+  }'
+```
+
+Odpowiedź zawiera access token i ustawia refresh token w HTTPOnly cookie:
+```json
+{
+  "status": "success", 
+  "payload": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 900
+  }
+}
+```
+
+#### Odnawianie access tokena
+
+System automatycznie odnawia tokeny, ale możesz też wywołać endpoint ręcznie:
+
+```bash
+curl -X POST http://localhost:3000/api/auth/refresh \
+  -H "Cookie: refresh-token=your_refresh_token_here"
+```
+
+Odpowiedź:
+```json
+{
+  "status": "success",
+  "payload": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 900
+  }
+}
+```
+
+#### Autoryzacja API zapytań
+
+Dołącz access token do każdego zapytania w nagłówku `Authorization`:
+
+```bash
+curl -X GET http://localhost:3000/api/profile \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
+
+#### Automatyczne wylogowanie
+
+System automatycznie wylogowuje użytkownika gdy:
+- Refresh token wygaśnie (po 30 dniach)
+- Refresh token zostanie unieważniony
+- Wystąpią błędy 401 z endpointu `/api/auth/refresh`
+
+Proces automatycznego wylogowania:
+1. ✅ Czyszczenie access tokena z session storage
+2. ✅ Czyszczenie sesji użytkownika  
+3. ✅ Wyświetlenie powiadomienia "Session Expired"
+4. ✅ Przekierowanie na stronę logowania
 
 ### Limity zapytań
 
