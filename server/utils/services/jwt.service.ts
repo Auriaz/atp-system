@@ -5,11 +5,9 @@ import {
 } from '../repositories/refresh_tokens.repository'
 import { getUserRoleSlugs } from '../repositories/user_roles.repositories'
 import { sessionManagementService } from './session-management.service'
-import { createHash } from 'crypto'
-import jwt from 'jsonwebtoken'
 
 /**
- * Service dla zarządzania JWT tokenami (access tokeny)
+ * Service dla zarządzania JWT tokenami (access tokeny) - Web Crypto API version
  */
 
 interface JWTPayload {
@@ -18,6 +16,8 @@ interface JWTPayload {
     roles: string[]
     iat?: number
     exp?: number
+    iss?: string
+    aud?: string
 }
 
 interface TokenPair {
@@ -26,33 +26,103 @@ interface TokenPair {
     sessionId?: number
 }
 
-/**
- * Generuje access token (JWT)
- */
-export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
-    const secretKey = process.env.NUXT_JWT_SECRET || 'your-secret-key-change-in-production'
+// Pomocnicze funkcje dla Web Crypto API
+function base64UrlEncode(str: string): string {
+    return btoa(str)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '')
+}
 
-    // Access token wygasa po 15 minutach
-    return jwt.sign(payload, secretKey, {
-        expiresIn: '15m',
-        issuer: 'atp-system',
-        audience: 'atp-users'
-    })
+function base64UrlDecode(str: string): string {
+    str += '='.repeat((4 - str.length % 4) % 4)
+    return atob(str.replace(/-/g, '+').replace(/_/g, '/'))
+}
+
+async function createSignature(header: string, payload: string, secret: string): Promise<string> {
+    const encoder = new TextEncoder()
+    const data = encoder.encode(`${header}.${payload}`)
+    const key = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(secret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+    )
+    const signature = await crypto.subtle.sign('HMAC', key, data)
+    return base64UrlEncode(String.fromCharCode(...new Uint8Array(signature)))
+}
+
+async function verifySignature(header: string, payload: string, signature: string, secret: string): Promise<boolean> {
+    const expectedSignature = await createSignature(header, payload, secret)
+    return signature === expectedSignature
 }
 
 /**
- * Weryfikuje access token
+ * Generuje access token (JWT) używając Web Crypto API
  */
-export function verifyAccessToken(token: string): JWTPayload | null {
+export async function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): Promise<string> {
+    const secretKey = process.env.NUXT_JWT_SECRET || 'your-secret-key-change-in-production'
+
+    const now = Math.floor(Date.now() / 1000)
+    const exp = now + (15 * 60) // 15 minut
+
+    const header = {
+        alg: 'HS256',
+        typ: 'JWT'
+    }
+
+    const jwtPayload = {
+        ...payload,
+        iat: now,
+        exp: exp,
+        iss: 'atp-system',
+        aud: 'atp-users'
+    }
+
+    const encodedHeader = base64UrlEncode(JSON.stringify(header))
+    const encodedPayload = base64UrlEncode(JSON.stringify(jwtPayload))
+
+    const signature = await createSignature(encodedHeader, encodedPayload, secretKey)
+
+    return `${encodedHeader}.${encodedPayload}.${signature}`
+}
+
+/**
+ * Weryfikuje access token używając Web Crypto API
+ */
+export async function verifyAccessToken(token: string): Promise<JWTPayload | null> {
     try {
         const secretKey = process.env.NUXT_JWT_SECRET || 'your-secret-key-change-in-production'
 
-        const decoded = jwt.verify(token, secretKey, {
-            issuer: 'atp-system',
-            audience: 'atp-users'
-        }) as JWTPayload
+        const parts = token.split('.')
+        if (parts.length !== 3) {
+            return null
+        }
 
-        return decoded
+        const [encodedHeader, encodedPayload, signature] = parts
+
+        // Weryfikuj sygnaturę
+        const isValid = await verifySignature(encodedHeader, encodedPayload, signature, secretKey)
+        if (!isValid) {
+            return null
+        }
+
+        // Dekoduj payload
+        const payload = JSON.parse(base64UrlDecode(encodedPayload)) as JWTPayload
+
+        // Sprawdź wygaśnięcie
+        const now = Math.floor(Date.now() / 1000)
+        if (payload.exp && payload.exp < now) {
+            return null
+        }
+
+        // Sprawdź issuer i audience
+        if (payload.iss !== 'atp-system' || payload.aud !== 'atp-users') {
+            return null
+        }
+
+        return payload
     } catch (error) {
         console.error('JWT verification failed:', error)
         return null
@@ -77,7 +147,7 @@ export async function generateTokenPair(
     const existingSessionId = await sessionManagementService.findExistingSession(userId, finalDeviceId)
 
     // Generuj access token
-    const accessToken = generateAccessToken({
+    const accessToken = await generateAccessToken({
         userId,
         email,
         roles
@@ -127,7 +197,7 @@ export async function refreshAccessToken(refreshTokenValue: string): Promise<Tok
         const userRoles = await getUserRoleSlugs(refreshTokenData.userId)
 
         // Generuj nowy access token
-        const accessToken = generateAccessToken({
+        const accessToken = await generateAccessToken({
             userId: refreshTokenData.user.id,
             email: refreshTokenData.user.email,
             roles: userRoles
@@ -171,5 +241,6 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
  */
 export function generateDeviceId(userAgent?: string, ipAddress?: string): string {
     const data = `${userAgent || 'unknown'}-${ipAddress || 'unknown'}-${Date.now()}`
-    return createHash('md5').update(data).digest('hex')
+    return btoa(data).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32)
 }
+

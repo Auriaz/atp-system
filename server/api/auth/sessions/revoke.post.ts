@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const token = authHeader.slice(7)
-        const payload = verifyAccessToken(token)
+        const payload = await verifyAccessToken(token)
 
         if (!payload) {
             throw createError({

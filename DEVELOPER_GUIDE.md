@@ -20,6 +20,7 @@
 - [⚡ Szybkie Komendy](#-szybkie-komendy)
 - [🐛 Debugowanie](#-debugowanie)
 - [✅ Checklist Przed Wdrożeniem](#-checklist-przed-wdrożeniem)
+- [🌿 Git Branching Strategy](#-git-branching-strategy)
 
 ---
 
@@ -154,7 +155,6 @@ atp-system/
 ├── 🎨 content/                # Nuxt Content (dokumentacja, blog)
 │   ├── docs/                  # Dokumentacja techniczna
 │   ├── faq/                   # FAQ
-│   └── legal/                 # Dokumenty prawne
 ├── 🌐 i18n/                   # Pliki tłumaczeń
 ├── 🖼️ public/                 # Statyczne zasoby
 ├── ⚙️ server/                 # Backend Nitro

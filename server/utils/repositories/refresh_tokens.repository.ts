@@ -1,24 +1,29 @@
 import { refreshTokens } from '../../database/schema'
 import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { randomBytes, createHash } from 'crypto'
 import { sessionManagementService } from '../services/session-management.service'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
 type NewRefreshToken = typeof refreshTokens.$inferInsert
 
 /**
- * Generuje bezpieczny refresh token
+ * Generuje bezpieczny refresh token używając Web Crypto API
  */
 export function generateRefreshToken(): string {
-    return randomBytes(32).toString('hex')
+    const array = new Uint8Array(32)
+    crypto.getRandomValues(array)
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 /**
- * Hash refresh token przed zapisem do bazy
+ * Hash refresh token przed zapisem do bazy używając Web Crypto API
  */
 export async function hashRefreshToken(token: string): Promise<string> {
-    return createHash('sha256').update(token).digest('hex')
+    const encoder = new TextEncoder()
+    const data = encoder.encode(token)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+    const hashArray = new Uint8Array(hashBuffer)
+    return Array.from(hashArray, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 /**
