@@ -81,14 +81,55 @@ export default defineNuxtConfig({
     database: true,
     cache: true,
   },
-
   nitro: {
     experimental: {
       tasks: true, // Włącz eksperymentalne zadania
       // websocket: true,
       openAPI: true, // Włącz eksperymentalne OpenAPI
     },
-
+    // Cloudflare Workers compatibility
+    preset: 'cloudflare-pages',
+    minify: true,
+    // Node.js polyfills for Cloudflare Workers
+    unenv: {
+      polyfill: {
+        fs: false,
+        crypto: true,
+        util: true,
+        stream: true,
+        buffer: true,
+        process: true,
+        events: true,
+        url: true,
+        path: true,
+        querystring: true,
+        string_decoder: true,
+        timers: true,
+        zlib: true,
+      }
+    },
+    // Additional node compatibility
+    node: {
+      crypto: true,
+      util: true,
+      stream: true,
+      buffer: true,
+      process: true,
+      events: true,
+      url: true,
+      path: true,
+      querystring: true,
+      string_decoder: true,
+      timers: true,
+      zlib: true,
+    },
+    // Rollup options for better compatibility
+    rollupConfig: {
+      external: ['fs', 'net', 'tls'],
+      output: {
+        format: 'es'
+      }
+    }
   },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins

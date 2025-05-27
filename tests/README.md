@@ -1,14 +1,29 @@
 # 🧪 Tests Directory
 
-This directory contains all test files for the ATP System, including JWT Authentication and Session Management.
+This directory contains all test files for the ATP System, organized by test type and scope.
 
-## 📁 Test Structure
+## 📁 Test Structure (Reorganized)
 
-### 🔐 Authentication Tests (Root Level)
-Core JWT authentication and token management tests
+Tests are now organized into categorized subdirectories for better maintainability:
 
-### 📱 Session Management Tests
-Complete test suite for multi-device session management in `session-management/` subdirectory
+### 📁 `/unit` - Unit Tests (18 files)
+Individual component and function testing in isolation
+
+### 📁 `/integration` - Integration Tests (8 files)  
+Testing component interaction and API integration
+
+### 📁 `/e2e` - End-to-End Tests (5 files)
+Complete user scenario testing
+
+### 📁 `/browser` - Browser Tests (3 files)
+Testing in browser environment with HTML interfaces
+
+### 📁 `/session-management` - Session Management Tests
+Specialized test suite for multi-device session management
+
+## 📋 Quick Reference
+
+See `STRUCTURE.md` for detailed file organization and running instructions.
 
 ## Test Files Overview
 

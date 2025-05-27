@@ -34,9 +34,10 @@
 - **Database schema** - Pełna struktura tabel dla sesji
 
 ### 🔧 Organizacja Projektu  
-- **Reorganizacja testów** - 15 plików przeniesione do `tests/session-management/`
-- **Dokumentacja** - Wszystkie README zaktualizowane
-- **Struktura plików** - Uporządkowana zgodnie z best practices
+- **Reorganizacja testów** - 34 pliki zorganizowane w 4 kategorie (unit/integration/e2e/browser/)
+- **Centralizacja raportów** - 10 raportów przeniesione do `docs/reports/`
+- **Dokumentacja** - Wszystkie README zaktualizowane z nową strukturą
+- **Struktura plików** - Uporządkowana zgodnie z best practices i skalowalnością
 
 ### 📊 Metryki Jakości
 ```
@@ -292,19 +293,33 @@ git push origin feature/nazwa-funkcjonalności
 
 ## 🧪 Testowanie
 
-### Struktura Testów
+### Struktura Testów (Zreorganizowana 27.05.2025)
 ```
 tests/
-├── README.md                    # Dokumentacja testów (zaktualizowane 26.05.2025)
-├── session-management/          # ✅ Testy zarządzania sesjami (zreorganizowane)
-│   ├── validate-session-management.cjs  # ✅ 100% walidacja (19/19 testów)
-│   ├── test-session-*.js        # Testy funkcjonalne
-│   ├── debug-session-*.js       # Narzędzia debugowania
-│   ├── REORGANIZATION_COMPLETE.md  # Dokumentacja reorganizacji
-│   └── *.ps1, *.cjs, *.js      # Dodatkowe pliki testowe (15 plików)
-├── test-auth-*.cjs             # Testy autoryzacji
-├── test-*.html                 # Testy przeglądarki
-└── serve-browser-tests.cjs     # Serwer testów
+├── README.md                    # Dokumentacja testów (zaktualizowane)
+├── STRUCTURE.md                 # ✅ Szczegółowa dokumentacja organizacji
+├── unit/                        # ✅ 18 testów jednostkowych
+│   ├── test-basic-auth.js/.cjs  # Podstawowa autoryzacja
+│   ├── test-jwt-auth.js/.cjs    # Testy JWT
+│   ├── test-token-refresh.js/.cjs # Odświeżanie tokenów
+│   └── ... (inne testy jednostkowe)
+├── integration/                 # ✅ 8 testów integracyjnych  
+│   ├── test-api-final.js        # Finalne testy API
+│   ├── test-composable-integration.js/.cjs # Integracja composables
+│   └── ... (inne testy integracyjne)
+├── e2e/                        # ✅ 5 testów end-to-end
+│   ├── test-comprehensive-session.js # Kompleksowe testy sesji
+│   ├── test-multi-device.js     # Testy wielourządzeniowe
+│   └── test-final-validation.* (js/cjs/ps1)
+├── browser/                    # ✅ 3 testy przeglądarki
+│   ├── test-auth.html          # HTML testy autoryzacji
+│   ├── session-management-test.html # Testy sesji
+│   └── debug-registration.js   # Debug rejestracji
+├── session-management/         # ✅ Specjalistyczne testy sesji (zachowane)
+│   ├── validate-session-management.cjs # ✅ 100% walidacja (19/19 testów)
+│   └── ... (15 plików specjalistycznych)
+├── run-all-tests.js/.cjs      # Uruchamianie wszystkich testów
+└── serve-browser-tests.js/.cjs # Serwer testów przeglądarki
 ```
 
 ### Komendy Testowe
@@ -315,6 +330,20 @@ pnpm run test
 # ✅ Testy zarządzania sesjami (100% success - 19/19)
 cd tests/session-management
 node validate-session-management.cjs
+
+# Nowa zorganizowana struktura testów:
+
+# Testy jednostkowe
+cd tests/unit
+node test-basic-auth.js
+
+# Testy integracyjne
+cd tests/integration  
+node test-api-final.js
+
+# Testy end-to-end
+cd tests/e2e
+.\test-final-validation.ps1
 
 # Testy przeglądarki
 cd tests && node serve-browser-tests.cjs
@@ -424,12 +453,16 @@ pnpm test
 # ✅ Testy session management (19/19 passed)
 cd tests/session-management && node validate-session-management.cjs
 
+# Nowa zorganizowana struktura testów:
+cd tests/unit && node test-basic-auth.js      # Testy jednostkowe
+cd tests/integration && node test-api-final.js # Testy integracyjne  
+cd tests/e2e && .\test-final-validation.ps1    # Testy E2E
+
 # Serwer testów przeglądarki
 cd tests && node serve-browser-tests.cjs
 
-# Sprawdź status reorganizacji testów
-ls -la tests/session-management/
-# Powinno pokazać 15 plików w zorganizowanej strukturze
+# Sprawdź reorganizację testów (34 pliki w 4 kategoriach)
+ls tests/unit/, tests/integration/, tests/e2e/, tests/browser/
 ```
 
 ### Deployment
@@ -576,6 +609,12 @@ pnpm build && pnpm preview
 4. Commit z opisem `docs: update developer guide - [opis zmian]`
 
 ### Historia Zmian
+- **27.05.2025** - Major reorganizacja plików testowych i raportów
+  - ✅ Przeprowadzono kompletną reorganizację 34 plików testowych w 4 kategorie
+  - ✅ Centralizacja 10 raportów w `docs/reports/`
+  - ✅ Utworzono nową strukturę: unit/ integration/ e2e/ browser/
+  - ✅ Zaktualizowano dokumentację z nową organizacją
+  - 📝 Projekt ma teraz profesjonalną, skalowalną strukturę plików
 - **26.05.2025** - Utworzenie pierwotnej wersji + major update
   - ✅ Zaktualizowano status projektu: 100% walidacja systemu zarządzania sesjami (19/19 testów)
   - ✅ Dodano informacje o reorganizacji testów (15 plików w `tests/session-management/`)
