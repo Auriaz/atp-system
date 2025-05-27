@@ -1,5 +1,26 @@
 {
-  "name": "nuxt-app",
+  "name": "atp-system",
+  "version": "0.0.9",
+  "description": "Advanced Training Platform - Comprehensive system for managing athletes, coaches, and training programs",
+  "author": "Auriaz",
+  "license": "MIT",
+  "keywords": [
+    "training-platform",
+    "athlete-management",
+    "nuxt3",
+    "typescript",
+    "drizzle-orm",
+    "authentication",
+    "session-management"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/atp-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/atp-system/issues"
+  },
+  "homepage": "https://github.com/your-username/atp-system#readme",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +31,13 @@
     "deploy": "npx nuxthub deploy",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "release:v0.1.0": "npm version 0.1.0 && git tag v0.1.0",
+    "release:v0.2.0": "npm version 0.2.0 && git tag v0.2.0",
+    "release:v1.0.0": "npm version 1.0.0 && git tag v1.0.0"
   },
   "dependencies": {
     "@nuxt/content": "^3.5.1",
