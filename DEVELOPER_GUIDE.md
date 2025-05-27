@@ -410,6 +410,7 @@ node tests/session-management/validate-session-management.cjs
 - **API Base**: http://localhost:3000/api
 - **✅ Sessions API**: http://localhost:3000/api/auth/sessions (fully implemented)
 - **✅ Test Server**: http://localhost:8080 (browser tests)
+- ✅ **Git Workflow Documentation**: `/content/docs/development/git-workflow.md` (complete branching strategy)
 
 ---
 
@@ -615,7 +616,8 @@ pnpm build && pnpm preview
   - ✅ Centralizacja 10 raportów w `docs/reports/`
   - ✅ Utworzono nową strukturę: unit/ integration/ e2e/ browser/
   - ✅ Zaktualizowano dokumentację z nową organizacją
-  - 📝 Projekt ma teraz profesjonalną, skalowalną strukturę plików
+  - ✅ **Dodano kompletną strategię Git workflow** z dokumentacją w systemie zarządzania treścią
+  - 📝 Projekt ma teraz profesjonalną, skalowalną strukturę plików i procedur Git
 - **26.05.2025** - Utworzenie pierwotnej wersji + major update
   - ✅ Zaktualizowano status projektu: 100% walidacja systemu zarządzania sesjami (19/19 testów)
   - ✅ Dodano informacje o reorganizacji testów (15 plików w `tests/session-management/`)

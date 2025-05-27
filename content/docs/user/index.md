@@ -12,7 +12,7 @@ navigation:
   order: 7
 requirements:
   - 'Każdy zarejestrowany użytkownik'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
 ---
 
 # Dokumentacja Użytkownika ATP System

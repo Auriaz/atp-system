@@ -14,6 +14,7 @@ navigation:
 permissions:
   view: ['editor', 'manager', 'admin']
   edit: ['admin']
+requiredRole: ['admin', 'editor', 'manager']
 ---
 
 # FAQ dla Edytorów

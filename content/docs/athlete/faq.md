@@ -12,7 +12,9 @@ navigation:
   order: 2
 requirements:
   - 'Rola: Athlete lub wyższa'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
+requiredRole: ['athlete', 'coach', 'admin']
+category: 'Sportowcy'
 ---
 
 # FAQ dla Zawodników

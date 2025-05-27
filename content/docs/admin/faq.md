@@ -2,18 +2,14 @@
 title: 'FAQ dla Administratorów'
 description: 'Najczęściej zadawane pytania przez administratorów systemu ATP - zarządzanie systemem, bezpieczeństwo, konfiguracja i wsparcie techniczne'
 version: '1.0.0'
+requiredRole: ['admin']
 lastUpdated: '2025-05-26'
 author: 'ATP System Team'
-category: 'admin'
+category: 'Administracja'
 tags: ['faq', 'admin', 'system', 'bezpieczeństwo', 'konfiguracja', 'serwer', 'baza-danych', 'backup']
 navigation:
   title: 'FAQ'
   icon: 'heroicons:question-mark-circle'
-  order: 2
-  badge: 'Pomoc'
-permissions:
-  view: ['admin']
-  edit: ['admin']
 ---
 
 # FAQ dla Administratorów

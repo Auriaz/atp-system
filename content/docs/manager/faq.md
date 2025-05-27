@@ -11,9 +11,8 @@ navigation:
   icon: 'heroicons:question-mark-circle'
   order: 2
   badge: 'Pomoc'
-permissions:
-  view: ['manager', 'admin']
-  edit: ['admin']
+
+requiredRole: ['admin', 'menager']
 ---
 
 # FAQ dla Menedżerów

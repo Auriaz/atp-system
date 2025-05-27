@@ -3,7 +3,7 @@ title: 'Raport Końcowy - Zarządzanie Sesjami'
 description: 'Finalny raport implementacji systemu zarządzania sesjami wielourządzeniowymi w ATP System'
 lastUpdated: '2025-05-26'
 author: 'Zespół ATP System'
-version: '2.0.0'
+version: '1.0.0'
 tags: ['sesje', 'implementacja', 'zakończenie', 'raport', 'zarządzanie']
 navigation:
   title: 'Raport Zarządzania Sesjami'
@@ -12,8 +12,9 @@ navigation:
   order: 7
 requirements:
   - 'Rola: Admin lub Developer'
-  - 'System: ATP System v3.0+'
-category: 'Development'
+  - 'System: ATP System v1.0+'
+category: 'Raporty'
+requiredRole: ['admin', 'developer']
 ---
 
 # 🎉 Raport implementacji zarządzania wielourządzeniowymi sesjami

@@ -3,7 +3,7 @@ title: 'Raport Reorganizacji Struktury Plików'
 description: 'Dokumentacja reorganizacji struktury plików w projekcie ATP System, zgodnie z konwencjami Nuxt 3'
 lastUpdated: '2025-12-28'
 author: 'Zespół ATP System'
-version: '2.0.0'
+version: '1.0.0'
 tags: ['reorganizacja', 'struktura', 'nuxt3', 'development', 'raport']
 navigation:
   title: 'Reorganizacja Plików'
@@ -12,7 +12,8 @@ navigation:
   order: 5
 requirements:
   - 'Rola: Developer lub Admin'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
+requiredRole: ['admin', 'developer']
 ---
 
 # Raport Reorganizacji Struktury Plików - ATP System

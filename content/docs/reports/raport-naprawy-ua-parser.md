@@ -3,7 +3,7 @@ title: 'Raport Naprawy ua-parser-js'
 description: 'Dokumentacja naprawy błędu importu biblioteki ua-parser-js w systemie ATP'
 lastUpdated: '2025-12-28'
 author: 'Zespół ATP System'
-version: '2.0.0'
+version: '1.0.0'
 tags: ['naprawa', 'ua-parser-js', 'import', 'development', 'błąd']
 navigation:
   title: 'Naprawa ua-parser-js'
@@ -12,7 +12,8 @@ navigation:
   order: 6
 requirements:
   - 'Rola: Developer lub Admin'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
+requiredRole: ['admin', 'developer']
 ---
 
 # Raport Naprawy Błędu ua-parser-js - ATP System

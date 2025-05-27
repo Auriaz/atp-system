@@ -12,7 +12,8 @@ navigation:
   order: 2
 requirements:
   - 'Rola: Coach lub wyższa'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
+requiredRole: ['coach', 'admin']
 ---
 
 # FAQ dla Trenerów

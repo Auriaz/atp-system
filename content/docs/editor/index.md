@@ -12,7 +12,8 @@ navigation:
   order: 6
 requirements:
   - 'Rola: Editor lub wyższa'
-  - 'System: ATP System v3.0+'
+  - 'System: ATP System v1.0+'
+requiredRole: ['editor', 'admin']
 ---
 
 # Dokumentacja dla Edytorów Treści
