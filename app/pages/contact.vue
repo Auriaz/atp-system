@@ -39,10 +39,15 @@ const faqs = ref([
 
 // Dane kontaktowe
 const contactInfo = {
-  address: 'Lorem ipsum dolor sit amet',
-  email: 'przykład@atp-system.pl',
-  phone: '+48 111 111 111 ',
-  hours: 'Pon-Pt: 9:00 - 17:00'
+  address: 'ul. Nowogrodzka 84/86, 02-018 Warszawa, Polska',
+  email: 'info@atp-system.com',
+  phone: '+48 22 380 15 30',
+  hours: 'Pon-Pt: 8:00 - 18:00, Sob: 9:00 - 15:00',
+  supportEmail: 'support@atp-system.com',
+  salesEmail: 'sales@atp-system.com',
+  fax: '+48 22 380 15 31',
+  nip: 'NIP: 123-456-78-90',
+  regon: 'REGON: 123456789'
 }
 
 // Obsługa wysłania formularza
@@ -220,20 +225,22 @@ const toggleFaq = (index: number) => {
                   Przepraszamy, wystąpił problem. Spróbuj ponownie później.
                 </p>
               </div>
-            </div>
-            
-            <!-- Contact Information -->
+            </div>              <!-- Contact Information -->
             <div class="space-y-8">
               <!-- Info Cards -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="grid grid-cols-1 gap-6">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                   <div class="flex items-start">
                     <div class="bg-primary-100 dark:bg-primary-900/30 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mr-4">
                       <UIcon name="i-lucide-map-pin" class="text-primary-600 dark:text-primary-400 text-xl" />
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Adres</h3>
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Adres biura</h3>
                       <p class="text-gray-600 dark:text-gray-400">{{ contactInfo.address }}</p>
+                      <div class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        <p>{{ contactInfo.nip }}</p>
+                        <p>{{ contactInfo.regon }}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -244,8 +251,35 @@ const toggleFaq = (index: number) => {
                       <UIcon name="i-lucide-mail" class="text-primary-600 dark:text-primary-400 text-xl" />
                     </div>
                     <div>
-                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Email</h3>
-                      <a href="mailto:kontakt@atp-system.pl" class="text-primary-600 dark:text-primary-400 hover:underline">{{ contactInfo.email }}</a>
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Kontakt główny</h3>
+                      <a href="mailto:info@atp-system.com" class="text-primary-600 dark:text-primary-400 hover:underline block">{{ contactInfo.email }}</a>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Informacje ogólne i zapytania</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                  <div class="flex items-start">
+                    <div class="bg-green-100 dark:bg-green-900/30 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mr-4">
+                      <UIcon name="i-lucide-headphones" class="text-green-600 dark:text-green-400 text-xl" />
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Wsparcie techniczne</h3>
+                      <a href="mailto:support@atp-system.com" class="text-green-600 dark:text-green-400 hover:underline block">{{ contactInfo.supportEmail }}</a>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Pomoc w obsłudze systemu i troubleshooting</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mr-4">
+                      <UIcon name="i-lucide-briefcase" class="text-blue-600 dark:text-blue-400 text-xl" />
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Sprzedaż i oferty B2B</h3>
+                      <a href="mailto:sales@atp-system.com" class="text-blue-600 dark:text-blue-400 hover:underline block">{{ contactInfo.salesEmail }}</a>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Plany Enterprise, partnerstwa i współpraca</p>
                     </div>
                   </div>
                 </div>
@@ -257,7 +291,8 @@ const toggleFaq = (index: number) => {
                     </div>
                     <div>
                       <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Telefon</h3>
-                      <a href="tel:+48123456789" class="text-primary-600 dark:text-primary-400 hover:underline">{{ contactInfo.phone }}</a>
+                      <a href="tel:+48223801530" class="text-primary-600 dark:text-primary-400 hover:underline block">{{ contactInfo.phone }}</a>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fax: {{ contactInfo.fax }}</p>
                     </div>
                   </div>
                 </div>
@@ -270,6 +305,7 @@ const toggleFaq = (index: number) => {
                     <div>
                       <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Godziny pracy</h3>
                       <p class="text-gray-600 dark:text-gray-400">{{ contactInfo.hours }}</p>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Niedziela: zamknięte</p>
                     </div>
                   </div>
                 </div>
@@ -281,9 +317,8 @@ const toggleFaq = (index: number) => {
                   <!-- W rzeczywistej implementacji należy umieścić tutaj rzeczywistą mapę (Google Maps, Leaflet itp.) -->
                   <div class="absolute inset-0 flex items-center justify-center">
                     <div class="text-center">
-                      <UIcon name="i-lucide-map" class="h-12 w-12 text-gray-400 dark:text-gray-500 mb-2" />
-                      <p class="text-gray-500 dark:text-gray-400">Mapa lokalizacji</p>
-                      <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">ul. Sportowa 123, 00-001 Warszawa</p>
+                      <UIcon name="i-lucide-map" class="h-12 w-12 text-gray-400 dark:text-gray-500 mb-2" />                      <p class="text-gray-500 dark:text-gray-400">Mapa lokalizacji</p>
+                      <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">ul. Nowogrodzka 84/86, Warszawa</p>
                     </div>
                   </div>
                 </div>

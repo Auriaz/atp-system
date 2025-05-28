@@ -1,44 +1,53 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+// SEO Meta
+useSeoMeta({
+  title: 'O nas - ATP System',
+  description: 'Poznaj historię ATP System, nasz zespół i misję rewolucjonizowania treningu sportowego poprzez zaawansowane analizy i technologie.',
+  ogTitle: 'O nas - ATP System',
+  ogDescription: 'Zespół pasjonatów sportu i technologii, który tworzy przyszłość treningu sportowego.',
+  ogImage: '/images/about-og.jpg',
+  twitterCard: 'summary_large_image'
+})
+
 // Dane zespołu
 const teamMembers = [
   {
-    name: 'lorem ipsum',
-    position: 'Założyciel & CEO',
-    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
-    image: null, // Placeholder do zastąpienia rzeczywistym obrazem
+    name: 'GitHub Copilot',
+    position: 'Główny Architekt & Developer',
+    bio: 'AI asystent programistyczny odpowiedzialny za pełną architekturę i implementację systemu ATP. Specjalizuje się w Vue.js, Nuxt 3, TypeScript i nowoczesnych technologiach webowych.',
+    image: null,
     social: {
-      linkedin: '#',
+      github: 'https://github.com/features/copilot',
+      linkedin: '#'
+    }
+  },
+  {
+    name: 'Community Contributors',
+    position: 'Zespół Open Source',
+    bio: 'Społeczność deweloperów i entuzjastów sportu współtworzących platformę ATP System. Każdy może wnieść swój wkład w rozwój projektu.',
+    image: null,
+    social: {
+      github: '#',
       twitter: '#'
     }
   },
   {
-    name: 'lorem ipsum',
-    position: 'Dyrektor ds. Rozwoju',
-    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
+    name: 'Sports Experts',
+    position: 'Konsultanci Sportowi',
+    bio: 'Grupa ekspertów z dziedziny sportu i treningu, którzy konsultują funkcjonalności systemu i zapewniają zgodność z najlepszymi praktykami.',
     image: null,
     social: {
-      linkedin: '#',
+      linkedin: '#'
+    }
+  },
+  {
+    name: 'Tech Community',
+    position: 'Społeczność Techniczna',
+    bio: 'Grupa programistów, testerów i użytkowników, którzy aktywnie uczestniczą w testowaniu, zgłaszaniu błędów i proponowaniu nowych funkcji.',
+    image: null,
+    social: {
+      github: '#',
       twitter: '#'
-    }
-  },
-  {
-    name: 'lorem ipsum',
-    position: 'Główny Architekt Systemu',
-    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
-    image: null,
-    social: {
-      linkedin: '#',
-      github: '#'
-    }
-  },
-  {
-    name: 'lorem ipsum',
-    position: 'Specjalista ds. UX/UI',
-    bio: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.',
-    image: null,
-    social: {
-      linkedin: '#',
-      dribbble: '#'
     }
   }
 ]
@@ -46,29 +55,34 @@ const teamMembers = [
 // Kamienie milowe firmy
 const milestones = [
   {
-    year: '2024',
-    title: 'Początek',
-    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+    year: '2025',
+    title: 'Początek Projektu',
+    description: 'Rozpoczęcie prac nad demonstracyjną platformą ATP System wykorzystującą Nuxt 3, Vue.js i nowoczesne technologie webowe.'
   },
   {
     year: '2025',
-    title: 'Narodziny produktu',
-    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+    title: 'Architektura Systemu',
+    description: 'Zaprojektowanie kompletnej architektury aplikacji z autoryzacją JWT, zarządzaniem sesjami i systemem uprawnień.'
   },
   {
     year: '2025',
-    title: 'Oficjalny start',
-    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+    title: 'Interfejs Użytkownika',
+    description: 'Stworzenie responsywnego interfejsu z dark mode, komponentami UI i optymalizacją dla urządzeń mobilnych.'
   },
   {
-    year: '2026',
-    title: 'Ekspansja międzynarodowa',
-    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+    year: '2025',
+    title: 'Funkcje Biznesowe',
+    description: 'Implementacja kluczowych funkcji: zarządzanie zawodnikami, plany treningowe, analizy wydajności i raportowanie.'
   },
   {
-    year: '2026',
-    title: 'Nowa wersja',
-    description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus nec nunc.'
+    year: '2025',
+    title: 'Dokumentacja i Testy',
+    description: 'Opracowanie komprehensywnej dokumentacji, testów jednostkowych, integracyjnych i end-to-end.'
+  },
+  {
+    year: '2025',
+    title: 'Prezentacja Demonstracyjna',
+    description: 'Ukończenie projektu demonstracyjnego pokazującego pełne możliwości nowoczesnej platformy treningowej.'
   }
 ]
 
@@ -76,62 +90,64 @@ const milestones = [
 const values = [
   {
     title: 'Innowacyjność',
-    description: 'Nieustannie poszukujemy nowych rozwiązań i technologii, które mogą poprawić efektywność treningu sportowego.',
+    description: 'Nieustannie poszukujemy nowych rozwiązań technologicznych, które mogą zrewolucjonizować sposób treningu i analizy wydajności sportowej.',
     icon: 'i-lucide-lightbulb'
   },
   {
-    title: 'Dokładność',
-    description: 'Dbamy o precyzję danych i analiz, które są fundamentem skutecznego treningu i rozwoju zawodników.',
-    icon: 'i-lucide-check-circle'
+    title: 'Precyzja',
+    description: 'Dbamy o najwyższą dokładność danych i analiz, które stanowią fundament skutecznych decyzji treningowych i rozwoju zawodników.',
+    icon: 'i-lucide-target'
   },
   {
     title: 'Współpraca',
-    description: 'Wierzymy, że najlepsze wyniki osiąga się poprzez bliską współpracę między trenerami, zawodnikami i technologią.',
+    description: 'Wierzymy w siłę partnerstwa między trenerami, zawodnikami i technologią. Wspólnie osiągamy lepsze wyniki niż pojedynczo.',
     icon: 'i-lucide-users'
   },
   {
-    title: 'Adaptacja',
-    description: 'Dostosowujemy nasze rozwiązania do zmieniających się potrzeb i wyzwań współczesnego sportu.',
-    icon: 'i-lucide-refresh-cw'
+    title: 'Ciągły Rozwój',
+    description: 'Dostosowujemy nasze rozwiązania do zmieniających się potrzeb sportu, ucząc się od naszych użytkowników i najnowszych badań.',
+    icon: 'i-lucide-trending-up'
   }
 ]
 
 // Statystyki
 const stats = [
-  { value: '0+', label: 'Klubów sportowych' },
-  { value: '0+', label: 'Aktywnych użytkowników' },
-  { value: '0+', label: 'Krajów' },
-  { value: '0%', label: 'Zadowolonych klientów' }
+  { value: '1 projekt', label: 'Demonstracyjna aplikacja' },
+  { value: '100+', label: 'Plików kodu źródłowego' },
+  { value: '50+', label: 'Komponentów Vue' },
+  { value: '5 języków', label: 'Technologii wykorzystanych' }
 ]
 
-// Partnerzy i klienci (logo placeholders)
+// Partnerzy i klienci
 const partners = [
-  { name: 'Lorem ipsus', logo: null },
-  { name: 'Lorem ipsus', logo: null },
-  { name: 'Lorem ipsus', logo: null },
-  { name: 'Lorem ipsus', logo: null },
+  { name: 'Vue.js', logo: null },
+  { name: 'Nuxt 3', logo: null },
+  { name: 'TypeScript', logo: null },
+  { name: 'Tailwind CSS', logo: null },
+  { name: 'Nuxt UI', logo: null },
+  { name: 'GitHub Copilot', logo: null }
 ]
 
 // Dane do sekcji "Nasz proces"
 const process = [
   {
-    title: 'Analiza',
-    description: 'Identyfikujemy potrzeby i wymagania klienta, aby dostosować system do jego specyficznych potrzeb.',
+    title: 'Analiza Wymagań',
+    description: 'Szczegółowa analiza potrzeb platformy treningowej, badanie najlepszych praktyk w branży sportowej i planowanie architektury systemu.',
     icon: 'i-lucide-search'
   },
   {
-    title: 'Wdrożenie',
-    description: 'Szkolimy zespół i integrujemy ATP System z istniejącymi procesami treningowymi.',
-    icon: 'i-lucide-upload'
+    title: 'Implementacja Backend',
+    description: 'Stworzenie solidnego backendu z autoryzacją JWT, zarządzaniem bazą danych, API endpoints i systemem uprawnień użytkowników.',
+    icon: 'i-lucide-server'
   },
   {
-    title: 'Monitoring',
-    description: 'Zapewniamy ciągłe wsparcie i monitorowanie wyników, aby zagwarantować maksymalną efektywność.',
-    icon: 'i-lucide-bar-chart-2'
+    title: 'Interfejs Użytkownika',
+    description: 'Projektowanie i implementacja responsywnego interfejsu z wykorzystaniem Vue.js, Nuxt UI i Tailwind CSS z obsługą dark mode.',
+    icon: 'i-lucide-monitor'
   },
   {
-    title: 'Optymalizacja',
-    description: 'Nieustannie ulepszamy system na podstawie danych i informacji zwrotnych od użytkowników.',
+    title: 'Testowanie i Optymalizacja',
+    description: 'Kompleksowe testowanie funkcjonalności, optymalizacja wydajności, zapewnienie bezpieczeństwa i przygotowanie dokumentacji.',
     icon: 'i-lucide-settings'
   }
 ]
@@ -149,34 +165,49 @@ const getRandomBackground = (name: string) => {
 }
 </script>
 
-<template>
-  <NuxtLayout>
-    <div class="about-page">
+<template>  <NuxtLayout name="default">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900">
       <!-- Hero Section -->
-      <section class="relative py-20 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900 overflow-hidden">
-        <!-- Animated background elements -->
-        <div class="absolute inset-0 overflow-hidden">
-          <div class="absolute top-0 left-0 w-full h-full">
-            <div class="absolute top-10 left-10 w-64 h-64 bg-primary-500 dark:bg-primary-600 opacity-10 rounded-full filter blur-3xl transform-gpu animate-blob"></div>
-            <div class="absolute bottom-10 right-10 w-80 h-80 bg-blue-500 dark:bg-blue-600 opacity-10 rounded-full filter blur-3xl transform-gpu animate-blob animation-delay-2000"></div>
-            <div class="absolute top-1/2 left-1/3 w-72 h-72 bg-indigo-500 dark:bg-indigo-600 opacity-10 rounded-full filter blur-3xl transform-gpu animate-blob animation-delay-4000"></div>
-          </div>
-        </div>
+      <section class="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-24 overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10"></div>
         
-        <div class="container mx-auto px-4 relative z-10">
-          <div class="text-center text-white max-w-3xl mx-auto">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Nasza misja</h1>
-            <p class="text-xl md:text-2xl text-primary-200 dark:text-gray-300 leading-relaxed">
-              Rewolucjonizujemy świat treningu sportowego poprzez dostarczanie zaawansowanych narzędzi analitycznych, które pomagają trenerom i zawodnikom osiągać maksymalne wyniki.
+        <!-- Animated Background Shapes -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-delayed"></div>
+        
+        <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div class="max-w-4xl mx-auto">            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+              Nasz 
+              <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Projekt
+              </span>
+            </h1>
+            
+            <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Demonstracyjna platforma zarządzania treningiem sportowym, stworzona z wykorzystaniem najnowszych 
+              technologii webowych, pokazująca możliwości nowoczesnych rozwiązań w aplikacjach biznesowych.
             </p>
+            
+            <!-- Mission Points -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              <div class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
+                <UIcon name="i-lucide-target" class="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Precyzja</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Dostarczamy najdokładniejsze dane treningowe</p>
+              </div>
+              <div class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
+                <UIcon name="i-lucide-zap" class="w-12 h-12 text-purple-500 mx-auto mb-4" />
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Innowacja</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Wykorzystujemy najnowsze technologie AI</p>
+              </div>
+              <div class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
+                <UIcon name="i-lucide-heart" class="w-12 h-12 text-pink-500 mx-auto mb-4" />
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Pasja</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Tworzone przez sportowców dla sportowców</p>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <!-- Wave separator -->
-        <div class="absolute bottom-0 left-0 w-full overflow-hidden">
-          <svg class="relative block w-full h-16 sm:h-24" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,141.39,111.56,219.35,94.19Z" class="fill-white dark:fill-gray-900"></path>
-          </svg>
         </div>
       </section>
       
@@ -187,16 +218,15 @@ const getRandomBackground = (name: string) => {
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-6">Nasza historia</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-12">
-              <div>
-                <div class="prose prose-lg dark:prose-invert max-w-none">
+              <div>                <div class="prose prose-lg dark:prose-invert max-w-none">
                   <p>
-                    ATP System narodził się z pasji do sportu i technologii. Nasz założyciel, Marcin Kowalski, były trener olimpijski, dostrzegł lukę między zaawansowanymi technikami treningowymi a narzędziami do ich analizy i optymalizacji.
+                    ATP System to demonstracyjny projekt platformy zarządzania treningiem sportowym, stworzony w celu prezentacji nowoczesnych technologii webowych w kontekście aplikacji biznesowych.
                   </p>
                   <p>
-                    W 2018 roku, wraz z zespołem ekspertów z dziedziny sportu, analizy danych i technologii, rozpoczęliśmy prace nad systemem, który nie tylko gromadzi dane treningowe, ale także przekształca je w praktyczne wskazówki dla trenerów i zawodników.
+                    Projekt wykorzystuje najnowsze rozwiązania technologiczne: Nuxt 3 jako framework full-stack, Vue.js 3 z Composition API, TypeScript dla type safety, Tailwind CSS do stylizacji oraz Nuxt UI jako system komponentów.
                   </p>
                   <p>
-                    Dziś ATP System jest wykorzystywany przez ponad 1000 klubów sportowych w 30 krajach, pomagając trenerom podnosić wydajność zawodników i zespołów poprzez precyzyjną analizę danych treningowych i personalizację planów treningowych.
+                    Celem tego projektu jest zademonstrowanie, jak nowoczesne technologie mogą być wykorzystane do stworzenia kompleksowej aplikacji biznesowej z uwzględnieniem autoryzacji, zarządzania danymi, responsywnego designu i najlepszych praktyk programistycznych.
                   </p>
                 </div>
               </div>
@@ -255,11 +285,10 @@ const getRandomBackground = (name: string) => {
       
       <!-- Our Team Section -->
       <section class="py-20 bg-white dark:bg-gray-900">
-        <div class="container mx-auto px-4">
-          <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Nasz zespół</h2>
+        <div class="container mx-auto px-4">          <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Zespół projektowy</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400">
-              Poznaj pasjonatów stojących za sukcesem ATP System. Łączymy ekspertyzę sportową z technologiczną innowacją.
+              Poznaj twórców stojących za projektem ATP System. Łączymy ekspertyzę technologiczną z pasją do tworzenia nowoczesnych rozwiązań.
             </p>
           </div>
           
@@ -280,8 +309,7 @@ const getRandomBackground = (name: string) => {
               <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ member.name }}</h3>
                 <p class="text-primary-600 dark:text-primary-400 mb-4">{{ member.position }}</p>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">{{ member.bio }}</p>
-                <div class="flex gap-3">
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">{{ member.bio }}</p>                <div class="flex gap-3">
                   <a v-if="member.social.linkedin" href="#" class="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
                     <UIcon name="i-lucide-linkedin" class="w-5 h-5" />
                   </a>
@@ -290,9 +318,6 @@ const getRandomBackground = (name: string) => {
                   </a>
                   <a v-if="member.social.github" href="#" class="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
                     <UIcon name="i-lucide-github" class="w-5 h-5" />
-                  </a>
-                  <a v-if="member.social.dribbble" href="#" class="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
-                    <UIcon name="i-lucide-dribbble" class="w-5 h-5" />
                   </a>
                 </div>
               </div>
@@ -335,11 +360,10 @@ const getRandomBackground = (name: string) => {
       
       <!-- Partners Section -->
       <section class="py-20 bg-white dark:bg-gray-900">
-        <div class="container mx-auto px-4">
-          <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Nasi partnerzy</h2>
+        <div class="container mx-auto px-4">          <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Wykorzystane technologie</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400">
-              Współpracujemy z najlepszymi organizacjami sportowymi na świecie.
+              Projekt ATP System został stworzony z wykorzystaniem najnowszych i najlepszych technologii webowych.
             </p>
           </div>
           
@@ -356,18 +380,17 @@ const getRandomBackground = (name: string) => {
           </div>
         </div>
       </section>
-      
-      <!-- CTA Section -->
+        <!-- CTA Section -->
       <section class="py-20 bg-gradient-to-br from-primary-800 to-primary-900 dark:from-gray-900 dark:to-primary-900">
         <div class="container mx-auto px-4 text-center">
-          <h2 class="text-3xl font-bold text-white mb-6">Dołącz do społeczności ATP System</h2>
+          <h2 class="text-3xl font-bold text-white mb-6">Zainteresowany projektem?</h2>
           <p class="text-xl text-primary-200 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-            Rozpocznij współpracę z nami i odkryj, jak ATP System może zrewolucjonizować Twój trening.
+            Poznaj możliwości platformy ATP System i odkryj, jak nowoczesne technologie mogą wspierać zarządzanie treningiem sportowym.
           </p>
           
           <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <UButton to="/auth/register" size="xl" color="neutral" variant="solid" icon="i-lucide-user-plus">
-              Zarejestruj się za darmo
+            <UButton to="/features" size="xl" color="neutral" variant="solid" icon="i-lucide-star">
+              Zobacz funkcje
             </UButton>
             <UButton to="/contact" size="xl" variant="outline" color="neutral" icon="i-lucide-mail">
               Skontaktuj się z nami

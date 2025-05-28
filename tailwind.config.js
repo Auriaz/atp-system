@@ -10,6 +10,11 @@ export default {
     ],
     theme: {
         extend: {
+            // Add custom screen breakpoints
+            screens: {
+                'xs': '475px',
+                // sm, md, lg, xl, 2xl are already defined by default
+            },
             // Dodaj rozszerzenia dla opacity w tekście i krawędziach
             opacity: {
                 '5': '0.05',
