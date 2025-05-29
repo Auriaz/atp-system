@@ -6,9 +6,16 @@ const {navbarItems} = useNavbar()
 <template>
   <XLayout>
     <template #header>
-
-
+        <UAlert 
+          color="warning" 
+          variant="solid"
+          title="Alpha Version Notice" 
+          description="This website is currently in alpha testing phase. All content, data, and information displayed on this site is fictional and for demonstration purposes only. Please do not consider any information as factual or official."
+          icon="i-heroicons-exclamation-triangle"
+          class="w-full 7xl:px-4 lg:px-8 mb-4"
+        />
       <div class="w-full flex flex-col lg:flex-row gap-8">
+        
         <x-navbar container :links="navbarItems">
           <template #logo>
             <XLogo size="24"/>

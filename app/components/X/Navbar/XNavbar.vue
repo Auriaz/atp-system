@@ -78,11 +78,12 @@ onBeforeUnmount(() => {
     :class="[
       navbar.isScroll 
         ? 'fixed h-14 sm:h-16 top-0 left-0 backdrop-blur-xl bg-gradient-to-r from-white/95 via-gray-50/90 to-gray-100/95 dark:from-gray-900/95 dark:via-primary-900/90 dark:to-gray-800/95 z-50 ' 
-        : 'fixed h-16 sm:h-20 top-0 left-0 z-50 bg-transparent'
+        : 'sticky h-16 sm:h-20 top-0 left-0 z-50 bg-transparent'
     ]">
       <!-- Main Navigation Container -->
     <div class="h-full w-full flex items-center justify-between px-3 xs:px-4 sm:px-6 lg:px-8"
       :class="[container ? 'container mx-auto max-w-7xl' : '']">
+      
         <!-- Left Section: Logo -->
       <div class="flex items-center space-x-3 sm:space-x-6 z-20">
         <div class="logo-container">
