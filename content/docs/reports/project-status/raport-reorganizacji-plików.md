@@ -13,6 +13,7 @@ navigation:
 requirements:
   - 'Rola: Developer lub Admin'
   - 'System: ATP System v1.0+'
+category: 'Raporty'
 requiredRole: ['admin', 'developer']
 ---
 

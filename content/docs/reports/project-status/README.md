@@ -22,17 +22,6 @@ navigation:
 
 ## 📋 Dostępne Raporty
 
-### 🏆 [Website Completion Summary](./ATP_WEBSITE_COMPLETION_SUMMARY.md)
-**Data**: 28 maja 2025  
-**Typ**: Raport ukończenia głównego zadania
-
-Kompletne podsumowanie implementacji kluczowych stron internetowych ATP System, w tym:
-- Poprawa responsywności nawigacji mobilnej
-- Naprawy trybu ciemnego
-- Utworzenie strony funkcji
-- Optymalizacja strony cennika
-- Ulepszenia strony "o nas" i kontaktu
-
 ### 📁 [Reorganizacja Struktury Plików](./raport-reorganizacji-plików.md)
 **Data**: 28 grudnia 2024  
 **Typ**: Raport reorganizacji projektowej

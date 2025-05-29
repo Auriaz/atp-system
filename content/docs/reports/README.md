@@ -70,14 +70,10 @@ Status ukończenia: ✅ Kompletne
 ## 🔍 Najważniejsze Raporty
 
 ### 🏆 Najnowsze Ukończenia
-- **[Website Completion Summary](/docs/reports/project-status/ATP_WEBSITE_COMPLETION_SUMMARY)** - Kompletne ukończenie strony internetowej
-- **[Contact & About Improvements](/docs/reports/ui-improvements/CONTACT_ABOUT_IMPROVEMENTS)** - Poprawa stron kontaktu i "o nas"
-- **[Visual Improvements Summary](/docs/reports/ui-improvements/VISUAL_IMPROVEMENTS_SUMMARY)** - Kompleksowe ulepszenia wizualne
+
 
 ### 🔧 Kluczowe Naprawy Techniczne
 - **[UA Parser Fix](/docs/reports/technical-fixes/raport-naprawy-ua-parser)** - Naprawa biblioteki ua-parser-js
-- **[Video Implementation](/docs/reports/technical-fixes/VIDEO_FIX_SUMMARY)** - Implementacja tła wideo
-- **[Video Hero Guide](/docs/reports/technical-fixes/VIDEO_HERO_GUIDE)** - Przewodnik wideo hero
 
 ### ⚙️ Implementacje Funkcji
 - **[Session Management](/docs/reports/features-implementation/raport-implementacji-sesji)** - Zarządzanie sesjami wielourządzeniowymi

@@ -60,7 +60,8 @@ export default defineNuxtConfig({
       name: 'nuxt-session', // Nazwa sesji
       password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6', // Hasło sesji
       maxAge: 60 * 60 * 24 * 7, // 1 tydzień
-    }
+    },
+    sessionDebug: true, // Włącz debugowanie sesji
   },
 
   auth: {
