@@ -132,7 +132,7 @@ onMounted(() => {
     <NuxtLayout>
         <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
           <!-- Hero Section -->
-          <section ref="heroRef" class="relative pt-20 sm:pt-24 lg:pt-32 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
+          <section ref="heroRef" class="relative pt-20 sm:pt-24 lg:pt-60 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
             <!-- Background Elements -->
             <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50 dark:from-blue-900/20 dark:via-transparent dark:to-purple-900/20"></div>
             <div class="absolute top-0 left-0 w-full h-full">

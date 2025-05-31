@@ -29,8 +29,7 @@ const currentDate = new Date().toLocaleDateString('pl-PL', {
           </div>
         </template>
           <template #action>
-          <!-- Manage Account -->
-          <XDropdownManageAccount v-if="isAuthenticated && user" :user="user" />
+
         </template>
       </XDashboardNavbar>
     </template>

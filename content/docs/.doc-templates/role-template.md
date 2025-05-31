@@ -5,7 +5,7 @@ category: 'Kategoria Roli'
 version: '1.0.0'
 lastUpdated: '2025-05-28'
 createdAt: '2025-05-28'
-requiredRole: ['określona-rola', 'admin']
+requiredRole: ['editor', 'admin', 'menager', ] 
 icon: 'i-heroicons-user-group'
 author: 'Zespół ATP System'
 tags: ['nazwa-roli', 'funkcjonalność', 'przewodnik']

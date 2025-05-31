@@ -330,11 +330,10 @@ const formatEventDate = (dateString: string) => {
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Aktywność tygodniowa</h3>
                   <p class="text-sm text-gray-500 dark:text-gray-400">Treningi i testy w ostatnim tygodniu</p>
-                </div>
-                <UDropdown :items="[
-                  { label: 'Ostatni tydzień', icon: 'i-lucide-calendar-days', click: () => {} },
-                  { label: 'Ostatni miesiąc', icon: 'i-lucide-calendar', click: () => {} },
-                  { label: 'Ostatni kwartał', icon: 'i-lucide-calendar-range', click: () => {} },
+                </div>                <UDropdown :items="[
+                  { label: 'Ostatni tydzień', icon: 'i-lucide-calendar-days', onSelect: () => {} },
+                  { label: 'Ostatni miesiąc', icon: 'i-lucide-calendar', onSelect: () => {} },
+                  { label: 'Ostatni kwartał', icon: 'i-lucide-calendar-range', onSelect: () => {} },
                 ]">
                   <UButton color="primary" variant="ghost" icon="i-lucide-more-horizontal" />
                 </UDropdown>

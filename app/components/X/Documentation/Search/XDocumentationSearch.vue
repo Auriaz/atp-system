@@ -1,232 +1,221 @@
 <script lang="ts" setup>
-import Fuse from 'fuse.js';
-import type {ContentNavigationItem} from '@nuxt/content';
-// Definicja typu dla wyników wyszukiwania
-interface SearchResult {
-  item: any;
-  matches?: ReadonlyArray<{
-    key?: string;
-    indices: ReadonlyArray<[number, number]>;
-  }>;
-}
+// Import composables
+import { useDebounceFn } from '@vueuse/core';
 
 // Props dla parametrów wyszukiwania
 const props = defineProps({
-  // Pliki/sekcje do przeszukiwania (pobrane przez queryCollectionSearchSections)
-  files: {
+  // Kategorie dokumentów do przeszukiwania
+  categories: {
     type: Array,
     required: true
-  },
-  // Struktura nawigacji do wyświetlania (pobrana przez queryCollectionNavigation)
-  navigation: {
-    type: Array as PropType<ContentNavigationItem[] | undefined>,
-    required: true
-  },
-  // Konfiguracja Fuse.js
-  fuse: {
-    type: Object,
-    default: () => ({ resultLimit: 10 })
   },
   // Teksty UI
   placeholder: {
     type: String,
-    default: 'Wyszukaj w dokumentacji...'
+    default: 'Przeszukaj dokumentację...'
+  },
+  // Konfiguracja wyszukiwania
+  searchConfig: {
+    type: Object,
+    default: () => ({ 
+      resultLimit: 10,
+      threshold: 0.3 
+    })
+  },
+  size: {
+    type: String as PropType<'xs' | 'sm' | 'md' | 'lg' | 'xl'>,
+    default: 'md'
+  },
+  color: {
+    type: String as PropType<'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'neutral'>,
+    default: 'primary'
+  },
+  variant: {
+    type: String as PropType<'soft' | 'link' | 'solid' | 'outline' | 'subtle' | 'ghost'>,
+    default: 'soft'
+  },
+  icon: {
+    type: String,
+    default: 'i-heroicons-magnifying-glass'
   }
 });
 
 // Event emitters
-const emit = defineEmits(['update:searchTerm']);
+const emit = defineEmits(['close']);
 
 // Stan wyszukiwania
 const searchTerm = ref('');
 const isSearching = ref(false);
-const searchResults = ref<SearchResult[]>([]);
+const searchResults = ref<any[]>([]);
 const searchInput = ref<HTMLInputElement | null>(null);
 
 // Modal state
 const isOpen = ref(false);
 
-// Tryb kolorów
-const colorMode = useColorMode();
-const isDark = computed(() => colorMode.value === 'dark');
+// Funkcja do otwierania modala (eksportowana)
+const openSearch = () => {
+  isOpen.value = true;
+  nextTick(() => {
+    if (searchInput.value) {
+      searchInput.value.focus();
+    }
+  });
+};
 
-// Obserwuj searchTerm i emituj zdarzenia aktualizacji
-watch(searchTerm, (newTerm) => {
-  emit('update:searchTerm', newTerm);
-  if (newTerm.length >= 2) {
-    performSearch();
-  } else {
-    searchResults.value = [];
+// Funkcja do zamykania modala
+const closeSearch = () => {
+  isOpen.value = false;
+  searchTerm.value = '';
+  searchResults.value = [];
+  emit('close');
+};
+
+// Funkcja do czyszczenia wyszukiwania
+const clearSearch = () => {
+  searchTerm.value = '';
+  searchResults.value = [];
+};
+
+// Funkcja do wyboru wyniku
+const selectResult = (path: string) => {
+  closeSearch();
+  navigateTo(path);
+};
+
+// Obsługa klawiatury
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    closeSearch();
   }
-});
+};
 
-// Inicjalizacja instancji Fuse dla wyszukiwania
-const fuseInstance = computed(() => {
-  if (!props.files || props.files.length === 0) return null;
-  
-  return new Fuse(props.files, {
-    keys: ['title', 'description', 'body', 'path', 'category', 'tags'],
-    threshold: 0.3,
-    distance: 100,
-    includeMatches: true,
-    ...props.fuse,
-  });
-});
-
-// Formatowanie wyników wyszukiwania
-const formattedResults = computed(() => {
-  if (!searchResults.value.length) return [];
-  
-  return searchResults.value.map(result => {
-    // Wyciągnij informacje z wyniku Fuse
-    const { item, matches } = result;
-    // Znajdź dopasowania dla podświetlenia
-    let highlightedText = '';
-    
-    // Spróbuj znaleźć dopasowania w treści i dodaj fragment
-    if (matches && matches.length > 0) {
-      const bodyMatches = matches.filter(match => match.key === 'body');
-      
-      if (bodyMatches[0] ) {
-        if(bodyMatches[0].indices.length > 0) {
-
-          const match = bodyMatches[0];
-          const indices = match.indices[0];
-          const bodyText = item.body || '';
-          
-          // Weź fragment tekstu wokół dopasowania (do 100 znaków)
-          if(indices) {
-            const start = Math.max(0, indices[0] - 50);
-            const end = Math.min(bodyText.length, indices[1] + 50);
-            highlightedText = bodyText.substring(start, end);
-            // Dodaj "..." jeśli nie zaczynamy od początku
-            if (start > 0) highlightedText = '...' + highlightedText;
-            if (end < bodyText.length) highlightedText += '...';
-          }
-        }
-      }
-    }
-    
-    return {
-      title: item.title || 'Bez tytułu',
-      path: item.id,
-      description: item.description || highlightedText || '',
-      category: item.category || 'Ogólne',
-      icon: item.icon || 'i-heroicons-document'
-    };
-  });
-});
-
-// Grupowanie wyników według kategorii
-const groupedResults = computed(() => {
-  const groups: Record<string, any[]> = {};
-  
-  formattedResults.value.forEach(result => {
-    if (!groups[result.category]) {
-      groups[result.category] = [];
-    }
-    // Now we can safely access the array since it's guaranteed to exist
-    groups[result.category]?.push(result);
-  });
-  
-  return groups;
-});
-
-// Wykonaj wyszukiwanie
-async function performSearch() {
-  if (!fuseInstance.value || searchTerm.value.length < 2) {
+// Funkcja wyszukiwania
+const performSearch = (query: string) => {
+  if (!query || query.length < 2) {
     searchResults.value = [];
     return;
   }
-  
+
   isSearching.value = true;
   
   try {
-    // Wykonaj wyszukiwanie przez Fuse
-    const results = fuseInstance.value.search(searchTerm.value);
-    
-    // Ogranicz wyniki
-    searchResults.value = results.slice(0, props.fuse.resultLimit || 10);
+    const results: any[] = [];
+    const searchLower = query.toLowerCase();
+
+    // Przeszukaj wszystkie kategorie i dokumenty
+    props.categories.forEach((category: any) => {
+      category.items.forEach((doc: any) => {
+        let matchType = '';
+        let isMatch = false;
+
+        // Sprawdź tytuł
+        if (doc.title && doc.title.toLowerCase().includes(searchLower)) {
+          isMatch = true;
+          matchType = 'title';
+        }
+        // Sprawdź opis
+        else if (doc.description && doc.description.toLowerCase().includes(searchLower)) {
+          isMatch = true;
+          matchType = 'description';
+        }
+        // Sprawdź kategorię
+        else if (category.name && category.name.toLowerCase().includes(searchLower)) {
+          isMatch = true;
+          matchType = 'category';
+        }
+
+        if (isMatch) {
+          results.push({
+            ...doc,
+            category: category.name,
+            categoryIcon: category.icon,
+            categoryColor: category.color,
+            matchType
+          });
+        }
+      });
+    });
+
+    // Ograniczenie wyników
+    searchResults.value = results.slice(0, props.searchConfig.resultLimit);
   } catch (error) {
     console.error('Search error:', error);
     searchResults.value = [];
   } finally {
     isSearching.value = false;
   }
-}
+};
 
-// Wyczyść wyszukiwanie
-function clearSearch() {
-  searchTerm.value = '';
-  searchResults.value = [];
-}
+// Obserwuj zmiany w terminie wyszukiwania z debounce
+const debouncedSearch = useDebounceFn((query: string) => {
+  performSearch(query);
+}, 300);
 
-// Wybierz wynik wyszukiwania
-function selectResult(path: string) {
-  navigateTo(path);
-  isOpen.value = false;
-  clearSearch();
-}
-
-// Obsługa klawisza Escape i innych skrótów
-function handleKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') {
-    isOpen.value = false;
-  }
-}
-
-// Obsługa globalnych skrótów klawiszowych
-function handleGlobalKeydown(e: KeyboardEvent) {
-  // Ctrl+K lub Cmd+K
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    isOpen.value = true;
-    nextTick(() => {
-      if (searchInput.value) {
-        searchInput.value.focus();
-      }
-    });
-  }
-}
-
-// Rejestruj globalny skrót klawiszowy (K)
-onMounted(() => {
-  window.addEventListener('keydown', handleGlobalKeydown);
+watch(searchTerm, (newTerm) => {
+  debouncedSearch(newTerm);
 });
 
-// Usuń nasłuchiwanie po zniszczeniu komponentu
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleGlobalKeydown);
+// Obsługa skrótów klawiszowych (global)
+onMounted(() => {
+  const handleGlobalKeydown = (event: KeyboardEvent) => {
+    // Ctrl+K lub Cmd+K - otwórz wyszukiwanie
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
+      openSearch();
+    }
+    // ESC - zamknij wyszukiwanie
+    if (event.key === 'Escape' && isOpen.value) {
+      closeSearch();
+    }
+  };
+
+  document.addEventListener('keydown', handleGlobalKeydown);
+
+  onUnmounted(() => {
+    document.removeEventListener('keydown', handleGlobalKeydown);
+  });
+});
+
+// Grupowanie wyników według kategorii
+const groupedResults = computed(() => {
+  const grouped: Record<string, any[]> = {};
+  
+  searchResults.value.forEach(result => {
+    const category = result.category || 'Bez kategorii';
+    if (!grouped[category]) {
+      grouped[category] = [];
+    }
+    grouped[category].push(result);
+  });
+  
+  return grouped;
 });
 
 // Sprawdź, czy wyszukiwarka ma wyniki
 const hasResults = computed(() => searchResults.value.length > 0);
+
+// Eksportuj funkcję otwierania dla komponentu rodzica
+defineExpose({
+  openSearch
+});
 </script>
 
-<template>
-  <div class="search-container">
-    <!-- Modal wyszukiwania -->
-    <UModal 
-      v-model="isOpen"
-      :class="{ width: 'md:max-w-2xl', padding: 'p-0', overlay: 'bg-gray-950/75 dark:bg-gray-950/90 backdrop-blur-sm' }"
-    >
-      <!-- Przycisk wyszukiwania - prosty, bez dodatkowych opcji -->
-      <UButton
-        icon="i-heroicons-magnifying-glass"
-        color="primary"
-        variant="soft"
-        class="search-button"
-        @click="isOpen = true"
-      >
-        {{ placeholder }}
-        <template #trailing>
-          <span class="hidden sm:inline-flex items-center gap-1 opacity-70 text-xs">
-            <kbd class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800">⌘</kbd>
-            <kbd class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800">K</kbd>
-          </span>
-        </template>
-      </UButton>
-      <template #content>
+<template>  <!-- Modal wyszukiwania -->
+  <UModal 
+    v-model:open="isOpen"
+    :ui="{ wrapper: 'md:max-w-2xl' }"
+  >
+      <!-- Trigger Button -->
+    <UButton
+     :label="placeholder"
+      :color="color"
+      :variant="variant"
+      :icon="icon"
+      :size="size"
+    />
+
+    <template #content>
+      <UCard>
         <div class="search-modal">
           <!-- Pole wyszukiwania -->
           <div class="relative border-b border-gray-200 dark:border-gray-700">
@@ -239,14 +228,15 @@ const hasResults = computed(() => searchResults.value.length > 0);
               v-model="searchTerm"
               type="search"
               :placeholder="placeholder"
-              class="w-full py-3 px-12 bg-white dark:bg-gray-900 focus:outline-none text-lg"
+              class="w-full py-3 px-12 bg-white dark:bg-gray-900 focus:outline-none text-lg border-0"
               @keydown="handleKeydown"
             />
             <div v-if="searchTerm" class="absolute right-4 top-1/2 transform -translate-y-1/2">
               <UButton
-                color="primary" 
+                color="neutral" 
                 variant="ghost" 
                 icon="i-heroicons-x-mark" 
+                size="xs"
                 @click="clearSearch"
               />
             </div>
@@ -284,7 +274,7 @@ const hasResults = computed(() => searchResults.value.length > 0);
                 <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider px-3 mb-2">
                   {{ category }}
                 </h3>
-   
+    
                 <ul class="space-y-1">
                   <li 
                     v-for="result in results" 
@@ -292,17 +282,16 @@ const hasResults = computed(() => searchResults.value.length > 0);
                     @click="selectResult(result.path)"
                     class="px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition"
                   >
-                    
                     <div class="flex items-start">
-                      <UIcon :name="result.icon" class="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <div class="ml-3">
+                      <UIcon :name="result.categoryIcon || 'i-heroicons-document-text'" class="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                      <div class="ml-3 flex-1">
                         <div class="font-medium text-gray-900 dark:text-gray-100">{{ result.title }}</div>
                         <div 
                           v-if="result.description" 
                           class="text-sm text-gray-500 mt-0.5 line-clamp-2"
                           v-html="result.description.replace(
                             new RegExp(searchTerm, 'gi'), 
-  (                            match: any) => `<mark class='bg-primary-100 dark:bg-primary-900 text-primary-900 dark:text-primary-100 px-0.5 rounded'>${match}</mark>`
+                            (match: string) => `<mark class='bg-primary-100 dark:bg-primary-900 text-primary-900 dark:text-primary-100 px-0.5 rounded'>${match}</mark>`
                           )"
                         ></div>
                         <div class="text-xs text-gray-400 mt-1">{{ result.path }}</div>
@@ -313,43 +302,33 @@ const hasResults = computed(() => searchResults.value.length > 0);
               </div>
             </div>
             
-            <!-- Brak zapytania -->
+            <!-- Brak zapytania - wskazówki -->
             <div v-else-if="searchTerm.length < 2" class="p-4">
-              <p class="text-sm text-center text-gray-500">
+              <p class="text-sm text-center text-gray-500 mb-4">
                 Wpisz co najmniej 2 znaki, aby rozpocząć wyszukiwanie
               </p>
               
-              <!-- Nawigacja jeśli nie ma wyszukiwania -->
-              <div v-if="navigation && navigation.length" class="mt-4">
+              <!-- Kategorie jako podpowiedzi -->
+              <div v-if="categories && categories.length" class="mt-4">
                 <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider px-3 mb-2">
-                  Szybka nawigacja
+                  Kategorie dokumentacji
                 </h3>
-                
-                <div class="space-y-3">
+                <div class="grid grid-cols-1 gap-2">
                   <div 
-                    v-for="section in navigation.slice(0, 5)" 
-                    :key="section.path"
-                    class="px-3"
+                    v-for="category in (categories as any[]).slice(0, 5)" 
+                    :key="(category as any).name"
+                    class="px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition"
+                    @click="searchTerm = (category as any).name"
                   >
-                    <div class="font-medium text-primary-600 dark:text-primary-400 mb-1">
-                      {{ section.title }}
+                    <div class="flex items-center">
+                      <UIcon :name="(category as any).icon" class="h-4 w-4 text-gray-400 mr-2" />
+                      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ (category as any).name }}</span>
+                      <span class="ml-auto text-xs text-gray-400">({{ (category as any).items.length }})</span>
                     </div>
-                    <ul class="space-y-1 ml-4">
-                      <li v-for="item in section.children?.slice(0, 3)" :key="item.path">
-                        <NuxtLink 
-                          :to="item.path"
-                          class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 text-sm"
-                          @click="isOpen = false"
-                        >
-                          {{ item.title }}
-                        </NuxtLink>
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </div>        </div>
           
           <!-- Stopka -->
           <div class="border-t border-gray-200 dark:border-gray-700 p-2 flex justify-between items-center bg-gray-50 dark:bg-gray-850 text-xs">
@@ -371,37 +350,12 @@ const hasResults = computed(() => searchResults.value.length > 0);
             </div>
           </div>
         </div>
-      </template>
-    </UModal>
-  </div>
+      </UCard>
+    </template>
+  </UModal>
 </template>
 
 <style scoped>
-.search-container {
-  position: relative;
-}
-
-.search-button {
-  width: 100%;
-  justify-content: flex-start;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid transparent;
-}
-
-/* Style dla trybu jasnego */
-:root {
-  .search-button {
-    border-color: #e5e7eb;
-    background-color: white;
-  }
-}
-
-/* Style dla trybu ciemnego */
-.dark .search-button {
-  border-color: rgba(75, 85, 99, 0.5);
-  background-color: rgba(31, 41, 55, 0.5);
-}
-
 /* Stylizacja scrolla */
 .search-results {
   scrollbar-width: thin;

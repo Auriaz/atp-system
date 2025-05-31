@@ -5,7 +5,7 @@ category: 'FAQ'
 version: '1.0.0'
 lastUpdated: '2025-05-28'
 createdAt: '2025-05-28'
-requiredRole: false # lub określona rola jeśli potrzebna
+requiredRole: ['editor', 'admin', 'menager', 'developer'] 
 icon: 'i-heroicons-question-mark-circle'
 author: 'Zespół ATP System'
 tags: ['faq', 'pomoc', 'pytania']

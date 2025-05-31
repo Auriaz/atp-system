@@ -1,4 +1,8 @@
 import type { UserSession } from '#auth-utils';
+import { USER_ROLES } from '../../shared/utils/roles.constants';
+import type { Permission } from '../../shared/utils/permissions.constants';
+import { hasPermissionMultiRole, hasAllPermissionsMultiRole, hasAnyPermissionMultiRole } from '../../shared/utils/permissions.constants';
+
 export function usePermissions() {
   // Użyj istniejącej sesji lub proxy, które będzie reaktywnie aktualizowane
   const userSession = useState<UserSession>('user-session');

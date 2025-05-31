@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// Stan formularza
+// Stan formularza z lepszą walidacją
 const form = reactive({
   name: '',
   email: '',
@@ -7,6 +7,19 @@ const form = reactive({
   message: '',
   agreement: false
 })
+
+// Lepsze reguły walidacji
+const validate = (state: any) => {
+  const errors = []
+  if (!state.name) errors.push({ path: 'name', message: 'Imię i nazwisko jest wymagane' })
+  if (!state.email) errors.push({ path: 'email', message: 'Email jest wymagany' })
+  else if (!/\S+@\S+\.\S+/.test(state.email)) errors.push({ path: 'email', message: 'Email musi być poprawny' })
+  if (!state.subject) errors.push({ path: 'subject', message: 'Temat jest wymagany' })
+  if (!state.message) errors.push({ path: 'message', message: 'Wiadomość jest wymagana' })
+  else if (state.message.length < 10) errors.push({ path: 'message', message: 'Wiadomość musi mieć co najmniej 10 znaków' })
+  if (!state.agreement) errors.push({ path: 'agreement', message: 'Zgoda na przetwarzanie danych jest wymagana' })
+  return errors
+}
 
 // Lista często zadawanych pytań
 const faqs = ref([
@@ -39,15 +52,15 @@ const faqs = ref([
 
 // Dane kontaktowe
 const contactInfo = {
-  address: 'ul. Nowogrodzka 84/86, 02-018 Warszawa, Polska',
-  email: 'info@atp-system.com',
-  phone: '+48 22 380 15 30',
+  address: ', Polska',
+  email: 'info@example.com',
+  phone: '+48 example',
   hours: 'Pon-Pt: 8:00 - 18:00, Sob: 9:00 - 15:00',
-  supportEmail: 'support@atp-system.com',
-  salesEmail: 'sales@atp-system.com',
-  fax: '+48 22 380 15 31',
-  nip: 'NIP: 123-456-78-90',
-  regon: 'REGON: 123456789'
+  supportEmail: 'support@example.com',
+  salesEmail: 'sales@example.com',
+  fax: '+48 example',
+  nip: 'NIP: example',
+  regon: 'REGON: example'
 }
 
 // Obsługa wysłania formularza
@@ -91,19 +104,6 @@ const submitForm = async () => {
   }
 }
 
-// Walidacja formularza
-const nameRules = [(v: string | undefined) => !!v || 'Imię i nazwisko jest wymagane']
-const emailRules = [
-  (v: string | undefined) => !!v || 'Email jest wymagany',
-  (v: string | undefined) => /.+@.+\..+/.test(v || '') || 'Email musi być poprawny'
-]
-const subjectRules = [(v: string | undefined) => !!v || 'Temat jest wymagany']
-const messageRules = [
-  (v: string | undefined) => !!v || 'Wiadomość jest wymagana',
-  (v: string | undefined) => (v && v.length >= 10) || 'Wiadomość musi mieć co najmniej 10 znaków'
-]
-const agreementRules = [(v: boolean | undefined) => !!v || 'Zgoda na przetwarzanie danych jest wymagana']
-
 // Obsługa FAQ
 const toggleFaq = (index: number) => {
   if (index >= 0 && index < faqs.value.length) {
@@ -119,7 +119,7 @@ const toggleFaq = (index: number) => {
   <NuxtLayout>
     <div class="contact-page">
       <!-- Hero Section -->
-      <section class="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900 py-16 md:py-24">
+      <section class="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 dark:from-gray-900 dark:via-gray-800 dark:to-primary-900 py-16 md:py-42">
         <div class="container mx-auto px-4">
           <div class="text-center text-white">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Kontakt</h1>
@@ -143,89 +143,103 @@ const toggleFaq = (index: number) => {
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <!-- Contact Form -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Wyślij wiadomość</h2>
-              
-              <UForm :state="form" @submit="submitForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <UFormField label="Imię i nazwisko" required>
+              <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Wyślij wiadomość</h2>
+                  <UForm :state="form" :validate="validate" @submit="submitForm" class="space-y-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <UFormField label="Imię i nazwisko" name="name" required>
                       <UInput
                         v-model="form.name"
                         placeholder="Twoje imię i nazwisko"
-                        :rules="nameRules"
-                        :ui="{ trailingIcon: 'i-lucide-user' }"
+                        icon="i-lucide-user"
+                        class="w-full"
                       />
                     </UFormField>
-                  </div>
-                  
-                  <div>
-                    <UFormField label="Email" required>
+                    
+                    <UFormField label="Email" name="email" required>
                       <UInput
                         v-model="form.email"
                         placeholder="twoj@email.pl"
                         type="email"
-                        :rules="emailRules"
-                        :ui="{ trailingIcon: 'i-lucide-mail' }"
+                        icon="i-lucide-mail"
+                        class="w-full"
                       />
                     </UFormField>
                   </div>
+                  
+                  <UFormField label="Temat" name="subject" required>
+                    <UInput
+                      v-model="form.subject"
+                      placeholder="Czego dotyczy Twoja wiadomość?"
+                      icon="i-lucide-tag"
+                      class="w-full"
+                    />
+                  </UFormField>
+                  
+                  <UFormField label="Wiadomość" name="message" required>
+                    <UTextarea
+                      v-model="form.message"
+                      placeholder="W czym możemy Ci pomóc?"
+                      :rows="6"
+                      class="w-full"
+                    />
+                  </UFormField>
+                  
+                  <UFormField name="agreement">
+                    <UCheckbox
+                      v-model="form.agreement"
+                      label="Wyrażam zgodę na przetwarzanie moich danych osobowych w celu udzielenia odpowiedzi na wiadomość zgodnie z polityką prywatności."
+                    />
+                  </UFormField>
+                  
+                  <div class="flex justify-end">
+                    <UButton
+                      type="submit"
+                      color="primary"
+                      block
+                      size="lg"
+                      :loading="isSubmitting"
+                      :disabled="isSubmitting"
+                      icon="i-lucide-send"
+                    >
+                      {{ isSubmitting ? 'Wysyłanie...' : 'Wyślij wiadomość' }}
+                    </UButton>
+                  </div>
+                </UForm>
+                
+                <div v-if="submitSuccess" class="mt-6 p-4 bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 rounded-lg">
+                  <p class="flex items-center">
+                    <UIcon name="i-lucide-check-circle" class="h-5 w-5 mr-2" />
+                    Twoja wiadomość została wysłana. Dziękujemy za kontakt!
+                  </p>
                 </div>
                 
-                <UFormField label="Temat" required>
-                  <UInput
-                    v-model="form.subject"
-                    placeholder="Czego dotyczy Twoja wiadomość?"
-                    :rules="subjectRules"
-                    :ui="{ trailingIcon: 'i-lucide-tag' }"
-                  />
-                </UFormField>
-                
-                <UFormField label="Wiadomość" required>
-                  <UTextarea
-                    v-model="form.message"
-                    placeholder="W czym możemy Ci pomóc?"
-                    :rows="6"
-                    :rules="messageRules"
-                  />
-                </UFormField>
-                
-                <UFormField>
-                  <UCheckbox
-                    v-model="form.agreement"
-                    label="Wyrażam zgodę na przetwarzanie moich danych osobowych w celu udzielenia odpowiedzi na wiadomość zgodnie z polityką prywatności."
-                    :rules="agreementRules"
-                  />
-                </UFormField>
-                
-                <div class="flex justify-end">
-                  <UButton
-                    type="submit"
-                    color="primary"
-                    block
-                    size="lg"
-                    :loading="isSubmitting"
-                    :disabled="isSubmitting"
-                    :icon="isSubmitting ? undefined : 'i-lucide-send'"
-                  >
-                    {{ isSubmitting ? 'Wysyłanie...' : 'Wyślij wiadomość' }}
-                  </UButton>
+                <div v-if="submitError" class="mt-6 p-4 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300 rounded-lg">
+                  <p class="flex items-center">
+                    <UIcon name="i-lucide-alert-circle" class="h-5 w-5 mr-2" />
+                    Przepraszamy, wystąpił problem. Spróbuj ponownie później.
+                  </p>
                 </div>
-              </UForm>
               
-              <div v-if="submitSuccess" class="mt-6 p-4 bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 rounded-lg">
-                <p class="flex items-center">
-                  <UIcon name="i-lucide-check-circle" class="h-5 w-5 mr-2" />
-                  Twoja wiadomość została wysłana. Dziękujemy za kontakt!
-                </p>
               </div>
-              
-              <div v-if="submitError" class="mt-6 p-4 bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-300 rounded-lg">
-                <p class="flex items-center">
-                  <UIcon name="i-lucide-alert-circle" class="h-5 w-5 mr-2" />
-                  Przepraszamy, wystąpił problem. Spróbuj ponownie później.
-                </p>
+
+
+                            <!-- Map (Placeholder) -->
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gray-200 dark:bg-gray-700 h-80 w-full rounded-lg relative overflow-hidden">
+                  <!-- W rzeczywistej implementacji należy umieścić tutaj rzeczywistą mapę (Google Maps, Leaflet itp.) -->
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                      <UIcon name="i-lucide-map" class="h-12 w-12 text-gray-400 dark:text-gray-500 mb-2" />                      
+                      <p class="text-gray-500 dark:text-gray-400">Mapa lokalizacji</p>
+                      <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">example </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>              <!-- Contact Information -->
+            </div>              
+            
+            <!-- Contact Information -->
             <div class="space-y-8">
               <!-- Info Cards -->
               <div class="grid grid-cols-1 gap-6">
@@ -310,20 +324,7 @@ const toggleFaq = (index: number) => {
                   </div>
                 </div>
               </div>
-              
-              <!-- Map (Placeholder) -->
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div class="bg-gray-200 dark:bg-gray-700 h-64 w-full rounded-lg relative overflow-hidden">
-                  <!-- W rzeczywistej implementacji należy umieścić tutaj rzeczywistą mapę (Google Maps, Leaflet itp.) -->
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="text-center">
-                      <UIcon name="i-lucide-map" class="h-12 w-12 text-gray-400 dark:text-gray-500 mb-2" />                      <p class="text-gray-500 dark:text-gray-400">Mapa lokalizacji</p>
-                      <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">ul. Nowogrodzka 84/86, Warszawa</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
+      
               <!-- Social Media -->
               <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Śledź nas</h3>

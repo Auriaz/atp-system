@@ -1,12 +1,9 @@
-import type { NavigationMenuItem } from '#ui/types';
 export default function useNavbar() {
   const navbar = useState('navbar', () => ({
     isOpen: false,
     isMobile: false,
     isScroll: false
   }))
-
-  const navbarItems = reactive<NavigationMenuItem[]>(navigationItems);
 
   const toggleNavbar = () => {
     navbar.value.isOpen = !navbar.value.isOpen
@@ -43,7 +40,6 @@ export default function useNavbar() {
 
   return {
     navbar,
-    navbarItems,
     toggleNavbar,
     closeNavbar,
     toggleMobile,

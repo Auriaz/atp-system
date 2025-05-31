@@ -15,6 +15,8 @@ const props = withDefaults(defineProps<Props>(), {
   shadow: false
 })
 
+
+const isAlertVisible = ref(true)
 // Computed classes based on props
 const headerClasses = computed(() => {
   const classes = ['relative', 'w-full', 'h-0', 'z-40', 'box-border', 'transition-all', 'duration-500']
@@ -47,28 +49,23 @@ const headerClasses = computed(() => {
 
 <template>
   <header id="main-header" :class="headerClasses">
-    <!-- Header content wrapper -->
-    <div class="h-full w-full flex items-center justify-between px-4 lg:px-6">
-      <!-- Left section (logo, navigation) -->
-      <div class="flex items-center space-x-6">
-        <slot name="left" />
-        <slot name="logo" />
-        <slot name="navigation" />
-      </div>
+    <UAlert
+      v-if="isAlertVisible"
+      color="warning" 
+      variant="outline"
+      title="Alpha Version Notice" 
+      description="This website is currently in alpha testing phase. All content, data, and information displayed on this site is fictional and for demonstration purposes only. Please do not consider any information as factual or official."
+      icon="i-heroicons-exclamation-triangle"
 
-      <!-- Center section -->
-      <div class="hidden lg:flex items-center justify-center flex-1">
-        <slot name="center" />
-      </div>
-
-      <!-- Right section (actions, user menu) -->
-      <div class="flex items-center space-x-4">
-        <slot name="search" />
-        <slot name="actions" />
-        <slot name="user" />
-        <slot name="right" />
-      </div>
-    </div>
+      close
+      :ui="{
+        wrapper: 'container mx-auto max-w-7xl px-4 lg:px-8',
+      }"
+    >
+      <template #close>
+        <UButton color="primary" variant="solid" @click="isAlertVisible = !isAlertVisible">Got it!</UButton>
+      </template>
+    </UAlert>
 
     <!-- Mobile menu button -->
     <div class="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2">

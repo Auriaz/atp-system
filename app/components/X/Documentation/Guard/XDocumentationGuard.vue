@@ -1,5 +1,5 @@
 <!-- components/Documentation/DocumentationGuard.vue -->
-<script setup>
+<script setup lang="ts">
 const route = useRoute()
 const { data: document } = await useAsyncData(route.path, () => {
   return queryCollection('docs').path(route.path).first()
@@ -24,7 +24,7 @@ const hasAccess = computed(() => {
     ? document.value.requiredRole 
     : [document.value.requiredRole];
     
-  return userRoles.value.some(role => requiredRoles.includes(role));
+  return userRoles.value.some((role: string) => requiredRoles.includes(role));
 });
 
 // Przekieruj, jeśli nie ma dostępu

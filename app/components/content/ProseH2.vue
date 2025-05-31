@@ -2,7 +2,7 @@
   <h2 :id="props.id" class="text-2xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-300 dark:border-gray-700 pb-2 my-4">
     <a
       v-if="props.id && generate"
-      :href="`#${props.id}`"
+      :href="`${props.id}`"
       class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500 no-underline font-medium transition-colors duration-300 ease-in-out"
     >
       # <slot />

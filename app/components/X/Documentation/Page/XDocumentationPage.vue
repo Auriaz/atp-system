@@ -262,8 +262,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <div v-if="pageDocument" class="container mx-auto px-4">
+  <div class="min-h-screen w-full relative">
+    <div v-if="pageDocument" class="w-full">
       <!-- Mobilny TOC - widoczny tylko na małych ekranach -->
       <div 
         v-if="hasToc" 
@@ -307,11 +307,11 @@ onMounted(() => {
           </nav>
         </div>
       </div>
-
+      
       <!-- Główna zawartość -->
-      <div class="flex gap-8 relative" style="min-height: 80vh;">
+      <div class="flex w-full gap-8 relative" style="min-height: 80vh;">
         <!-- Main content -->
-        <div ref="contentRef" class="prose prose-lg dark:prose-invert max-w-none flex-1">
+        <div ref="contentRef" class="prose prose-lg dark:prose-invert w-full flex-1">
           <!-- Metadane dokumentu -->
           <h1>{{ pageDocument.title }}</h1>
           

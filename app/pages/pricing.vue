@@ -151,7 +151,7 @@ const toggleFaq = (index: number) => {
     <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900">
       
       <!-- Hero Section -->
-      <section class="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-24 overflow-hidden">
+      <section class="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-42 lg:pb-24 overflow-hidden">
         <!-- Background Elements -->
         <div class="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10"></div>
         

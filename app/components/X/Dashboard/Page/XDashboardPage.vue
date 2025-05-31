@@ -43,7 +43,7 @@ defineExpose({
 
 <template>
   <section
-    class="relative w-full h-full transition-all duration-500 box-border "
+    class="relative w-full h-full transition-all duration-500 box-border lg:pt-20"
     :class="[
       sidebar.isShow ?
         sidebar.isRail ? 'lg:w-[calc(100%-110px)]' : 'lg:w-[calc(100%-280px)]'

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const { navbar, handleScroll } = useNavbar()
 const { sidebar, toggleShowMenuBar } = useSidebar()
+const { user, isAuthenticated } = useAuth()
 
 onMounted(() => {
   handleScroll('main-nav-dashboard')
@@ -13,7 +14,7 @@ onMounted(() => {
     :class="[
       navbar.isScroll ? 'fixed top-0 left-0 backdrop-blur-lg bg-secondary-50/50 dark:bg-secondary-950/50' : 'fixed top-0 left-0 bg-secondary-50 dark:bg-secondary-950',
     ]"
-    class="w-screen z-40 box-border h-20 transition-all duration-500  hover:shadow-black shadow-lg  "
+    class="w-screen z-40 box-border h-20 transition-all duration-500  hover:shadow-black shadow-lg"
   >
     <div class="h-full flex items-center justify-center lg:justify-between">
       <div class="relative  hidden lg:flex">
@@ -39,6 +40,11 @@ onMounted(() => {
               <XBtnColorMode />
 
               <slot name="action" />
+              <div v-if="isAuthenticated" class="user-navigation hidden sm:block">
+                <AuthState>
+                  <XDropdownManageAccount :user="user" :items="userDropdownItems" />
+                </AuthState>
+              </div>
             </div>
           </div>
         </div>
@@ -51,8 +57,15 @@ onMounted(() => {
           </UTooltip>
 
           <XBtnColorMode />
+      
 
           <slot name="action" />
+
+          <div v-if="isAuthenticated" class="user-navigation hidden sm:block">
+            <AuthState>
+              <XDropdownManageAccount :user="user" :items="userDropdownItems" />
+            </AuthState>
+          </div>
         </div>
       </div>
     </div>

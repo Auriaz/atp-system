@@ -30,7 +30,7 @@ const layoutClasses = computed(() => {
 
 // Computed classes for the main content
 const mainClasses = computed(() => {
-  const classes = ['w-full', 'box-border', 'relative', 'transition-all', 'duration-500']
+  const classes = ['w-full', 'box-border', 'relative', 'transition-all', 'duration-500', 'p-0']
   
   if (props.variant === 'full-height') {
     classes.push('flex-1', 'overflow-auto')

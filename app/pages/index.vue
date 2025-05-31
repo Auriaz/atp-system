@@ -105,7 +105,7 @@ onMounted(() => {
     })
       // Parallax scroll effect for video background
     gsap.to('.hero-video', {
-      y: '30%',
+      y: '0%',
       scale: 1.1,
       ease: 'none',
       scrollTrigger: {

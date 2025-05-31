@@ -5,7 +5,7 @@ category: 'Development'
 version: '1.0.0'
 lastUpdated: '2025-05-28'
 createdAt: '2025-05-28'
-requiredRole: ['admin', 'editor', 'developer']
+requiredRole: ['admin', 'editor', 'developer', 'manager'] # Role wymagane do odczytu dokumentu
 icon: 'i-heroicons-document-text'
 author: 'Zespół ATP System'
 tags: ['przewodnik-stylistyczny', 'dokumentacja', 'standardy', 'pisanie']

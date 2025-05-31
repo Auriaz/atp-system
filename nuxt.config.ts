@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   imports: {
     dirs: [
-      'composables/**'
+      'composables/**',
+      'stores/**', // Importuj wszystkie pliki w katalogu stores
+      'utils/**', // Importuj wszystkie pliki w katalogu utils
+      'api/**', // Importuj wszystkie pliki w katalogu components
     ]
   },
   // https://nuxt.com/modules
@@ -136,7 +139,6 @@ export default defineNuxtConfig({
       lg: 1024,
       xl: 1280,
       xxl: 1536,
-      '2xl': 1536
     },
   }
 })

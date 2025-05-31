@@ -5,7 +5,7 @@ category: 'Nazwa kategorii'
 version: '1.0.0'
 lastUpdated: '2025-05-28'
 createdAt: '2025-05-28'
-requiredRole: false # lub ['rola1', 'rola2'] dla ograniczonego dostępu
+requiredRole: ['editor', 'admin', 'menager', 'developer']
 icon: 'i-heroicons-document-text'
 author: 'Zespół ATP System'
 tags: ['tag1', 'tag2', 'tag3']
