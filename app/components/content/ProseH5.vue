@@ -2,7 +2,7 @@
   <h5 :id="props.id" class="text-base font-semibold text-gray-800 dark:text-gray-200 my-2">
     <a
       v-if="props.id && generate"
-      :href="`#${props.id}`"
+      :href="`${props.id}`"
       class="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     >
       <slot />

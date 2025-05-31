@@ -5,7 +5,7 @@
       :href="`${props.id}`"
       class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500 no-underline font-medium transition-colors duration-300 ease-in-out"
     >
-      # <slot />
+      <slot />
     </a>
     <slot v-else />
   </h2>
