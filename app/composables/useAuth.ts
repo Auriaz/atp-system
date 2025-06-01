@@ -192,9 +192,7 @@ export function useAuth(): AuthComposable {
 
             return false
         }
-    }
-
-    /**
+    }    /**
      * Logout function that clears both JWT tokens and session
      */
     const logout = async (): Promise<void> => {
@@ -212,6 +210,11 @@ export function useAuth(): AuthComposable {
 
             // Clear session
             clearUserSession()
+            fetchUserSession()
+
+            navigateTo('/auth/login', { replace: true })
+            // Force refresh authentication state
+            await nextTick()
 
             // Show success message
             toast.add({
@@ -220,12 +223,21 @@ export function useAuth(): AuthComposable {
                 color: 'success'
             })
 
+            // Broadcast logout event to other tabs
+            if (import.meta.client) {
+                localStorage.setItem('logout-event', Date.now().toString())
+                localStorage.removeItem('logout-event')
+            }
+
         } catch (error: any) {
             console.error('❌ Logout failed:', error)
 
             // Even if logout request fails, clear local tokens and session
             jwtAuth.clearTokens()
             clearUserSession()
+
+            // Force refresh authentication state
+            await nextTick()
 
             toast.add({
                 title: 'Logout Error',
@@ -276,12 +288,31 @@ export function useAuth(): AuthComposable {
         } else {
             jwtAuth.stopAutoRefresh()
         }
-    }, { immediate: true })
-
-    // Cleanup on unmount
+    }, { immediate: true })    // Setup cross-tab logout synchronization
     if (import.meta.client) {
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === 'logout-event') {
+                console.log('🚪 Logout event detected from another tab')
+                // Clear local tokens and session without API call
+                jwtAuth.clearTokens()
+                clearUserSession()
+
+                // Show notification
+                toast.add({
+                    title: 'Logged Out',
+                    description: 'You have been logged out from another tab',
+                    color: 'info'
+                })
+            }
+        }
+
+        // Add event listener for storage changes
+        window.addEventListener('storage', handleStorageChange)
+
+        // Cleanup on unmount
         onBeforeUnmount(() => {
             jwtAuth.stopAutoRefresh()
+            window.removeEventListener('storage', handleStorageChange)
         })
     }
 

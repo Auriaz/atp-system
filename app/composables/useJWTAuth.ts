@@ -43,9 +43,7 @@ export function useJWTAuth(): JWTAuth {
                 sessionStorage.removeItem('tokenExpiresAt')
             }
         }
-    }
-
-    const isAuthenticated = computed(() => {
+    } const isAuthenticated = computed(() => {
         return !!accessToken.value && (tokenExpiresAt.value ? tokenExpiresAt.value > Date.now() : true)
     })
 
@@ -71,7 +69,9 @@ export function useJWTAuth(): JWTAuth {
         if (import.meta.client) {
             sessionStorage.removeItem('accessToken')
             sessionStorage.removeItem('tokenExpiresAt')
-        } stopAutoRefresh()
+        }
+
+        stopAutoRefresh()
     }
 
     const onRefreshError = (callback: RefreshErrorCallback) => {
