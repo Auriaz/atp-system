@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
 
   console.log('JWT Middleware: Verifying access token');
   // Verify the JWT access token
-  const payload = verifyAccessToken(accessToken);
+  const payload = await verifyAccessToken(accessToken);
 
   if (!payload) {
     console.log('JWT Middleware: Invalid access token');

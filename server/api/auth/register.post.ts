@@ -1,5 +1,12 @@
 import { useValidatedBody } from 'h3-zod'
 import { eq } from 'drizzle-orm'
+import { emailService } from '../../utils/services/email.service'
+import { verificationTokenService } from '../../utils/services/verification-token.service'
+import { RegisterFormSchema, type RegisterForm } from '../../../shared/utils/register.schema'
+import { assignDefaultUserRole, getUserRoleSlugs } from '../../utils/repositories/user_roles.repositories'
+import { generateTokenPair, generateDeviceId } from '../../utils/services/jwt.service'
+import { getClientIp, getPlatformFromUserAgent } from '../../utils/services/agent.service'
+import { createApiResponse } from '../../utils/services/response.service'
 
 
 export default defineEventHandler(async (event) => {
@@ -33,9 +40,7 @@ export default defineEventHandler(async (event) => {
         statusCode: 409,
         message: 'User with this username already exists'
       })
-    }
-
-    // Hash the password
+    }    // Hash the password
     const hashedPassword = await hashPassword(body.password)
 
     // Create new user
@@ -100,9 +105,7 @@ export default defineEventHandler(async (event) => {
       path: '/'
     })// Set security headers
     setHeader(event, 'Cache-Control', 'no-cache, no-store, must-revalidate')
-    setHeader(event, 'Pragma', 'no-cache')
-
-    // Log user registration activity
+    setHeader(event, 'Pragma', 'no-cache')    // Log user registration activity
     await useDatabase()
       .insert(tables.userActivities)
       .values({
@@ -118,6 +121,25 @@ export default defineEventHandler(async (event) => {
       })
       .execute()
       .catch(error => console.error('Failed to log user activity:', error))
+
+    // Send verification email
+    try {
+      const verificationToken = await verificationTokenService.createEmailVerificationToken(user.id)
+      const emailSent = await emailService.sendVerificationEmail(
+        user.email,
+        user.username,
+        verificationToken
+      )
+
+      if (emailSent) {
+        console.log(`✅ Verification email sent to ${user.email}`)
+      } else {
+        console.warn(`⚠️ Failed to send verification email to ${user.email}`)
+      }
+    } catch (emailError) {
+      console.error('Error sending verification email:', emailError)
+      // Don't fail registration if email fails, just log the error
+    }
 
     return createApiResponse(
       {

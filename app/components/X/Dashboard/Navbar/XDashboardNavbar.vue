@@ -2,7 +2,7 @@
 const { navbar, handleScroll } = useNavbar()
 const { sidebar, toggleShowMenuBar } = useSidebar()
 const { user, isAuthenticated } = useAuth()
-
+const {  userDropdownItems } = useNavigationItems()
 onMounted(() => {
   handleScroll('main-nav-dashboard')
 });

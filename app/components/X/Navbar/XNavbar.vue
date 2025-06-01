@@ -9,7 +9,7 @@ defineProps({
     default: false,
   },
 });
-
+const { mainNavigationItems, userDropdownItems, mobileNavigationItems, userNavigationMobileItems } = useNavigationItems()
 const { navbar, toggleMobile, handleScroll, closeMobile } = useNavbar();
 const route = useRoute();
 const { user, isAuthenticated } = useAuth();

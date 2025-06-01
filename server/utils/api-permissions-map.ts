@@ -61,11 +61,13 @@ export const API_PERMISSION_MAP: Record<string, Permission> = {
   // '/api/reports': PERMISSIONS.REPORT_VIEW,        // Lista raportów
   // '/api/reports/create': PERMISSIONS.REPORT_CREATE, // Tworzenie raportów
   // '/api/reports/\\d+': PERMISSIONS.REPORT_VIEW,   // Szczegóły raportu
-
   // Ustawienia
   '/api/settings': PERMISSIONS.SETTINGS_VIEW,     // Przeglądanie ustawień
   '/api/settings/updated': PERMISSIONS.SETTINGS_EDIT, // Aktualizacja ustawień
   '/api/settings/updated/logo': PERMISSIONS.SETTINGS_LOGO, // Ustawienia logo
+  '/api/settings/email': PERMISSIONS.SETTINGS_EMAIL, // Ustawienia email
+  '/api/settings/email/update': PERMISSIONS.SETTINGS_EMAIL_UPDATE, // Aktualizacja ustawień email
+  '/api/settings/email/test': PERMISSIONS.SETTINGS_EMAIL_TEST, // Test ustawień email
   '/api/settings/notifications': PERMISSIONS.SETTINGS_NOTIFICATIONS, // Ustawienia powiadomień
 
 

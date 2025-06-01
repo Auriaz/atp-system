@@ -4,8 +4,9 @@ definePageMeta({
   middleware: 'auth',
 })
 
-// Zdefiniowanie wymaganych uprawnień
-const requiredPermission = 'settings:logo:update';
+// Define required permissions for different sections
+const logoPermission = 'settings:logo:update'
+const emailPermission = 'settings:email'
 </script>
 
 <template>
@@ -17,9 +18,14 @@ const requiredPermission = 'settings:logo:update';
   
       <template #main>
         <div class="p-6 space-y-6">
-          <!-- Dodanie dyrektywy v-can -->
-          <XPermission permission="settings:logo:update">
+          <!-- Logo Settings Section -->
+          <XPermission :permission="logoPermission">
             <XDashboardSettingsLogo />
+          </XPermission>
+
+          <!-- Email Settings Section -->
+          <XPermission :permission="emailPermission">
+            <XDashboardSettingsEmail />
           </XPermission>
         </div>
       </template>

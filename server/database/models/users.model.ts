@@ -13,6 +13,8 @@ export const users = sqliteTable('users', {
     // primaryRole: text('role').default(USER_ROLES.USER).$type<UserRole>(), // Default role is USER
     status: text('status').default(USER_STATUSES.ACTIVE).$type<UserStatus>(),
     isAgreedToTerms: integer('is_agreed_to_terms').notNull().default(0),
+    isEmailVerified: integer('is_email_verified', { mode: 'boolean' }).notNull().default(false),
+    emailVerifiedAt: integer('email_verified_at', { mode: 'timestamp' }),
     isOAuthAccount: integer('is_oauth_account', { mode: 'boolean' }).default(false),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
     updatedAt: integer('updated_at', { mode: 'timestamp' }),

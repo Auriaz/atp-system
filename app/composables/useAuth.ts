@@ -19,6 +19,10 @@ interface AuthComposable {
     logout: () => Promise<void>
     refreshToken: () => Promise<boolean>
 
+    // Email verification methods
+    verifyEmail: (token: string) => Promise<any>
+    resendVerification: (email: string) => Promise<any>
+
     // Token management
     setAccessToken: (token: string, expiresIn?: number) => void
     clearTokens: () => void
@@ -271,14 +275,128 @@ export function useAuth(): AuthComposable {
      */
     const fetchSession = async (): Promise<void> => {
         await fetchUserSession()
-    }
-
-    /**
+    }    /**
      * Clear all authentication data
      */
     const clearSession = (): void => {
         jwtAuth.clearTokens()
         clearUserSession()
+    }
+
+    /**
+     * Verify email with token
+     */
+    const verifyEmail = async (token: string): Promise<any> => {
+        try {
+            const response = await $fetch<{
+                status: string
+                payload: {
+                    user: {
+                        id: number
+                        email: string
+                        username: string
+                        isEmailVerified: boolean
+                        emailVerifiedAt: string
+                    }
+                }
+                message: {
+                    title: string
+                    description: string
+                }
+            }>('/api/auth/verify-email', {
+                method: 'POST',
+                body: { token }
+            })
+
+            if (response.status === 'success') {
+                toast.add({
+                    title: response.message?.title || 'Success',
+                    description: response.message?.description || 'Email verified successfully!',
+                    color: 'success'
+                })
+
+                // Refresh user session to get updated verification status
+                await fetchSession()
+
+                return {
+                    success: true,
+                    data: response
+                }
+            }
+
+            return {
+                success: false,
+                message: response.message?.description || 'Verification failed'
+            }
+        } catch (error: any) {
+            console.error('Email verification error:', error)
+
+            const errorMessage = error.data?.message || error.message || 'Verification failed'
+            toast.add({
+                title: 'Verification Failed',
+                description: errorMessage,
+                color: 'error'
+            })
+
+            return {
+                success: false,
+                message: errorMessage
+            }
+        }
+    }
+
+    /**
+     * Resend verification email
+     */
+    const resendVerification = async (email: string): Promise<any> => {
+        try {
+            const response = await $fetch<{
+                status: string
+                payload: {
+                    message: string
+                    email: string
+                }
+                message: {
+                    title: string
+                    description: string
+                }
+            }>('/api/auth/resend-verification', {
+                method: 'POST',
+                body: { email }
+            })
+
+            if (response.status === 'success') {
+                toast.add({
+                    title: response.message?.title || 'Success',
+                    description: response.message?.description || 'Verification email sent!',
+                    color: 'success'
+                })
+
+                return {
+                    success: true,
+                    data: response
+                }
+            }
+
+            return {
+                success: false,
+                message: response.message?.description || 'Failed to send verification email'
+            }
+        } catch (error: any) {
+            console.error('Resend verification error:', error)
+
+            const errorMessage = error.data?.message || error.message || 'Failed to resend verification email'
+            toast.add({
+                title: 'Resend Failed',
+                description: errorMessage,
+                color: 'error'
+            })
+
+            return {
+                success: false,
+                message: errorMessage
+            }
+        }
     }
 
     // Auto-start JWT refresh when user is authenticated
@@ -314,9 +432,7 @@ export function useAuth(): AuthComposable {
             jwtAuth.stopAutoRefresh()
             window.removeEventListener('storage', handleStorageChange)
         })
-    }
-
-    return {
+    } return {
         // Authentication state
         isAuthenticated,
         user,
@@ -330,6 +446,10 @@ export function useAuth(): AuthComposable {
         register,
         logout,
         refreshToken,
+
+        // Email verification methods
+        verifyEmail,
+        resendVerification,
 
         // Token management
         setAccessToken: jwtAuth.setAccessToken,

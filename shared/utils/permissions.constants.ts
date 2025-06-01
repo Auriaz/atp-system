@@ -45,11 +45,13 @@ export const PERMISSIONS = {
   SCHEDULE_CREATE: 'schedule:create',     // Tworzenie wydarzeń w harmonogramie
   SCHEDULE_EDIT: 'schedule:edit',        // Edycja wydarzeń w harmonogramie
   SCHEDULE_DELETE: 'schedule:delete',     // Usuwanie wydarzeń z harmonogramu
-
   // ===== ZARZĄDZANIE SYSTEMEM =====
   SYSTEM_SETTINGS: 'system:settings',    // Zmiana ustawień systemu
   SETTINGS_LOGO: 'settings:logo',
   SETTINGS_LOGO_UPDATE: 'settings:logo:update',       // Zmiana logo systemu
+  SETTINGS_EMAIL: 'settings:email',                   // Przeglądanie ustawień email
+  SETTINGS_EMAIL_UPDATE: 'settings:email:update',     // Zmiana ustawień email
+  SETTINGS_EMAIL_TEST: 'settings:email:test',         // Testowanie ustawień email
   SYSTEM_LOGS: 'system:logs',          // Przeglądanie logów systemu
   SYSTEM_BACKUP: 'system:backup',       // Tworzenie i przywracanie kopii zapasowych
 
@@ -94,7 +96,6 @@ export type Permissions = Permission[];
 export const ROLE_PERMISSIONS: Record<RoleSlug, Permissions> = {
   // Administrator ma wszystkie uprawnienia
   [USER_ROLES.ADMIN]: Object.values(PERMISSIONS) as Permissions,
-
   // Manager - zarządza organizacją, trenerami i sportowcami
   [USER_ROLES.MANAGER]: [
     // Zarządzanie użytkownikami
@@ -113,6 +114,11 @@ export const ROLE_PERMISSIONS: Record<RoleSlug, Permissions> = {
     // Harmonogram
     PERMISSIONS.SCHEDULE_VIEW_ALL, PERMISSIONS.SCHEDULE_CREATE,
     PERMISSIONS.SCHEDULE_EDIT, PERMISSIONS.SCHEDULE_DELETE,
+
+    // Ustawienia systemu
+    PERMISSIONS.SETTINGS_VIEW, PERMISSIONS.SETTINGS_EDIT,
+    PERMISSIONS.SETTINGS_EMAIL, PERMISSIONS.SETTINGS_EMAIL_UPDATE, PERMISSIONS.SETTINGS_EMAIL_TEST,
+    PERMISSIONS.SETTINGS_LOGO_UPDATE,
 
     // Komunikacja
     PERMISSIONS.MESSAGE_SEND, PERMISSIONS.MESSAGE_VIEW, PERMISSIONS.NOTIFICATION_SEND,
