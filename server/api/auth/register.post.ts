@@ -1,13 +1,5 @@
 import { useValidatedBody } from 'h3-zod'
 import { eq } from 'drizzle-orm'
-import { emailService } from '../../utils/services/email.service'
-import { verificationTokenService } from '../../utils/services/verification-token.service'
-import { RegisterFormSchema, type RegisterForm } from '../../../shared/utils/register.schema'
-import { assignDefaultUserRole, getUserRoleSlugs } from '../../utils/repositories/user_roles.repositories'
-import { generateTokenPair, generateDeviceId } from '../../utils/services/jwt.service'
-import { getClientIp, getPlatformFromUserAgent } from '../../utils/services/agent.service'
-import { createApiResponse } from '../../utils/services/response.service'
-
 
 export default defineEventHandler(async (event) => {
   try {

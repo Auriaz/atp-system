@@ -6,8 +6,6 @@
 import { z } from 'zod'
 import { eq, and } from 'drizzle-orm'
 import { useValidatedBody } from 'h3-zod'
-import { emailService } from '../../utils/services/email.service'
-import { verificationTokenService } from '../../utils/services/verification-token.service'
 
 // Validation schema for resend verification email request
 const ResendVerificationSchema = z.object({

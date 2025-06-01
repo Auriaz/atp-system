@@ -6,7 +6,6 @@
 import { z } from 'zod'
 import { eq } from 'drizzle-orm'
 import { useValidatedBody } from 'h3-zod'
-import { verificationTokenService } from '../../utils/services/verification-token.service'
 
 // Validation schema for email verification request
 const VerifyEmailSchema = z.object({

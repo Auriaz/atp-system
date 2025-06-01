@@ -1,11 +1,3 @@
-import {
-    createRefreshToken,
-    verifyRefreshToken,
-    revokeRefreshToken
-} from '../repositories/refresh_tokens.repository'
-import { getUserRoleSlugs } from '../repositories/user_roles.repositories'
-import { sessionManagementService } from './session-management.service'
-
 /**
  * Service dla zarządzania JWT tokenami (access tokeny) - Web Crypto API version
  */
@@ -236,8 +228,4 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
     return authHeader.slice(7) // Usuń "Bearer "
 }
 
-/**
- * Generuje device ID na podstawie User-Agent i IP
- */
-export { generateDeviceId } from '../auth/device'
 
