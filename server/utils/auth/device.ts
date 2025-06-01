@@ -28,9 +28,9 @@ export function generateDeviceId(userAgent: string = 'unknown', ipAddress?: stri
 /**
  * Extract client IP address from H3 event
  * @param event H3 event object
- * @returns Client IP address or undefined
+ * @returns Client IP address or null
  */
-export function getClientIp(event: H3Event): string | undefined {
+export function getClientIp(event: H3Event): string | null {
     // Check for forwarded headers first (reverse proxy, load balancer)
     const forwardedFor = getHeader(event, 'x-forwarded-for')
     if (forwardedFor) {
@@ -56,25 +56,73 @@ export function getClientIp(event: H3Event): string | undefined {
         return remoteAddress
     }
 
-    return undefined
+    return null
 }
 
 /**
  * Extract platform information from user agent string
  * @param userAgent User agent string
- * @returns Platform name
+ * @returns Platform information object
  */
-export function getPlatformFromUserAgent(userAgent: string): string {
+export function getPlatformFromUserAgent(userAgent?: string): Record<string, string | boolean> {
+    if (!userAgent) return { unknown: true }
+
     const ua = userAgent.toLowerCase()
+    const platformInfo: Record<string, string | boolean> = {
+        mobile: false,
+        tablet: false,
+        desktop: true,
+        os: 'unknown',
+        browser: 'unknown',
+        browserVersion: 'unknown'
+    }
 
-    if (ua.includes('windows')) return 'Windows'
-    if (ua.includes('mac os x') || ua.includes('macintosh')) return 'macOS'
-    if (ua.includes('linux')) return 'Linux'
-    if (ua.includes('android')) return 'Android'
-    if (ua.includes('iphone') || ua.includes('ipad')) return 'iOS'
-    if (ua.includes('chrome os')) return 'Chrome OS'
+    // Detect device type
+    if (/(android|webos|iphone|ipod|blackberry|iemobile|opera mini)/i.test(ua)) {
+        platformInfo.mobile = true
+        platformInfo.desktop = false
+    } else if (/(ipad|tablet|playbook|silk)|(android(?!.*mobile))/i.test(ua)) {
+        platformInfo.tablet = true
+        platformInfo.desktop = false
+    }
 
-    return 'Unknown'
+    // Detect operating system
+    if (/windows/i.test(ua)) {
+        platformInfo.os = 'Windows'
+    } else if (/macintosh|mac os x/i.test(ua)) {
+        platformInfo.os = 'macOS'
+    } else if (/linux/i.test(ua)) {
+        platformInfo.os = 'Linux'
+    } else if (/android/i.test(ua)) {
+        platformInfo.os = 'Android'
+    } else if (/iphone|ipad|ipod/i.test(ua)) {
+        platformInfo.os = 'iOS'
+    }
+
+    // Detect browser
+    if (/edge|edg/i.test(ua)) {
+        platformInfo.browser = 'Edge'
+        const match = ua.match(/(edge|edg)\/([\d.]+)/)
+        if (match) platformInfo.browserVersion = match[2]
+    } else if (/firefox/i.test(ua)) {
+        platformInfo.browser = 'Firefox'
+        const match = ua.match(/firefox\/([\d.]+)/)
+        if (match) platformInfo.browserVersion = match[1]
+    } else if (/chrome/i.test(ua)) {
+        platformInfo.browser = 'Chrome'
+        const match = ua.match(/chrome\/([\d.]+)/)
+        if (match) platformInfo.browserVersion = match[1]
+    } else if (/safari/i.test(ua)) {
+        platformInfo.browser = 'Safari'
+        const match = ua.match(/version\/([\d.]+)/)
+        if (match) platformInfo.browserVersion = match[1]
+    } else if (/msie|trident/i.test(ua)) {
+        platformInfo.browser = 'Internet Explorer'
+        const match = ua.match(/(msie |rv:)([\d.]+)/)
+        if (match) platformInfo.browserVersion = match[2]
+    }
+
+    return platformInfo
 }
 
 /**

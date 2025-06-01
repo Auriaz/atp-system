@@ -239,8 +239,5 @@ export function extractTokenFromHeader(authHeader: string | undefined): string |
 /**
  * Generuje device ID na podstawie User-Agent i IP
  */
-export function generateDeviceId(userAgent?: string, ipAddress?: string): string {
-    const data = `${userAgent || 'unknown'}-${ipAddress || 'unknown'}-${Date.now()}`
-    return btoa(data).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32)
-}
+export { generateDeviceId } from '../auth/device'
 

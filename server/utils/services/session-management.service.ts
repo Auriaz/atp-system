@@ -2,6 +2,7 @@ import { eq, and, desc } from 'drizzle-orm'
 import { refreshTokens } from '../../database/models/refresh_tokens.model'
 import { useDatabase } from '../database'
 import { UAParser } from 'ua-parser-js'
+import { generateDeviceId } from '../auth/device'
 
 export interface SessionInfo {
     id: number
@@ -47,20 +48,11 @@ export class SessionManagementService {
         const osVersion = result.os.version || ''
 
         return `${browser}${browserVersion ? ' ' + browserVersion : ''} on ${os}${osVersion ? ' ' + osVersion : ''}`
-    }
-
-    /**
+    }    /**
      * Generuje unikalny identyfikator urządzenia
      */
     generateDeviceId(userAgent: string, ipAddress: string): string {
-        const parser = new UAParser(userAgent)
-        const result = parser.getResult()
-
-        // Kombinacja przeglądarki, OS i IP do utworzenia fingerprint
-        const fingerprint = `${result.browser.name}_${result.os.name}_${ipAddress}`
-
-        // Prosty hash (w produkcji lepiej użyć crypto)
-        return Buffer.from(fingerprint).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 16)
+        return generateDeviceId(userAgent, ipAddress)
     }
 
     /**

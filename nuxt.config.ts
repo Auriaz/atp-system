@@ -6,6 +6,14 @@ export default defineNuxtConfig({
       'stores/**', // Importuj wszystkie pliki w katalogu stores
       'utils/**', // Importuj wszystkie pliki w katalogu utils
       'api/**', // Importuj wszystkie pliki w katalogu components
+    ],
+    // Exclude duplicated imports from nuxt-auth-utils
+    exclude: [
+      'hashPassword',
+      'verifyPassword',
+      'getClientIp',
+      'getPlatformFromUserAgent',
+      'generateDeviceId'
     ]
   },
   // https://nuxt.com/modules
@@ -85,12 +93,12 @@ export default defineNuxtConfig({
     kv: true,
     database: true,
     cache: true,
-  },
-  nitro: {
+  }, nitro: {
     experimental: {
       tasks: true, // Włącz eksperymentalne zadania
       // websocket: true,
       openAPI: true, // Włącz eksperymentalne OpenAPI
+      wasm: true
     },
   },
 
