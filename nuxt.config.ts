@@ -86,18 +86,12 @@ export default defineNuxtConfig({
     database: true,
     cache: true,
   },
-
   nitro: {
     experimental: {
       tasks: true, // Włącz eksperymentalne zadania
       // websocket: true,
       openAPI: true, // Włącz eksperymentalne OpenAPI
-      // wasm: true
     },
-    // imports: {
-    //   // Exclude specific imports to prevent conflicts with nuxt-auth-utils
-    //   // exclude: ['hashPassword', 'verifyPassword', 'getClientIp', 'getPlatformFromUserAgent', 'generateDeviceId']
-    // }
   },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
@@ -107,6 +101,34 @@ export default defineNuxtConfig({
   routeRules: {
     '/.well-known/**': { static: true }
   },
+  // content: {
+  //   renderer: {
+  //     anchorLinks: {
+  //       h1: true, h2: true, h3: true, h4: true, h5: true, h6: true, // Włącz linki kotwic dla nagłówków
+  //     },
+  //   },
+  //   build: {
+  //     // Konfiguracja markdown
+  //     markdown: {
+  //       // Spis treści
+  //       toc: {
+  //         depth: 4, // Głębokość spisu treści
+  //         searchDepth: 5, // Głębokość wyszukiwania
+  //       },
+
+  //       // Podświetlanie składni
+  //       highlight: {
+  //         theme: {
+  //           default: 'github-light', // Motyw domyślny
+  //           dark: 'github-dark',     // Motyw ciemny
+  //           sepia: 'monokai'         // Motyw sepia
+  //         },
+  //       },
+
+  //     },
+  //   },
+  // },
+  // debug: true, // Włącz debugowanie
 
   image: {
     // inject: true, // Wstrzyknij komponent obrazu
