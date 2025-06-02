@@ -1,285 +1,228 @@
-import type { SessionInfo } from '~/server/utils/services/session-management.service'
-
-interface SessionStats {
-    totalSessions: number
-    activeSessions: number
-    devicesCount: number
-    lastActivity: Date | null
-}
-
-interface SessionsResponse {
-    sessions: SessionInfo[]
-    stats: SessionStats
-}
-
 export const useSessionManagement = () => {
-    const { accessToken } = useJWTAuth()
-    const toast = useToast()
-
-    // Reactive data
     const sessions = ref<SessionInfo[]>([])
     const stats = ref<SessionStats | null>(null)
     const loading = ref(false)
     const error = ref<string | null>(null)
+    const toast = useToast()
 
-    /**
-     * Pobiera listę wszystkich sesji użytkownika
-     */
-    const fetchSessions = async (): Promise<void> => {
-        if (!accessToken.value) {
-            error.value = 'No access token available'
-            return
+    // Get auth composables safely
+    let authComposable: ReturnType<typeof useAuth> | null = null
+    let jwtComposable: ReturnType<typeof useJWTAuth> | null = null
+
+    try {
+        authComposable = useAuth()
+        jwtComposable = useJWTAuth()
+    } catch (err) {
+        console.error('Failed to initialize auth composables:', err)
+    }
+
+    // Helper function for authenticated requests
+    const authenticatedFetch = async (url: string, options: any = {}) => {
+        if (!authComposable?.isAuthenticated.value) {
+            throw new Error('User not authenticated')
         }
 
-        loading.value = true
-        error.value = null
-
-        try {
-            const response = await $fetch<{ success: boolean; data: SessionsResponse }>('/api/auth/sessions', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken.value}`
+        if (!jwtComposable?.accessToken.value) {
+            // Try to refresh token or wait
+            if (jwtComposable?.refreshToken) {
+                const refreshed = await jwtComposable.refreshToken()
+                if (!refreshed) {
+                    throw new Error('Failed to refresh authentication token')
                 }
-            })
+            } else {
+                throw new Error('No authentication token available')
+            }
+        }
+
+        return $fetch(url, {
+            ...options,
+            headers: {
+                'Authorization': `Bearer ${jwtComposable.accessToken.value}`,
+                ...options.headers
+            }
+        })
+    }
+
+    // Fetch all user sessions
+    const fetchSessions = async () => {
+        try {
+            loading.value = true
+            error.value = null
+
+            // Check authentication first
+            if (!authComposable?.isAuthenticated.value) {
+                throw new Error('User not authenticated')
+            }
+
+            const response = await authenticatedFetch('/api/auth/sessions', {
+                method: 'GET'
+            }) as any
 
             if (response.success) {
-                sessions.value = response.data.sessions
-                stats.value = response.data.stats
+                sessions.value = response.data.sessions.map((session: any) => ({
+                    ...session,
+                    lastUsedAt: new Date(session.lastUsedAt),
+                    createdAt: new Date(session.createdAt)
+                }))
+                stats.value = {
+                    ...response.data.stats,
+                    lastActivity: response.data.stats.lastActivity ? new Date(response.data.stats.lastActivity) : null
+                }
             } else {
                 throw new Error('Failed to fetch sessions')
             }
         } catch (err: any) {
-            error.value = err.message || 'Failed to fetch sessions'
+            error.value = err.message || 'Nie udało się pobrać sesji'
             console.error('Fetch sessions error:', err)
         } finally {
             loading.value = false
         }
     }
 
-    /**
-     * Usuwa wybraną sesję (wylogowuje z urządzenia)
-     */
-    const revokeSession = async (sessionId: number): Promise<boolean> => {
-        if (!accessToken.value) {
-            error.value = 'No access token available'
-            return false
-        }
-
-        loading.value = true
-        error.value = null
-
+    // Revoke specific session
+    const revokeSession = async (sessionId: number) => {
         try {
-            const response = await $fetch<{ success: boolean; message: string }>(`/api/auth/sessions/${sessionId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${accessToken.value}`
-                }
-            })
+            loading.value = true
+
+            const response = await authenticatedFetch(`/api/auth/sessions/${sessionId}`, {
+                method: 'DELETE'
+            }) as any
 
             if (response.success) {
                 toast.add({
-                    title: 'Sesja usunięta',
-                    description: 'Urządzenie zostało wylogowane pomyślnie',
-                    color: 'green'
+                    title: 'Sukces',
+                    description: 'Sesja została zakończona',
+                    color: 'success'
                 })
-
-                // Odśwież listę sesji
-                await fetchSessions()
-                return true
+                await fetchSessions() // Refresh list
             } else {
                 throw new Error(response.message || 'Failed to revoke session')
             }
         } catch (err: any) {
-            error.value = err.message || 'Failed to revoke session'
             toast.add({
                 title: 'Błąd',
-                description: error.value,
-                color: 'red'
+                description: err.message || 'Nie udało się zakończyć sesji',
+                color: 'error'
             })
             console.error('Revoke session error:', err)
-            return false
         } finally {
             loading.value = false
         }
     }
 
-    /**
-     * Usuwa wszystkie sesje oprócz aktualnej
-     */
-    const revokeAllOtherSessions = async (currentSessionId: number): Promise<boolean> => {
-        if (!accessToken.value) {
-            error.value = 'No access token available'
-            return false
-        }
-
-        loading.value = true
-        error.value = null
-
+    // Revoke all other sessions
+    const revokeAllOtherSessions = async (currentSessionId: number) => {
         try {
-            const response = await $fetch<{ success: boolean; message: string; revokedCount: number }>('/api/auth/sessions/revoke', {
+            loading.value = true
+
+            const response = await authenticatedFetch('/api/auth/sessions/revoke', {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken.value}`
-                },
                 body: {
                     currentSessionId,
                     revokeAll: false
                 }
-            })
+            }) as any
 
             if (response.success) {
                 toast.add({
-                    title: 'Sesje usunięte',
-                    description: `Wylogowano z ${response.revokedCount} urządzeń`,
-                    color: 'green'
+                    title: 'Sukces',
+                    description: `Zakończono ${response.revokedCount} sesji`,
+                    color: 'success'
                 })
-
-                // Odśwież listę sesji
-                await fetchSessions()
-                return true
+                await fetchSessions() // Refresh list
             } else {
                 throw new Error(response.message || 'Failed to revoke sessions')
             }
         } catch (err: any) {
-            error.value = err.message || 'Failed to revoke sessions'
             toast.add({
                 title: 'Błąd',
-                description: error.value,
-                color: 'red'
+                description: err.message || 'Nie udało się zakończyć sesji',
+                color: 'error'
             })
-            console.error('Revoke all other sessions error:', err)
-            return false
+            console.error('Revoke other sessions error:', err)
         } finally {
             loading.value = false
         }
     }
 
-    /**
-     * Usuwa wszystkie sesje (globalne wylogowanie)
-     */
-    const revokeAllSessions = async (): Promise<boolean> => {
-        if (!accessToken.value) {
-            error.value = 'No access token available'
-            return false
-        }
-
-        loading.value = true
-        error.value = null
-
+    // Revoke all sessions
+    const revokeAllSessions = async () => {
         try {
-            const response = await $fetch<{ success: boolean; message: string; revokedCount: number }>('/api/auth/sessions/revoke', {
+            loading.value = true
+
+            const response = await authenticatedFetch('/api/auth/sessions/revoke', {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken.value}`
-                },
                 body: {
                     revokeAll: true
                 }
-            })
+            }) as any
 
             if (response.success) {
                 toast.add({
-                    title: 'Wszystkie sesje usunięte',
-                    description: `Wylogowano ze wszystkich ${response.revokedCount} urządzeń`,
-                    color: 'green'
+                    title: 'Sukces',
+                    description: 'Wszystkie sesje zostały zakończone',
+                    color: 'success'
                 })
 
-                // Po globalnym wylogowaniu, przekieruj do strony logowania
-                // ponieważ aktualna sesja też została unieważniona
+                // Force logout and redirect
                 await navigateTo('/auth/login')
-                return true
             } else {
                 throw new Error(response.message || 'Failed to revoke all sessions')
             }
         } catch (err: any) {
-            error.value = err.message || 'Failed to revoke all sessions'
             toast.add({
                 title: 'Błąd',
-                description: error.value,
-                color: 'red'
+                description: err.message || 'Nie udało się zakończyć wszystkich sesji',
+                color: 'error'
             })
             console.error('Revoke all sessions error:', err)
-            return false
         } finally {
             loading.value = false
         }
     }
 
-    /**
-     * Formatuje datę ostatniej aktywności
-     */
-    const formatLastActivity = (date: Date): string => {
+    // Format last activity time
+    const formatLastActivity = (date: Date | string) => {
         const now = new Date()
-        const diffMs = now.getTime() - date.getTime()
-        const diffMins = Math.floor(diffMs / (1000 * 60))
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+        const lastActivity = new Date(date)
+        const diffInMinutes = Math.floor((now.getTime() - lastActivity.getTime()) / (1000 * 60))
 
-        if (diffMins < 1) return 'Teraz'
-        if (diffMins < 60) return `${diffMins} min temu`
-        if (diffHours < 24) return `${diffHours} godz. temu`
-        if (diffDays < 7) return `${diffDays} dni temu`
-
-        return date.toLocaleDateString('pl-PL')
+        if (diffInMinutes < 1) return 'Teraz'
+        if (diffInMinutes < 60) return `${diffInMinutes} min temu`
+        if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} godz. temu`
+        return `${Math.floor(diffInMinutes / 1440)} dni temu`
     }
 
-    /**
-     * Sprawdza czy sesja jest aktualna
-     */
-    const isCurrentSession = (session: SessionInfo): boolean => {
+    // Check if session is current
+    const isCurrentSession = (session: SessionInfo) => {
         return session.isCurrent
     }
 
-    /**
-     * Pobiera ikonę dla typu urządzenia
-     */
-    const getDeviceIcon = (deviceName: string): string => {
+    // Get device icon based on device name
+    const getDeviceIcon = (deviceName: string) => {
         const name = deviceName.toLowerCase()
 
-        if (name.includes('mobile') || name.includes('android') || name.includes('ios')) {
+        if (name.includes('mobile') || name.includes('android') || name.includes('iphone')) {
             return 'i-heroicons-device-phone-mobile'
         }
         if (name.includes('tablet') || name.includes('ipad')) {
             return 'i-heroicons-device-tablet'
         }
-        if (name.includes('chrome') || name.includes('firefox') || name.includes('safari') || name.includes('edge')) {
+        if (name.includes('mac') || name.includes('windows') || name.includes('linux')) {
             return 'i-heroicons-computer-desktop'
         }
-
         return 'i-heroicons-globe-alt'
     }
 
-    // Automatycznie pobierz sesje przy inicjalizacji
-    onMounted(() => {
-        if (accessToken.value) {
-            fetchSessions()
-        }
-    })
-
-    // Obserwuj zmiany access tokenu
-    watch(accessToken, (newToken) => {
-        if (newToken) {
-            fetchSessions()
-        } else {
-            sessions.value = []
-            stats.value = null
-        }
-    })
-
     return {
-        // State
         sessions: readonly(sessions),
         stats: readonly(stats),
         loading: readonly(loading),
         error: readonly(error),
-
-        // Actions
         fetchSessions,
         revokeSession,
         revokeAllOtherSessions,
         revokeAllSessions,
-
-        // Utilities
         formatLastActivity,
         isCurrentSession,
         getDeviceIcon

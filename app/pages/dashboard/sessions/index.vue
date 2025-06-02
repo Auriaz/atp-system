@@ -1,12 +1,12 @@
 <script setup lang="ts">
-// Import components
-import SessionManagement from '~/components/SessionManagement.vue'
-
 // Middleware i guards
 definePageMeta({
   middleware: 'auth',
   layout: 'authorization'
 })
+
+// Get auth state
+const { isAuthenticated } = useAuth()
 
 // SEO
 useSeoMeta({
@@ -16,6 +16,9 @@ useSeoMeta({
   ogDescription: 'Zarządzaj swoimi sesjami i urządzeniami w systemie ATP. Monitoruj aktywne sesje i dbaj o bezpieczeństwo swojego konta.',
   robots: 'noindex, nofollow' // Strona tylko dla zalogowanych użytkowników
 })
+
+// Wait for authentication before proceeding
+await until(isAuthenticated).toBe(true)
 </script>
 
 <template>
@@ -81,7 +84,7 @@ useSeoMeta({
           />
 
           <!-- Komponent zarządzania sesjami -->
-          <SessionManagement />
+          <XSessionManagement />
 
           <!-- Dodatkowe informacje -->
           <div class="mt-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
