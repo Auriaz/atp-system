@@ -3,26 +3,6 @@ import { refreshTokens } from '../../database/models/refresh_tokens.model'
 import { useDatabase } from '../database'
 import { UAParser } from 'ua-parser-js'
 
-export interface SessionInfo {
-    id: number
-    deviceId: string
-    deviceName: string
-    userAgent: string
-    ipAddress: string
-    location?: string
-    isCurrent: boolean
-    lastUsedAt: Date
-    createdAt: Date
-    isRevoked: boolean
-}
-
-export interface DeviceInfo {
-    deviceId: string
-    deviceName: string
-    userAgent: string
-    ipAddress: string
-    location?: string
-}
 
 export class SessionManagementService {
     private _db: ReturnType<typeof useDatabase> | null = null

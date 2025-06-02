@@ -1,6 +1,3 @@
-import { sessionManagementService } from '~~/server/utils/services/session-management.service'
-import { verifyAccessToken } from '~~/server/utils/services/jwt.service'
-
 export default defineEventHandler(async (event) => {
     try {
         // Sprawdź autoryzację
@@ -13,7 +10,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const token = authHeader.slice(7)
-        const payload = verifyAccessToken(token)
+        const payload = await verifyAccessToken(token)
 
         if (!payload) {
             throw createError({
