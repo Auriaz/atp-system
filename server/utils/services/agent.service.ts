@@ -84,17 +84,3 @@
 
 //     return platformInfo;
 // }
-
-// export function generateDeviceId(userAgent: string = 'unknown', ipAddress?: string): string {
-//     const baseString = `${userAgent}:${ipAddress || 'unknown'}`
-
-//     // Create a simple hash of the base string
-//     let hash = 0
-//     for (let i = 0; i < baseString.length; i++) {
-//         const char = baseString.charCodeAt(i)
-//         hash = ((hash << 5) - hash) + char
-//         hash = hash & hash // Convert to 32-bit integer
-//     }
-
-//     return `device_${Math.abs(hash).toString(36)}_${Date.now().toString(36)}`
-// }

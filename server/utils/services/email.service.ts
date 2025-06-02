@@ -1,6 +1,7 @@
 // /**
 //  * Email Service for ATP System
 //  * Using Gmail SMTP for email verification
+//  * Implements lazy initialization to prevent NuxtHub deployment issues
 //  */
 
 // import * as nodemailer from 'nodemailer'
@@ -39,8 +40,9 @@
 
 // class EmailService {
 //     private transporter: Transporter | null = null
-//     private config: EmailConfig
-//     private provider: string
+//     private config: EmailConfig | null = null
+//     private provider: string | null = null
+//     private initialized: boolean = false
 
 //     // Supported SMTP providers configuration
 //     private static readonly SMTP_PROVIDERS: Record<string, SMTPProvider> = {
@@ -110,28 +112,57 @@
 //     }
 
 //     constructor() {
-//         // Determine which provider to use based on environment variables
-//         this.provider = this.detectEmailProvider()
-//         const providerConfig = EmailService.SMTP_PROVIDERS[this.provider]
+//         // Delay initialization until first use to avoid build-time issues
+//     }
 
-//         this.config = {
-//             host: this.getConfigValue('SMTP_HOST', providerConfig.host),
-//             port: parseInt(this.getConfigValue('SMTP_PORT', providerConfig.port.toString())),
-//             secure: this.getConfigValue('SMTP_SECURE', providerConfig.secure.toString()) === 'true',
-//             auth: {
-//                 user: this.getConfigValue('SMTP_USER', ''),
-//                 pass: this.getConfigValue('SMTP_PASSWORD', '')
+//     /**
+//      * Initialize the email service (lazy initialization)
+//      */
+//     private async ensureInitialized(): Promise<void> {
+//         if (this.initialized) return
+
+//         try {
+//             // Determine which provider to use based on environment variables
+//             this.provider = this.detectEmailProvider()
+//             const providerConfig = EmailService.SMTP_PROVIDERS[this.provider]
+
+//             this.config = {
+//                 host: this.getConfigValue('SMTP_HOST', providerConfig.host),
+//                 port: parseInt(this.getConfigValue('SMTP_PORT', providerConfig.port.toString())),
+//                 secure: this.getConfigValue('SMTP_SECURE', providerConfig.secure.toString()) === 'true',
+//                 auth: {
+//                     user: this.getConfigValue('SMTP_USER', ''),
+//                     pass: this.getConfigValue('SMTP_PASSWORD', '')
+//                 }
 //             }
-//         }
 
-//         console.log(`📧 Email service configured for: ${providerConfig.name} (${this.provider})`)
-//         this.initializeTransporter()
+//             console.log(`📧 Email service configured for: ${providerConfig.name} (${this.provider})`)
+//             await this.initializeTransporter()
+//             this.initialized = true
+//         } catch (error) {
+//             console.error('❌ Email service initialization failed:', error)
+//             // Set defaults to prevent null errors
+//             this.provider = 'gmail'
+//             this.config = {
+//                 host: 'smtp.gmail.com',
+//                 port: 587,
+//                 secure: false,
+//                 auth: { user: '', pass: '' }
+//             }
+//             this.transporter = null
+//             this.initialized = true
+//         }
 //     }
 
 //     /**
 //      * Detect email provider based on environment variables or host
 //      */
 //     private detectEmailProvider(): string {
+//         // Skip during build/prerender
+//         if (typeof process === 'undefined' || !process.env) {
+//             return 'gmail'
+//         }
+
 //         // Check for explicit provider setting
 //         const explicitProvider = process.env.SMTP_PROVIDER?.toLowerCase()
 //         if (explicitProvider && EmailService.SMTP_PROVIDERS[explicitProvider]) {
@@ -168,6 +199,11 @@
 //      * Get configuration value with fallback
 //      */
 //     private getConfigValue(envKey: string, defaultValue: string): string {
+//         // Skip during build/prerender
+//         if (typeof process === 'undefined' || !process.env) {
+//             return defaultValue
+//         }
+
 //         // Check for general SMTP variables first
 //         const value = process.env[envKey]
 //         if (value) return value
@@ -179,19 +215,32 @@
 //         }
 
 //         return defaultValue
-//     } private async initializeTransporter(): Promise<void> {
+//     }
+
+//     private async initializeTransporter(): Promise<void> {
 //         try {
 //             // Skip real SMTP initialization during build/prerender
-//             if (process.env.NODE_ENV === 'production' && process.env.NUXT_APP_BUILD_ASSETS_DIR) {
+//             if (typeof process !== 'undefined' && process.env &&
+//                 process.env.NODE_ENV === 'production' && process.env.NUXT_APP_BUILD_ASSETS_DIR) {
 //                 console.log('📧 Email service skipped during build/prerender')
 //                 return
-//             }            // Check if we have valid SMTP credentials
-//             if (!this.config.auth.user || !this.config.auth.pass ||
+//             }
+
+//             // Ensure config is initialized
+//             if (!this.config) {
+//                 throw new Error('Email config not initialized')
+//             }
+
+//             // Check if we have valid SMTP credentials
+//             if (!this.config?.auth.user || !this.config?.auth.pass ||
 //                 this.config.auth.user === 'your-email@gmail.com' ||
 //                 this.config.auth.pass === 'your-app-password' ||
 //                 this.config.auth.user === 'your-email@example.com' ||
 //                 this.config.auth.pass === 'your-password') {
-//                 console.log(`⚠️ Email service: No valid ${EmailService.SMTP_PROVIDERS[this.provider].name} credentials configured, running in development mode`)
+//                 const providerName = this.provider && EmailService.SMTP_PROVIDERS[this.provider]
+//                     ? EmailService.SMTP_PROVIDERS[this.provider].name
+//                     : 'Unknown'
+//                 console.log(`⚠️ Email service: No valid ${providerName} credentials configured, running in development mode`)
 //                 this.transporter = null
 //                 return
 //             }
@@ -210,11 +259,15 @@
 
 //     /**
 //      * Send verification email to user
-//      */    async sendVerificationEmail(
+//      */
+//     async sendVerificationEmail(
 //         email: string,
 //         username: string,
 //         verificationToken: string
 //     ): Promise<boolean> {
+//         // Ensure service is initialized
+//         await this.ensureInitialized()
+
 //         if (!this.transporter) {
 //             console.log(`📧 Email service not configured - would send verification email to ${email}`)
 //             console.log(`🔗 Verification URL: /auth/verify-email?token=${verificationToken}`)
@@ -241,7 +294,7 @@
 
 //         try {
 //             const result = await this.transporter.sendMail({
-//                 from: `"ATP System" <${this.config.auth.user}>`,
+//                 from: `"ATP System" <${this.config?.auth.user || 'noreply@atpsystem.com'}>`,
 //                 ...mailOptions
 //             })
 
@@ -261,6 +314,9 @@
 //         username: string,
 //         resetToken: string
 //     ): Promise<boolean> {
+//         // Ensure service is initialized
+//         await this.ensureInitialized()
+
 //         if (!this.transporter) {
 //             console.log(`📧 Email service not configured - would send password reset email to ${email}`)
 //             console.log(`🔗 Reset URL: /auth/reset-password?token=${resetToken}`)
@@ -277,7 +333,7 @@
 
 //         try {
 //             const result = await this.transporter.sendMail({
-//                 from: `"ATP System" <${this.config.auth.user}>`,
+//                 from: `"ATP System" <${this.config?.auth.user || 'noreply@atpsystem.com'}>`,
 //                 to: email,
 //                 subject: 'Reset your ATP System password',
 //                 html: htmlContent
@@ -495,11 +551,13 @@
 //      */
 //     async testConnection(): Promise<boolean> {
 //         try {
+//             await this.ensureInitialized()
+
 //             if (!this.transporter) {
-//                 await this.initializeTransporter()
+//                 return false
 //             }
 
-//             await this.transporter!.verify()
+//             await this.transporter.verify()
 //             return true
 //         } catch (error) {
 //             console.error('Email service test failed:', error)
