@@ -1,7 +1,6 @@
 import { refreshTokens } from '../../database/schema'
 import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
-import { sessionManagementService } from '../services/session-management.service'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
 type NewRefreshToken = typeof refreshTokens.$inferInsert

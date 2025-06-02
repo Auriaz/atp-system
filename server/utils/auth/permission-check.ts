@@ -1,9 +1,3 @@
-import type { Permission } from '../../../shared/utils/permissions.constants'
-import { hasPermissionMultiRole } from '../../../shared/utils/permissions.constants'
-import { USER_ROLES } from '../../../shared/utils/roles.constants'
-import type { RoleSlugs } from '../../../shared/utils/roles.constants'
-import { getUserRoleSlugs } from '../repositories/user_roles.repositories'
-
 export async function requirePermission(event: any, permission: Permission): Promise<void> {
     const session = await getUserSession(event)
 

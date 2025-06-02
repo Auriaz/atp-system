@@ -1,6 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { defineNuxtConfig } from 'nuxt/config'
-
 export default defineNuxtConfig({
   imports: {
     dirs: [
@@ -94,12 +92,12 @@ export default defineNuxtConfig({
       tasks: true, // Włącz eksperymentalne zadania
       // websocket: true,
       openAPI: true, // Włącz eksperymentalne OpenAPI
-      wasm: true
+      // wasm: true
     },
-    imports: {
-      // Exclude specific imports to prevent conflicts with nuxt-auth-utils
-      // exclude: ['hashPassword', 'verifyPassword', 'getClientIp', 'getPlatformFromUserAgent', 'generateDeviceId']
-    }
+    // imports: {
+    //   // Exclude specific imports to prevent conflicts with nuxt-auth-utils
+    //   // exclude: ['hashPassword', 'verifyPassword', 'getClientIp', 'getPlatformFromUserAgent', 'generateDeviceId']
+    // }
   },
 
   // https://nuxt.com/docs/guide/directory-structure/plugins
