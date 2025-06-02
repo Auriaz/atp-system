@@ -3,7 +3,6 @@ import { eq, and, lt, gt } from 'drizzle-orm'
 import { useDatabase } from '../database'
 
 type RefreshToken = typeof refreshTokens.$inferSelect
-type NewRefreshToken = typeof refreshTokens.$inferInsert
 
 /**
  * Generuje bezpieczny refresh token używając Web Crypto API

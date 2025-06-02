@@ -2,7 +2,6 @@ import { eq, and, desc } from 'drizzle-orm'
 import { refreshTokens } from '../../database/models/refresh_tokens.model'
 import { useDatabase } from '../database'
 import { UAParser } from 'ua-parser-js'
-import { generateDeviceId } from '../auth/device'
 
 export interface SessionInfo {
     id: number
@@ -48,7 +47,9 @@ export class SessionManagementService {
         const osVersion = result.os.version || ''
 
         return `${browser}${browserVersion ? ' ' + browserVersion : ''} on ${os}${osVersion ? ' ' + osVersion : ''}`
-    }    /**
+    }
+
+    /**
      * Generuje unikalny identyfikator urządzenia
      */
     generateDeviceId(userAgent: string, ipAddress: string): string {
