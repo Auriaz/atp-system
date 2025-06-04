@@ -1,5 +1,5 @@
 import { asc, desc, eq, like, and, or, sql } from 'drizzle-orm'
-import { users, roles, userRoles } from '../../database/schema'
+import { users, roles, userRoles, userActivities, verificationTokens, refreshTokens, oAuthAccounts } from '../../database/schema'
 import { User } from '#auth-utils'
 
 /**
@@ -405,4 +405,163 @@ export async function checkExistingAvatarUrl(userId: number) {
     });
 
     return user?.avatarUrl || null;
+}
+
+
+export async function createUser(userData: any) {
+    const db = useDatabase()
+
+    // Generate username from email if not provided
+    const username = userData.username || userData.email.split('@')[0]
+
+    const newUser = await db
+        .insert(users)
+        .values({
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            username: username,
+            status: 'active',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        })
+        .returning()
+
+    if (!newUser[0]) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Failed to create user'
+        })
+    }
+
+    // Assign role to user
+    if (userData.role) {
+        const roleResult = await db.query.roles.findFirst({
+            where: eq(roles.slug, userData.role)
+        })
+
+        if (roleResult) {
+            await db.insert(userRoles).values({
+                userId: newUser[0].id,
+                roleId: roleResult.id,
+                assignedAt: new Date()
+            })
+        }
+    }
+
+    // Return user with roles
+    return await getUserById(newUser[0].id)
+}
+
+/**
+ * Usuwa użytkownika wraz z powiązanymi danymi
+ * @param userId Identyfikator użytkownika do usunięcia
+ * @returns Informacje o usuniętym użytkowniku
+ */
+export async function deleteUser(userId: number) {
+    const db = useDatabase()
+
+    // Najpierw pobierz dane użytkownika przed usunięciem
+    const userToDelete = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+        columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            username: true,
+            status: true
+        },
+        with: {
+            roles: {
+                with: {
+                    role: true
+                }
+            }
+        }
+    })
+
+    if (!userToDelete) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: 'User not found'
+        })
+    }
+
+    // Sprawdź czy użytkownik ma rolę admin i czy nie jest ostatnim adminem
+    const userRolesList = userToDelete.roles.map(ur => ur.role.slug)
+    if (userRolesList.includes('admin')) {
+        const activeAdminsCount = await db
+            .select({ count: sql`count(DISTINCT ${users.id})` })
+            .from(users)
+            .innerJoin(userRoles, eq(users.id, userRoles.userId))
+            .innerJoin(roles, eq(userRoles.roleId, roles.id))
+            .where(and(
+                eq(roles.slug, 'admin'),
+                eq(users.status, 'active')
+            ))
+
+        const adminCount = Number(activeAdminsCount[0]?.count) || 0
+        if (adminCount <= 1) {
+            throw createError({
+                statusCode: 403,
+                statusMessage: 'Cannot delete the last active administrator'
+            })
+        }
+    }
+
+    // Najpierw usuń powiązania z rolami
+    await db
+        .delete(userRoles)
+        .where(eq(userRoles.userId, userId))
+
+    await db
+        .delete(userActivities)
+        .where(eq(userActivities.userId, userId))
+
+    await db
+        .delete(verificationTokens)
+        .where(eq(verificationTokens.userId, userId))
+
+    await db
+        .delete(refreshTokens)
+        .where(eq(refreshTokens.userId, userId))
+
+    await db
+        .delete(oAuthAccounts)
+        .where(eq(oAuthAccounts.userId, userId))
+
+
+    // Następnie usuń użytkownika
+    const deletedUser = await db
+        .delete(users)
+        .where(eq(users.id, userId))
+        .returning({
+            id: users.id,
+            firstName: users.firstName,
+            lastName: users.lastName,
+            email: users.email,
+            username: users.username
+        })
+
+    if (!deletedUser[0]) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Failed to delete user'
+        })
+    }
+
+    return {
+        success: true,
+        deletedUser: {
+            id: deletedUser[0].id,
+            firstName: deletedUser[0].firstName,
+            lastName: deletedUser[0].lastName,
+            email: deletedUser[0].email,
+            username: deletedUser[0].username,
+            roles: userRolesList
+        },
+        deletedAt: new Date().toISOString()
+    }
 }

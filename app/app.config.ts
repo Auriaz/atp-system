@@ -1,41 +1,32 @@
 export default defineAppConfig({
     ui: {
-        theme: {
-            colors: [
-                // Podstawowe kolory
-                'primary',
-                'secondary',
-                'tertiary',
+        colors: {
+            primary: 'cyan',
+            secondary: 'blue',
+            tertiary: 'green',
 
-                'info',
-                'success',
-                'warning',
-                'error',
+            success: 'green',
+            info: 'cyan',
+            neutral: 'slate',
+            warning: 'orange',
+            error: 'red',
 
-                // Kolory pomocnicze
-                'light',
-                'dark',
-                'white',
-                'black',
-                'grey',
-                'blue',
-                'red',
-                'green',
-                'yellow',
-                'purple',
-                'pink',
-                'orange',
-                'teal',
-                'indigo',
-                'lime',
+            admin: 'violet',
+            manager: 'indigo',
+            coach: 'blue',
+            editor: 'green',
+            athlete: 'yellow',
+            user: 'orange',
+            observer: 'red',
 
-                'cyan',
-                'violet',
-
-
-            ]
-        },
-        // colors: {
-        // }
+            // Seven hierarchy levels (highest to lowest)
+            highest: 'violet',      // Highest level
+            veryHigh: 'indigo',     // Very high level
+            high: 'blue',           // High level
+            medium: 'green',        // Medium level
+            low: 'yellow',          // Low level
+            veryLow: 'orange',      // Very low level
+            lowest: 'red',          // Lowest level
+        }
     }
 })

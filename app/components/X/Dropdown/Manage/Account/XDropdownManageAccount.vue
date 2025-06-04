@@ -29,14 +29,14 @@ const userNavigationItems = computed(() => {
 <template>
   <UDropdownMenu
     :items="userNavigationItems"
-    orientation="vertical"
-    class="account-dropdown"
+    :ui="{
+      content: 'w-80 account-dropdown',
+    }"
   >
     <!-- Custom trigger with enhanced avatar styling -->
       <UButton 
         color="neutral" 
         variant="ghost" 
-        class="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary-500"
       >
         <XAvatar 
           v-if="user" 

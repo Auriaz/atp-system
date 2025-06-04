@@ -1,145 +1,192 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // ================================
+  // KONFIGURACJA IMPORTÓW
+  // ================================
   imports: {
     dirs: [
-      'composables/**',
-      'stores/**', // Importuj wszystkie pliki w katalogu stores
-      'utils/**', // Importuj wszystkie pliki w katalogu utils
-      'api/**', // Importuj wszystkie pliki w katalogu components
+      'composables/**', // Automatyczny import composables
+      'stores/**',      // Automatyczny import stores (Pinia)
+      'utils/**',       // Automatyczny import narzędzi pomocniczych
+      'api/**',         // Automatyczny import API
     ]
   },
-  // https://nuxt.com/modules
-  modules: [
-    '@nuxthub/core',
-    '@nuxt/eslint',
-    '@nuxt/content',
 
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxt/scripts',
-    '@nuxt/test-utils',
-    '@nuxt/ui',
-    'nuxt-auth-utils',
-    '@vueuse/nuxt',
-    '@nuxtjs/i18n'
+  // ================================
+  // MODUŁY NUXT
+  // ================================
+  modules: [
+    '@nuxthub/core',      // Moduł NuxtHub
+    '@nuxt/eslint',       // ESLint dla Nuxt
+    '@nuxt/content',      // System zarządzania treścią
+    '@nuxt/fonts',        // Optymalizacja czcionek
+    '@nuxt/icon',         // Ikony
+    '@nuxt/image',        // Optymalizacja obrazów
+    '@nuxt/scripts',      // Zarządzanie skryptami
+    '@nuxt/test-utils',   // Narzędzia do testowania
+    '@nuxt/ui',           // Komponenty UI
+    'nuxt-auth-utils',    // Uwierzytelnianie
+    '@vueuse/nuxt',       // Kompozycje VueUse
+    '@nuxtjs/i18n'        // Internacjonalizacja
   ],
 
+  // ================================
+  // INTERNACJONALIZACJA (i18n)
+  // ================================
   i18n: {
     bundle: {
       optimizeTranslationDirective: false, // Wyłącz optymalizację dyrektywy tłumaczeń
     },
-
-    defaultLocale: 'en',
+    defaultLocale: 'en', // Domyślny język
     locales: [
-      { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' }, // Angielski
-      { code: 'pl', name: 'Polski', iso: 'pl-PL', file: 'pl.json' }, // Polski
+      { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
+      { code: 'pl', name: 'Polski', iso: 'pl-PL', file: 'pl.json' },
     ],
-    lazy: true, // Włącz leniwe ładowanie tłumaczeń
+    lazy: true, // Leniwe ładowanie tłumaczeń
   },
 
-  css: ['~/assets/css/main.css'], // Ścieżka do głównego pliku CSS
+  // ================================
+  // STYLE CSS
+  // ================================
+  css: ['~/assets/css/main.css'],
 
+  // ================================
+  // TRYB KOLORÓW (DARK/LIGHT)
+  // ================================
   colorMode: {
-    preference: 'system', // Domyślnie użyj preferencji systemowych
-    fallback: 'light',    // Domyślny tryb, gdy preferencje systemowe są niedostępne
-    classSuffix: '',      // Usuń sufiks z klasy (używa 'dark' zamiast 'dark-mode')
+    preference: 'system', // Użyj preferencji systemowych
+    fallback: 'light',    // Tryb domyślny
+    classSuffix: '',      // Bez sufiksu klasy
   },
 
-  // https://devtools.nuxt.com
-  devtools: { enabled: true }, // Włącz narzędzia deweloperskie
+  // ================================
+  // NARZĘDZIA DEWELOPERSKIE
+  // ================================
+  devtools: { enabled: true },
 
-  // Zmienne środowiskowe - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
+  // ================================
+  // KONFIGURACJA RUNTIME
+  // ================================
   runtimeConfig: {
+    // Konfiguracja OAuth
     oauth: {
       github: {
-        clientId: process.env.NUXT_OAUTH_GITHUB_CLIENT_ID, // Identyfikator klienta GitHub
-        clientSecret: process.env.NUXT_OAUTH_GITHUB_CLIENT_SECRET, // Sekret klienta GitHub
-        redirectUri: process.env.NUXT_OAUTH_GITHUB_REDIRECT_URI || 'http://localhost:3000/api/auth/github/callback', // Adres przekierowania
-        scope: ['user:email'] // Zakres uprawnień
+        clientId: process.env.NUXT_OAUTH_GITHUB_CLIENT_ID,
+        clientSecret: process.env.NUXT_OAUTH_GITHUB_CLIENT_SECRET,
+        redirectUri: process.env.NUXT_OAUTH_GITHUB_REDIRECT_URI || 'http://localhost:3000/api/auth/github/callback',
+        scope: ['user:email']
       },
     },
-
+    // Konfiguracja sesji
     session: {
-      name: 'nuxt-session', // Nazwa sesji
-      password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6', // Hasło sesji
+      name: 'nuxt-session',
+      password: process.env.NUXT_SESSION_PASSWORD || 'b0b7df82584f43b5bef8bf4d5daf06c6',
       maxAge: 60 * 60 * 24 * 7, // 1 tydzień
     },
-    sessionDebug: true, // Włącz debugowanie sesji
+    sessionDebug: true, // Debugowanie sesji
   },
 
+  // ================================
+  // UWIERZYTELNIANIE
+  // ================================
   auth: {
     hash: {
       scrypt: {
-        keyLength: 80, // Długość klucza
+        keyLength: 80, // Długość klucza szyfrowania
       }
     }
   },
-  // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
-  future: { compatibilityVersion: 4 }, // Wersja kompatybilności
-  compatibilityDate: '2025-03-01', // Data kompatybilności
 
-  // https://hub.nuxt.com/docs/getting-started/installation#options
+  // ================================
+  // KOMPATYBILNOŚĆ I PRZYSZŁOŚĆ
+  // ================================
+  future: { compatibilityVersion: 4 },
+  compatibilityDate: '2025-03-01',
+
+  // ================================
+  // KONFIGURACJA NUXTHUB
+  // ================================
   hub: {
-    blob: true,
-    kv: true,
-    database: true,
-    cache: true,
+    blob: true,     // Przechowywanie plików
+    kv: true,       // Baza klucz-wartość
+    database: true, // Baza danych
+    cache: true,    // Cache
   },
+
+  // ================================
+  // KONFIGURACJA NITRO
+  // ================================
   nitro: {
     experimental: {
-      tasks: true, // Włącz eksperymentalne zadania
-      // websocket: true,
-      openAPI: true, // Włącz eksperymentalne OpenAPI
+      tasks: true,   // Eksperymentalne zadania
+      openAPI: true, // Generowanie dokumentacji OpenAPI
     },
   },
 
-  // https://nuxt.com/docs/guide/directory-structure/plugins
+  // ================================
+  // WTYCZKI
+  // ================================
   plugins: [
-    '~/plugins/permission.directive.ts', // Wtyczka do zarządzania uprawnieniami
+    '~/plugins/permission.directive.ts', // Dyrektywa uprawnień
   ],
+
+  // ================================
+  // REGUŁY ROUTINGU
+  // ================================
   routeRules: {
-    '/.well-known/**': { static: true }
+    '/.well-known/**': { static: true } // Statyczne pliki .well-known
   },
-  // content: {
-  //   renderer: {
-  //     anchorLinks: {
-  //       h1: true, h2: true, h3: true, h4: true, h5: true, h6: true, // Włącz linki kotwic dla nagłówków
-  //     },
-  //   },
-  //   build: {
-  //     // Konfiguracja markdown
-  //     markdown: {
-  //       // Spis treści
-  //       toc: {
-  //         depth: 4, // Głębokość spisu treści
-  //         searchDepth: 5, // Głębokość wyszukiwania
-  //       },
 
-  //       // Podświetlanie składni
-  //       highlight: {
-  //         theme: {
-  //           default: 'github-light', // Motyw domyślny
-  //           dark: 'github-dark',     // Motyw ciemny
-  //           sepia: 'monokai'         // Motyw sepia
-  //         },
-  //       },
-
-  //     },
-  //   },
-  // },
-  // debug: true, // Włącz debugowanie
-
+  // ================================
+  // KONFIGURACJA OBRAZÓW
+  // ================================
   image: {
-    // inject: true, // Wstrzyknij komponent obrazu
-    // format: ['webp'], // Format obrazu
     screens: {
-      xs: 320,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-      xxl: 1536,
+      xs: 320,   // Bardzo małe ekrany
+      sm: 640,   // Małe ekrany
+      md: 768,   // Średnie ekrany
+      lg: 1024,  // Duże ekrany
+      xl: 1280,  // Bardzo duże ekrany
+      xxl: 1536, // Największe ekrany
     },
+  },
+
+  // ================================
+  // KONFIGURACJA UI
+  // ================================
+  ui: {
+    theme: {
+      colors: [
+        // Kolory podstawowe
+        'primary',
+        'secondary',
+        'tertiary',
+
+        // Kolory statusów
+        'info',
+        'success',
+        'warning',
+        'error',
+
+        // Kolory ról użytkowników
+        'admin',
+        'coach',
+        'athlete',
+        'observer',
+        'manager',
+        'user',
+        'editor',
+
+        // Kolory priorytetów
+        'neutral',
+        'highest',
+        'veryHigh',
+        'high',
+        'medium',
+        'low',
+        'veryLow',
+        'lowest',
+      ]
+    }
   }
 })

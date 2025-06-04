@@ -20,6 +20,7 @@ export const USER_ACTIVITY_TYPES = {
   ACCOUNT_DELETED: 'account_deleted',
   ACCOUNT_SUSPENDED: 'account_suspended',
   ACCOUNT_REACTIVATED: 'account_reactivated',
+  USER_UPDATED: 'user_updated',
 
   // Aktywności związane z uprawnieniami
   ROLE_ASSIGNED: 'role_assigned',

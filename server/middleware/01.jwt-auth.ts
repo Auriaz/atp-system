@@ -8,11 +8,11 @@ export default defineEventHandler(async (event) => {
 
   // Debug logging
   console.log('JWT Middleware: Processing path:', path);
-
   // Skip JWT validation for public routes and auth endpoints
   if (
     path.startsWith('/api/auth/') ||
     path === '/api/health' ||
+    path.startsWith('/api/test/') ||
     path.startsWith('/_nuxt/') ||
     path.startsWith('/favicon.ico') ||
     path.startsWith('/__nuxt_devtools__/')

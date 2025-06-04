@@ -62,13 +62,13 @@ export type RoleSlugs = RoleSlug[];
  * 
  */
 export const USER_ROLE_COLORS: Record<RoleSlug, string> = {
-  [USER_ROLES.ADMIN]: 'primary',      // niebieski
-  [USER_ROLES.COACH]: 'green',        // zielony
-  [USER_ROLES.ATHLETE]: 'orange',     // pomarańczowy
-  [USER_ROLES.OBSERVER]: 'gray',      // szary
-  [USER_ROLES.MANAGER]: 'indigo',     // indygo
-  [USER_ROLES.USER]: 'blue',          // niebieski
-  [USER_ROLES.EDITOR]: 'violet'       // fioletowy
+  [USER_ROLES.ADMIN]: 'admin',      // niebieski
+  [USER_ROLES.COACH]: 'coach',        // zielony
+  [USER_ROLES.ATHLETE]: 'athlete',     // pomarańczowy
+  [USER_ROLES.OBSERVER]: 'observer',      // szary
+  [USER_ROLES.MANAGER]: 'manager',     // indygo
+  [USER_ROLES.USER]: 'user',          // niebieski
+  [USER_ROLES.EDITOR]: 'editor'       // fioletowy
 };
 
 /**

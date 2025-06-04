@@ -1,3 +1,5 @@
+import { vi } from 'date-fns/locale';
+
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
@@ -36,7 +38,8 @@ export default {
                     '500': '#9e9e9e',
                     '700': '#616161',
                     '900': '#212121',
-                }
+                },
+                violet: 'var(--color-violet)',
             },
             // Dodaj inne rozszerzenia, które mogą być potrzebne
         }

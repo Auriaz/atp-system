@@ -59,48 +59,46 @@ export function useUsersApi() {
             // Zawsze aktualizuj stan ładowania
             isLoading.value = false
         }
+    }    /**
+     * Pobiera pojedynczego użytkownika po ID
+     * @param id ID użytkownika
+     */
+    const fetchUserById = async (id: string) => {
+        isLoading.value = true
+        error.value = null
+
+        try {
+            // Wykonaj zapytanie do API
+            const response = await $fetch(`/api/users/${id}`, {
+                method: 'GET'
+            })
+
+            return response.payload
+        } catch (err: any) {
+            // Obsługa błędów
+            error.value = err
+
+            // Wyświetl komunikat
+            toast.add({
+                title: 'Error',
+                description: err?.data?.message || err?.message || `Failed to load user with ID: ${id}`,
+                color: 'error'
+            })
+
+            // Przekieruj w przypadku błędu autoryzacji
+            if (err?.statusCode === 401) {
+                navigateTo('/auth/login')
+            } else if (err?.statusCode === 404) {
+                // W przypadku, gdy nie znaleziono użytkownika
+                navigateTo('/dashboard/users')
+            }
+
+            return null
+        } finally {
+            // Zawsze aktualizuj stan ładowania
+            isLoading.value = false
+        }
     }
-
-    // /**
-    //  * Pobiera pojedynczego użytkownika po ID
-    //  * @param id ID użytkownika
-    //  */
-    // const fetchUserById = async (id: string) => {
-    //     isLoading.value = true
-    //     error.value = null
-
-    //     try {
-    //         // Wykonaj zapytanie do API
-    //         const response = await $fetch(`/api/users/${id}`, {
-    //             method: 'GET'
-    //         })
-
-    //         return response.payload
-    //     } catch (err: any) {
-    //         // Obsługa błędów
-    //         error.value = err
-
-    //         // Wyświetl komunikat
-    //         toast.add({
-    //             title: 'Error',
-    //             description: err?.data?.message || err?.message || `Failed to load user with ID: ${id}`,
-    //             color: 'error'
-    //         })
-
-    //         // Przekieruj w przypadku błędu autoryzacji
-    //         if (err?.statusCode === 401) {
-    //             navigateTo('/auth/login')
-    //         } else if (err?.statusCode === 404) {
-    //             // W przypadku, gdy nie znaleziono użytkownika
-    //             navigateTo('/dashboard/users')
-    //         }
-
-    //         return null
-    //     } finally {
-    //         // Zawsze aktualizuj stan ładowania
-    //         isLoading.value = false
-    //     }
-    // }
 
     /**
      * Tworzy nowego użytkownika
@@ -143,93 +141,91 @@ export function useUsersApi() {
         } finally {
             isLoading.value = false
         }
+    }    /**
+     * Aktualizuje istniejącego użytkownika
+     * @param id ID użytkownika
+     * @param userData Dane do aktualizacji
+     */
+    const updateUser = async (id: string, userData: Partial<UserResource>) => {
+        isLoading.value = true
+        error.value = null
+
+        try {
+            // Wykonaj zapytanie do API
+            const response = await $fetch(`/api/users/${id}`, {
+                method: 'PUT',
+                body: userData
+            })
+
+            // Wyświetl komunikat o sukcesie
+            toast.add({
+                title: 'Success',
+                description: 'User updated successfully',
+                color: 'primary'
+            })
+
+            // Odśwież listę użytkowników
+            await fetchUsers()
+
+            return response
+        } catch (err: any) {
+            // Obsługa błędów
+            error.value = err
+
+            // Wyświetl komunikat o błędzie
+            toast.add({
+                title: 'Error',
+                description: err?.data?.message || err?.message || 'Failed to update user',
+                color: 'error'
+            })
+
+            return null
+        } finally {
+            isLoading.value = false
+        }
     }
 
-    // /**
-    //  * Aktualizuje istniejącego użytkownika
-    //  * @param id ID użytkownika
-    //  * @param userData Dane do aktualizacji
-    //  */
-    // const updateUser = async (id: string, userData: Partial<IUserResource>) => {
-    //     isLoading.value = true
-    //     error.value = null
+    /**
+     * Usuwa użytkownika
+     * @param id ID użytkownika do usunięcia
+     */
+    const deleteUser = async (id: string) => {
+        isLoading.value = true
+        error.value = null
 
-    //     try {
-    //         // Wykonaj zapytanie do API
-    //         const response = await $fetch(`/api/users/${id}`, {
-    //             method: 'PUT',
-    //             body: userData
-    //         })
+        try {
+            // Wykonaj zapytanie do API
+            const response = await $fetch(`/api/users/${id}`, {
+                method: 'delete'
+            })
 
-    //         // Wyświetl komunikat o sukcesie
-    //         toast.add({
-    //             title: 'Success',
-    //             description: 'User updated successfully',
-    //             color: 'green'
-    //         })
+            // Wyświetl komunikat o sukcesie
+            toast.add({
+                title: 'Success',
+                description: 'User deleted successfully',
+                color: 'success'
+            })
 
-    //         // Odśwież listę użytkowników
-    //         await fetchUsers()
+            // Odśwież listę użytkowników
+            await fetchUsers()
 
-    //         return response
-    //     } catch (err: any) {
-    //         // Obsługa błędów
-    //         error.value = err
+            return response
+        } catch (err: any) {
+            // Obsługa błędów
+            error.value = err
 
-    //         // Wyświetl komunikat o błędzie
-    //         toast.add({
-    //             title: 'Error',
-    //             description: err?.data?.message || err?.message || 'Failed to update user',
-    //             color: 'error'
-    //         })
+            // Wyświetl komunikat o błędzie
+            toast.add({
+                title: 'Error',
+                description: err?.data?.message || err?.message || 'Failed to delete user',
+                color: 'error'
+            })
 
-    //         return null
-    //     } finally {
-    //         isLoading.value = false
-    //     }
-    // }
-
-    // /**
-    //  * Usuwa użytkownika
-    //  * @param id ID użytkownika do usunięcia
-    //  */
-    // const deleteUser = async (id: string) => {
-    //     isLoading.value = true
-    //     error.value = null
-
-    //     try {
-    //         // Wykonaj zapytanie do API
-    //         const response = await $fetch(`/api/users/${id}`, {
-    //             method: 'DELETE'
-    //         })
-
-    //         // Wyświetl komunikat o sukcesie
-    //         toast.add({
-    //             title: 'Success',
-    //             description: 'User deleted successfully',
-    //             color: 'green'
-    //         })
-
-    //         // Odśwież listę użytkowników
-    //         await fetchUsers()
-
-    //         return response
-    //     } catch (err: any) {
-    //         // Obsługa błędów
-    //         error.value = err
-
-    //         // Wyświetl komunikat o błędzie
-    //         toast.add({
-    //             title: 'Error',
-    //             description: err?.data?.message || err?.message || 'Failed to delete user',
-    //             color: 'error'
-    //         })
-
-    //         return null
-    //     } finally {
-    //         isLoading.value = false
-    //     }
-    // }
+            return null
+        } finally {
+            isLoading.value = false
+        }
+    }
 
     /**
      * Resetuje stan - przydatne np. przy wylogowaniu
@@ -239,9 +235,7 @@ export function useUsersApi() {
         pagination.value = {}
         isLoading.value = false
         error.value = null
-    }
-
-    // Zwróć dostęp do stanu i funkcji
+    }    // Zwróć dostęp do stanu i funkcji
     return {
         // Stan
         users,
@@ -249,12 +243,12 @@ export function useUsersApi() {
         isLoading,
         error,
 
-        // Funkcje
+        // Funkcje        
         fetchUsers,
-        // fetchUserById,
+        fetchUserById,
         createUser,
-        // updateUser,
-        // deleteUser,
+        updateUser,
+        deleteUser,
         resetState
     }
 }
